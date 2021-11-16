@@ -15,15 +15,17 @@ Gui.setupWithoutGUI()
 
 # This is cross-platform now as long as the script is in the project directory
 target_file = Path(__file__).parent.joinpath('CAD/v1-180-assembly.FCStd')
+bom_out_dir = Path(__file__).parent.joinpath('bom-out')
 # Regex pattern to match all fasteners
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
 bom = {'fasteners': {}, 'other': {}}
 fasteners_bom = bom['fasteners']
 other_bom = bom['other']
+component_bom = {}  # BOM for each individual component
 type_dictionary = {}  # for debugging purposes
 
 
-def add_fastener_to_bom(part):
+def add_fastener_to_bom(part, component=None):
     fastener = part.Label
     # Prepare fastener string to be added to BOM
     # ISO type with descriptive name
@@ -53,8 +55,16 @@ def add_fastener_to_bom(part):
     else:
         fasteners_bom[fastener] = 1
 
+    if component:
+        if component not in component_bom.keys():
+            component_bom[component] = {'fasteners': {}, 'other': {}}
+        if fastener in component_bom[component]['fasteners'].keys():
+            component_bom[component]['fasteners'][fastener] += 1
+        else:
+            component_bom[component]['fasteners'][fastener] = 1
 
-def add_other_part_to_bom(part):
+
+def add_other_part_to_bom(part, component):
     part_name = part.Label
 
     while part_name[-1].isnumeric() or part_name[-1] == '-':
@@ -63,6 +73,13 @@ def add_other_part_to_bom(part):
         other_bom[part_name] += 1
     else:
         other_bom[part_name] = 1
+    if component:
+        if component not in component_bom.keys():
+            component_bom[component] = {'fasteners': {}, 'other': {}}
+        if part_name in component_bom[component]['other'].keys():
+            component_bom[component]['other'][part_name] += 1
+        else:
+            component_bom[component]['other'][part_name] = 1
 
 
 def get_bom_from_freecad_document(assembly: FreeCAD.Document):
@@ -74,9 +91,13 @@ def get_bom_from_freecad_document(assembly: FreeCAD.Document):
         type_dictionary[part.Label] = part.TypeId
         # If fastener matches, add it to BOM
         if fastener_pattern.match(part.Label):
-            add_fastener_to_bom(part)
+            add_fastener_to_bom(part, assembly.Label)
         else:
-            add_other_part_to_bom(part)
+            add_other_part_to_bom(part, assembly.Label)
+
+    if assembly.Label in component_bom.keys():
+        with open(bom_out_dir.joinpath(f'bom-{assembly.Label}.json'), 'w') as f:
+            f.write(json.dumps(component_bom[assembly.Label], indent=4))
     # Recurse through each linked file
     for linked_file in assembly.findObjects("App::Link"):
         print("# Getting fasteners from", linked_file.Name)
@@ -92,4 +113,5 @@ get_bom_from_freecad_document(cad_assembly)
 print(json.dumps(bom, indent=4))
 
 with open('bom-fasteners.json', 'w') as file:
-    file.write(json.dumps(fasteners_bom, indent=4))
+    file.write(json.dumps(component_bom, indent=4))
+

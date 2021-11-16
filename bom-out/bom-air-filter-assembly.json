@@ -1,0 +1,18 @@
+{
+    "fasteners": {
+        "Button head M3x6-Screw": 4,
+        "Button head M6x12-Screw": 2,
+        "M3x3-HeatSet": 4,
+        "Socket head M2x6-selft-tapping-Screw": 8
+    },
+    "other": {
+        "hepa-filter": 1,
+        "active-carbon-foam": 1,
+        "air-filter-mounter-left": 1,
+        "air-filter-mounter-right": 1,
+        "air-filter-front-cover": 1,
+        "air-filter-body": 1,
+        "air-filter-eject-level": 1,
+        "4010-fan": 2
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "fasteners": {
+        "Socket head M3x25-Screw": 2,
+        "Standard size M6-Washer": 10,
+        "Button head M6x20-Screw": 8,
+        "Socket head M3x35-Screw": 2,
+        "Small size M6-Washer": 2,
+        "Button head M6x14-Screw": 4,
+        "Small size M5-Washer": 4,
+        "Button head M5x45-Screw": 2,
+        "M3x4-HeatSet": 4,
+        "Button head M5x40-Screw": 2
+    },
+    "other": {
+        "front-idler-spacer": 8,
+        "smooth-idler-6mm": 4,
+        "right-idler-bottom": 2,
+        "left-idler-bottom": 2,
+        "left-idler-mid": 2,
+        "right-idler-mid": 2,
+        "left-idler-top": 2,
+        "right-idler-top": 2
+    }
+}

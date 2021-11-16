@@ -1,0 +1,15 @@
+{
+    "fasteners": {
+        "Button head M5x50-Screw": 4,
+        "Small size M3-Washer": 9,
+        "Socket head M3x10-Screw": 7,
+        "Socket head M3x12-Screw": 2,
+        "M5-HeatSet": 4
+    },
+    "other": {
+        "smooth-idler": 1,
+        "20t-idler": 1,
+        "y-carrier-bottom-left": 1,
+        "y-carrier-top-left": 1
+    }
+}

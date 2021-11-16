@@ -1,0 +1,23 @@
+{
+    "fasteners": {
+        "Standard size M6-Washer": 5,
+        "Button head M6x16-Screw": 1,
+        "Button head M6x14-Screw": 4,
+        "Hex M5-Nut": 2,
+        "Socket head M3x40-Screw": 4,
+        "M3x4-HeatSet": 4,
+        "Standard size M5-Washer": 2,
+        "Button head M5x40-Screw": 2
+    },
+    "other": {
+        "MR115ZZ": 1,
+        "20t-pulley": 1,
+        "ab-motor-idler-spacer": 1,
+        "smooth-idler-6mm": 3,
+        "motor-40mm": 1,
+        "motor-mount-stack-idler-spacer": 1,
+        "ab-motor-top-right": 1,
+        "ab-motor-bottom-right": 1,
+        "ab-motor-right-pulley-spacer": 1
+    }
+}

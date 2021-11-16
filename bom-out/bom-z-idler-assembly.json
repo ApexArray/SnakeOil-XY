@@ -1,0 +1,19 @@
+{
+    "fasteners": {
+        "Socket head M3x45-Screw": 6,
+        "Button head M6x35-Screw": 12,
+        "Small size M3-Washer": 12,
+        "Socket head M3x12-Screw": 12,
+        "Button head M5x25-Screw": 6,
+        "M3x4-HeatSet": 6,
+        "M3-HeatSet": 6
+    },
+    "other": {
+        "20t-9mm-idker": 3,
+        "20t-9mm-idler": 3,
+        "z-idler-housing-left": 3,
+        "z-idler-housing-right": 3,
+        "z-idler-mounter-left": 3,
+        "z-idler-mounter-right": 3
+    }
+}

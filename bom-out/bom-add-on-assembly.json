@@ -1,0 +1,15 @@
+{
+    "fasteners": {
+        "Button head M3x6-Screw": 27,
+        "M3x3-HeatSet": 15,
+        "Standard size M6-Washer": 3,
+        "Button head M6x12-Screw": 3
+    },
+    "other": {
+        "HTU21D-mounter": 3,
+        "camera-arm": 3,
+        "camera-back-plate": 3,
+        "camera-axis": 3,
+        "filament-guide-e3d-collet": 3
+    }
+}

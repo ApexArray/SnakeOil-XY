@@ -1,0 +1,16 @@
+{
+    "fasteners": {
+        "Button head M3x10-Screw": 4,
+        "Button head M3x30-Screw": 4,
+        "Button head M3x6-Screw": 4,
+        "M3x4-HeatSet": 8
+    },
+    "other": {
+        "F623-bearing": 4,
+        "spool-holder-spacer": 4,
+        "filament-spoll": 1,
+        "spool-holder-face": 2,
+        "spool-holder-roller": 2,
+        "spool-holder-base": 1
+    }
+}

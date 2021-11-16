@@ -1,0 +1,31 @@
+{
+    "fasteners": {
+        "Button head M8x20-Screw": 26,
+        "Standard size M6-Washer": 56,
+        "Socket head M6x14-Screw": 56,
+        "Button head M6x12-Screw": 3
+    },
+    "other": {
+        "3030-310mm001-tap": 1,
+        "3030-310mm002-tap": 1,
+        "3030-310mm003-tap": 1,
+        "3030-310mm004-tap": 1,
+        "3030-310mm005-tap": 1,
+        "3030-310mm006-tap": 1,
+        "3030-310mm007-tap": 1,
+        "3030-280mm001-tap": 1,
+        "3030-280mm002-tap": 1,
+        "3030-280mm003-tap": 1,
+        "3030-310mm008-tap-drill": 1,
+        "3030-310mm009-tap-drill": 1,
+        "3030-310mm010-tap-drill": 1,
+        "3030-310mm011-tap-drill": 1,
+        "Block-corner-bracket": 4,
+        "L-corner-bracket": 24,
+        "HCJ_Joint": 22,
+        "3030-500mm-front001-tap-drill": 1,
+        "3030-500mm-back001-tap-drill": 1,
+        "3030-500mm-front002-tap-drill": 1,
+        "3030-500mm-back002-tap-drill": 1
+    }
+}

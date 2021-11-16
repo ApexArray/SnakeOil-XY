@@ -1,0 +1,27 @@
+{
+    "fasteners": {
+        "Standard size M6-Washer": 6,
+        "Socket head M3x70-Screw": 2,
+        "Socket head M3x35-Screw": 2,
+        "Button head M5x10-Screw": 2,
+        "Socket head M3x8-Screw": 1,
+        "Button head M3x12-Screw": 1,
+        "Button head M6x14-Screw": 2,
+        "Button head M6x16-Screw": 4,
+        "Socket head M3x40-Screw": 1,
+        "M3x4-HeatSet": 3
+    },
+    "other": {
+        "motor-spacer": 4,
+        "MR115ZZ": 4,
+        "20t-9mm-pulley": 1,
+        "motor-40mm": 1,
+        "16t-pulley": 1,
+        "z-motor-front-plate-right": 1,
+        "z-motor-back-plate-right": 1,
+        "z-motor-body-right": 1,
+        "80t-pulley": 1,
+        "z-motor-top-plate-right": 1,
+        "5x65-shaft": 1
+    }
+}

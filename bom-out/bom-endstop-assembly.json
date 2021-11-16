@@ -1,0 +1,13 @@
+{
+    "fasteners": {
+        "M3x3-HeatSet": 2,
+        "Socket head M3x16-Screw": 6,
+        "Socket head M3x8-Screw": 2
+    },
+    "other": {
+        "1x_x-endstop-flag": 2,
+        "y-endstop-housing": 2,
+        "y-endstop-wire-clamp": 2,
+        "endstop-switch": 2
+    }
+}

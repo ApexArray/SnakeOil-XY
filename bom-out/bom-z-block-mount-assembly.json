@@ -1,0 +1,22 @@
+{
+    "fasteners": {
+        "Small size M3-Washer": 36,
+        "Socket head M3x10-Screw": 12,
+        "M3x4-HeatSet": 33,
+        "Socket head M3x16-Screw": 12,
+        "Socket head M3x14-Screw": 12,
+        "Button head M3x12-Screw": 6,
+        "Socket head M3x5-Screw": 12,
+        "Socket head M3x25-Screw": 6
+    },
+    "other": {
+        "z-rail-block-mount-left-with-limiter": 3,
+        "z-rail-block-mount-right-with-limiter": 3,
+        "bed-spring-bottom-spacer": 12,
+        "6x16-dowel-pin": 12,
+        "hook-spring": 12,
+        "z-belt-mounter-clamp-nut": 6,
+        "z-belt-block-mount": 6,
+        "z-belt-mounter-middle": 6
+    }
+}
