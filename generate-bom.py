@@ -7,22 +7,27 @@ Example:
 
 from pathlib import Path
 import re
-import FreeCAD
+import FreeCAD as App
 import json
 import FreeCADGui as Gui
 
-Gui.setupWithoutGUI()
+Gui.showMainWindow()
 
 # This is cross-platform now as long as the script is in the project directory
 target_file = Path(__file__).parent.joinpath('CAD/v1-180-assembly.FCStd')
 bom_out_dir = Path(__file__).parent.joinpath('bom-out')
 # Regex pattern to match all fasteners
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
-bom = {'fasteners': {}, 'other': {}}
+bom = {'fasteners': {}, 'other': {}, 'printed': {}}
 fasteners_bom = bom['fasteners']
 other_bom = bom['other']
+printed_bom = bom['printed']
 component_bom = {}  # BOM for each individual component
 type_dictionary = {}  # for debugging purposes
+printed_parts_colors = [
+    (0.3333333432674408, 1.0, 1.0, 0.0),  # Teal
+    (0.6666666865348816, 0.6666666865348816, 1.0, 0.0)  # Blue
+]
 
 
 def add_fastener_to_bom(part, component=None):
@@ -57,7 +62,7 @@ def add_fastener_to_bom(part, component=None):
 
     if component:
         if component not in component_bom.keys():
-            component_bom[component] = {'fasteners': {}, 'other': {}}
+            component_bom[component] = {'fasteners': {}, 'other': {}, 'printed': {}}
         if fastener in component_bom[component]['fasteners'].keys():
             component_bom[component]['fasteners'][fastener] += 1
         else:
@@ -75,23 +80,40 @@ def add_other_part_to_bom(part, component):
         other_bom[part_name] = 1
     if component:
         if component not in component_bom.keys():
-            component_bom[component] = {'fasteners': {}, 'other': {}}
+            component_bom[component] = {'fasteners': {}, 'other': {}, 'printed': {}}
         if part_name in component_bom[component]['other'].keys():
             component_bom[component]['other'][part_name] += 1
         else:
             component_bom[component]['other'][part_name] = 1
 
 
-def get_bom_from_freecad_document(assembly: FreeCAD.Document):
-    parts = []
+def add_printed_part_to_bom(part, component):
+    part_name = part.Label
+    if part_name in other_bom.keys():
+        other_bom[part_name] += 1
+    else:
+        other_bom[part_name] = 1
+    if component:
+        if component not in component_bom.keys():
+            component_bom[component] = {'fasteners': {}, 'other': {}, 'printed': {}}
+        if part_name in component_bom[component]['printed'].keys():
+            component_bom[component]['printed'][part_name] += 1
+        else:
+            component_bom[component]['printed'][part_name] = 1
+
+
+def get_bom_from_freecad_document(assembly: App.Document):
+    # parts = []
     # Get parts from this document
-    parts += [x for x in assembly.Objects if x.TypeId.startswith('Part::')]
-    for part in parts:
+    # parts +=
+    for part in [x for x in assembly.Objects if x.TypeId.startswith('Part::')]:
         # [debugging] Add type to dictionary so we can see which parts we want to add or filter out
         type_dictionary[part.Label] = part.TypeId
         # If fastener matches, add it to BOM
         if fastener_pattern.match(part.Label):
             add_fastener_to_bom(part, assembly.Label)
+        elif part.ViewObject.ShapeColor in printed_parts_colors:
+            add_printed_part_to_bom(part, assembly.Label)
         else:
             add_other_part_to_bom(part, assembly.Label)
 
@@ -106,7 +128,7 @@ def get_bom_from_freecad_document(assembly: FreeCAD.Document):
 
 print(f"# Getting fasteners from {target_file}")
 # Get assembly object from filepath
-cad_assembly = FreeCAD.open(str(target_file))
+cad_assembly = App.open(str(target_file))
 get_bom_from_freecad_document(cad_assembly)
 
 # Pretty print BOM dictionary
