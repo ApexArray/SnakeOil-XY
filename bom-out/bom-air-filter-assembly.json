@@ -8,11 +8,13 @@
     "other": {
         "hepa-filter": 1,
         "active-carbon-foam": 1,
+        "air-filter-body": 1,
+        "4010-fan": 2
+    },
+    "printed": {
         "air-filter-mounter-left": 1,
         "air-filter-mounter-right": 1,
         "air-filter-front-cover": 1,
-        "air-filter-body": 1,
-        "air-filter-eject-level": 1,
-        "4010-fan": 2
+        "air-filter-eject-level": 1
     }
 }

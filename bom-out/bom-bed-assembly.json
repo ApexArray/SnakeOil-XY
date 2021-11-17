@@ -16,25 +16,38 @@
         "M3-HeatSet": 1
     },
     "other": {
-        "back-left-arm": 1,
-        "front-left-arm": 1,
-        "middle-right-arm": 1,
-        "frame-end-cap": 2,
-        "extrusion-connector": 2,
-        "bed-spring-top-spacer": 6,
         "10mm-thread-ball": 3,
-        "threaded-ball-spacer": 3,
         "1515-185mm": 2,
         "1515-190mm": 2,
         "HBLTBS": 4,
         "aluminum-plate-190x193x": 1,
         "silicon-spacer": 3,
         "thermal-fuse": 1,
+        "92mm-slim-fan": 1
+    },
+    "printed": {
+        "back-left-arm": 1,
+        "front-left-arm": 1,
+        "middle-right-arm": 1,
+        "frame-end-cap": 1,
+        "extrusion-connector": 1,
+        "bed-spring-top-spacer": 1,
+        "threaded-ball-spacer": 1,
+        "bed-spring-top-spacer001": 1,
+        "bed-spring-top-spacer002": 1,
+        "bed-spring-top-spacer003": 1,
+        "threaded-ball-spacer001": 1,
+        "threaded-ball-spacer002": 1,
+        "bed-spring-top-spacer004": 1,
+        "bed-spring-top-spacer005": 1,
+        "extrusion-connector001": 1,
+        "frame-end-cap001": 1,
         "bed-cable-mounter": 1,
         "wago-mounter": 1,
         "bed-cable-supporter": 1,
-        "1515-92mm-fan-mount": 2,
-        "1515-92mm-fan-mount001 (Mirror #1)": 2,
-        "92mm-slim-fan": 1
+        "1515-92mm-fan-mount002": 1,
+        "1515-92mm-fan-mount001 (Mirror #1)002": 1,
+        "1515-92mm-fan-mount001": 1,
+        "1515-92mm-fan-mount001 (Mirror #1)001": 1
     }
 }

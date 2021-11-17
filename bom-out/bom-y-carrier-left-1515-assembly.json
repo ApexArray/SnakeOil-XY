@@ -8,7 +8,9 @@
     },
     "other": {
         "smooth-idler": 1,
-        "20t-idler": 1,
+        "20t-idler": 1
+    },
+    "printed": {
         "y-carrier-bottom-left": 1,
         "y-carrier-top-left": 1
     }

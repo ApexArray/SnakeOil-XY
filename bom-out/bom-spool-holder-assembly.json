@@ -7,10 +7,16 @@
     },
     "other": {
         "F623-bearing": 4,
-        "spool-holder-spacer": 4,
         "filament-spoll": 1,
-        "spool-holder-face": 2,
-        "spool-holder-roller": 2,
-        "spool-holder-base": 1
+        "spool-holder-roller": 2
+    },
+    "printed": {
+        "spool-holder-spacer003": 1,
+        "spool-holder-face001": 1,
+        "spool-holder-base": 1,
+        "spool-holder-spacer002": 1,
+        "spool-holder-spacer001": 1,
+        "spool-holder-spacer": 1,
+        "spool-holder-face": 1
     }
 }

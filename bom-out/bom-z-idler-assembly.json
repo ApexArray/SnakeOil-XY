@@ -10,7 +10,9 @@
     },
     "other": {
         "20t-9mm-idker": 3,
-        "20t-9mm-idler": 3,
+        "20t-9mm-idler": 3
+    },
+    "printed": {
         "z-idler-housing-left": 3,
         "z-idler-housing-right": 3,
         "z-idler-mounter-left": 3,

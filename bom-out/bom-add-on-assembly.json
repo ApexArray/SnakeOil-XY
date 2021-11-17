@@ -5,7 +5,8 @@
         "Standard size M6-Washer": 3,
         "Button head M6x12-Screw": 3
     },
-    "other": {
+    "other": {},
+    "printed": {
         "HTU21D-mounter": 3,
         "camera-arm": 3,
         "camera-back-plate": 3,

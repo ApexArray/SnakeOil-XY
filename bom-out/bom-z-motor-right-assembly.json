@@ -18,10 +18,12 @@
         "motor-40mm": 1,
         "16t-pulley": 1,
         "z-motor-front-plate-right": 1,
+        "80t-pulley": 1,
+        "5x65-shaft": 1
+    },
+    "printed": {
         "z-motor-back-plate-right": 1,
         "z-motor-body-right": 1,
-        "80t-pulley": 1,
-        "z-motor-top-plate-right": 1,
-        "5x65-shaft": 1
+        "z-motor-top-plate-right": 1
     }
 }

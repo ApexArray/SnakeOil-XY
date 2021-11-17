@@ -3,7 +3,9 @@
         "Button head M10x25-Screw": 4
     },
     "other": {
-        "subber": 4,
+        "subber": 4
+    },
+    "printed": {
         "foot-corner": 4
     }
 }

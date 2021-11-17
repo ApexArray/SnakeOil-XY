@@ -12,9 +12,11 @@
     "other": {
         "MR115ZZ": 1,
         "20t-pulley": 1,
-        "ab-motor-idler-spacer": 1,
         "smooth-idler-6mm": 3,
-        "motor-40mm": 1,
+        "motor-40mm": 1
+    },
+    "printed": {
+        "ab-motor-idler-spacer": 1,
         "motor-mount-stack-idler-spacer": 1,
         "ab-motor-top-right": 1,
         "ab-motor-bottom-right": 1,

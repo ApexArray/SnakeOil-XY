@@ -5,9 +5,11 @@
         "Socket head M3x8-Screw": 2
     },
     "other": {
-        "1x_x-endstop-flag": 2,
-        "y-endstop-housing": 2,
-        "y-endstop-wire-clamp": 2,
         "endstop-switch": 2
+    },
+    "printed": {
+        "1x_x-endstop-flag-1515": 2,
+        "y-endstop-housing": 2,
+        "y-endstop-wire-clamp": 2
     }
 }

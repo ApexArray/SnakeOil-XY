@@ -17,6 +17,18 @@
         "Socket head M3x10-Screw": 2
     },
     "other": {
+        "panel-BL": 1,
+        "panel-BR": 1,
+        "panel-FR": 1,
+        "panel-FL": 1,
+        "din-282mm": 1,
+        "SonOff-mini": 1,
+        "WAGO 222-3c": 4,
+        "SSR0omron": 1,
+        "lrs-psu": 1,
+        "IEC Screw Mount Plug Socket Male": 1
+    },
+    "printed": {
         "bottom-frame-SL": 1,
         "bottom-frame-BL": 1,
         "bottom-frame-BR": 1,
@@ -24,26 +36,18 @@
         "bottom-frame-SRF": 1,
         "bottom-frame-FR": 1,
         "bottom-frame-FL": 1,
-        "panel-BL": 1,
-        "panel-BR": 1,
-        "panel-FR": 1,
-        "panel-FL": 1,
         "center-panel-connector": 1,
         "side-panel-connector": 1,
         "front-din-cap": 1,
-        "bottom-din-holder": 2,
+        "bottom-din-holder": 1,
         "back-din-cap": 1,
-        "din-282mm": 1,
+        "bottom-din-holder001": 1,
         "sonoff-mount": 1,
-        "SonOff-mini": 1,
         "wago-mount": 1,
-        "WAGO 222-3c": 4,
-        "SSR0omron": 1,
-        "lrs-psu": 1,
-        "din-wire-mounter": 2,
+        "din-wire-mounter": 1,
         "24v-200w-psu-mounter-mirror": 1,
         "24v-200w-psu-mounter": 1,
-        "ac-socket-mounter": 1,
-        "IEC Screw Mount Plug Socket Male": 1
+        "din-wire-mounter001": 1,
+        "ac-socket-mounter": 1
     }
 }

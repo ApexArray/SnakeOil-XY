@@ -10,13 +10,21 @@
         "Socket head M3x25-Screw": 6
     },
     "other": {
+        "6x16-dowel-pin": 12,
+        "hook-spring": 12
+    },
+    "printed": {
         "z-rail-block-mount-left-with-limiter": 3,
         "z-rail-block-mount-right-with-limiter": 3,
-        "bed-spring-bottom-spacer": 12,
-        "6x16-dowel-pin": 12,
-        "hook-spring": 12,
-        "z-belt-mounter-clamp-nut": 6,
-        "z-belt-block-mount": 6,
-        "z-belt-mounter-middle": 6
+        "bed-spring-bottom-spacer": 3,
+        "bed-spring-bottom-spacer001": 3,
+        "z-belt-mounter-clamp-nut": 3,
+        "z-belt-block-mount": 3,
+        "z-belt-mounter-middle": 3,
+        "bed-spring-bottom-spacer002": 3,
+        "bed-spring-bottom-spacer003": 3,
+        "z-belt-block-mount001": 3,
+        "z-belt-mounter-middle001": 3,
+        "z-belt-mounter-clamp-nut001": 3
     }
 }
