@@ -30,9 +30,10 @@ printed_parts_colors = [
 
 # Quick references to BOM part types.  Also provides type hinting in the BomPart dataclass
 PRINTED = "printed"
+PRINTED_ACCENT = "printed (accent)"
 FASTENER = "fastener"
 OTHER = "other"
-BomItemType = Enum('BomItemType', [PRINTED, FASTENER, OTHER])
+BomItemType = Enum('BomItemType', [PRINTED, PRINTED_ACCENT, FASTENER, OTHER])
 
 
 def get_new_bom():
@@ -49,6 +50,7 @@ detail_bom = get_new_bom()
 # Quick references
 fasteners_bom = bom[FASTENER]
 printed_bom = bom[PRINTED]
+printed_accent_bom = bom[PRINTED_ACCENT]
 other_bom = bom[OTHER]
 
 
@@ -108,7 +110,10 @@ def add_to_bom(part: FreeCAD.Part):
     if fastener_pattern.match(part.Label):
         bomItem = BomItem(part, FASTENER)
     elif part.ViewObject.ShapeColor in printed_parts_colors:
-        bomItem = BomItem(part, PRINTED)
+        if part.ViewObject.ShapeColor == (0.3333333432674408, 1.0, 1.0, 0.0):  # Teal
+            bomItem = BomItem(part, PRINTED)
+        elif part.ViewObject.ShapeColor == (0.6666666865348816, 0.6666666865348816, 1.0, 0.0):  # Blue
+            bomItem = BomItem(part, PRINTED_ACCENT)
     else:
         bomItem = BomItem(part, OTHER)
     _add_to_main_bom(bomItem)
@@ -180,7 +185,7 @@ addCustomfFastener("3030 M5-T-nut", 10)
 # Write to files
 write_bom_to_file('bom-all.json', bom)
 write_bom_to_file('bom-fasteners.json', fasteners_bom)
-write_bom_to_file('bom-printed-parts.json', printed_bom)
+write_bom_to_file('bom-printed-parts-main-color).json', {'printed (main color)': printed_bom, 'printed (accent color)': printed_accent_bom})
 write_bom_to_file('bom-detail.json', detail_bom)
 write_bom_to_file('bom-other.json', other_bom)
 
