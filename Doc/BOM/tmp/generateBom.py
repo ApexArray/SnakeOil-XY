@@ -3,6 +3,7 @@ Run with FreeCAD's bundled interpreter, or as a FreeCAD macro
 """
 from pathlib import Path
 import re
+import sys
 import FreeCAD as App
 import json
 import os
@@ -43,6 +44,11 @@ def get_new_bom():
         _bom[partType.name] = {}
     return _bom
 
+def get_stl_files():
+    dir = Path(SNAKEOIL_PROJECT_PATH)
+    stl_files = [x for x in dir.glob("**/*.stl")]
+    print(f"# Found {len(stl_files)} stl files")
+    return stl_files
 
 # Create new BOM dictionaries
 bom = get_new_bom()
@@ -156,37 +162,91 @@ def write_bom_to_file(target_file_name, bomContent):
     with open(filePath, 'w') as bom_file:
         bom_file.write(json.dumps(sortedDict, indent=2))
 
+global parts_dict
+parts_dict = None
+
+def load_printed_parts_from_file(filename='bom-printed-parts.json'):
+    """Returns tuple main_colors, accent_colors from a json file"""
+    global parts_dict
+    if parts_dict is None:
+        with open(filename) as file:
+            parts_dict = json.load(file)
+    main_colors = parts_dict['printed (main color)']
+    accent_colors = parts_dict['printed (accent color)']
+    return main_colors, accent_colors
+
+def what_is_part_color(file: Path, main_colors: list, accent_colors: list):
+    """Check if part_name is a main or accent color. Returns 'main', 'accent' or None"""
+    file_name = file.name
+    main_results = [part_name for part_name in main_colors if part_name in file_name]
+    accent_results = [part_name for part_name in accent_colors if part_name in file_name]
+    main_count = len(main_results)
+    accent_count = len(accent_results)
+    total_count = main_count + accent_count
+    if total_count != 1:
+        # print(f"# Found {total_count} results for {file_name}")
+        if total_count > 1:
+            print(f"# {file_name} matches {total_count} part_names")
+            print(f"\tmain_results {main_results}")
+            print(f"\taccent_results {accent_results}")
+    else:
+        if main_count == 1:
+            return "main"
+        elif accent_count == 1:
+            return "accent"
+        else:
+            raise ValueError(f"total count is {total_count}, main and accent count != 1")
+
+def get_filename_color_report():
+    """return dictionary of filename['main'|'accent'|None]"""
+    stl_files = get_stl_files()
+    main_colors, accent_colors = load_printed_parts_from_file()
+    file_results = {part_name: what_is_part_color(part_name, main_colors, accent_colors) for part_name in stl_files}
+    # print(file_results)
+    total_main_parts = len([file for (file, result)  in file_results.items() if result == 'main'])
+    total_accent_parts = len([file for (file, result)  in file_results.items() if result == 'accent'])
+    total_missing_parts = len([file for (file, result)  in file_results.items() if result is None])
+    print(f"# Total main parts: {total_main_parts}")
+    print(f"# Total accent parts: {total_accent_parts}")
+    print(f"# Total missing parts: {total_missing_parts}")
+    return file_results
+
 if __name__ == '__main__':
-    print(f"# Getting BOM from {target_file}")
-    # Get assembly object from filepath
-    cad_assembly = App.open(str(target_file))
-    get_bom_from_freecad_document(cad_assembly)
+    get_filename_color_report()
 
-    # add custom Fasteners that not in the assembly
-    # spring washer for rails mount
-    addCustomfFastener("Spring washer M3", 60)
-    # bolts for 3030 extrusion rails mount
-    addCustomfFastener("Socket head M3x10-Screw", 50)
-    # bolts for 1515 extrusion rail mount
-    addCustomfFastener("Socket head M3x8-Screw", 10)
-    # T-nut for 1515 gantry and bed
-    addCustomfFastener("Square M3-Nut", 30)
-    # count 3030 M6 T-nut = M6 bolt
-    m6NutCount = 0
-    for fastenersName in fasteners_bom.keys():
-        if "Screw" in fastenersName and "M6" in fastenersName:
-            m6NutCount += fasteners_bom[fastenersName]
-    addCustomfFastener("3030 M6-T-nut", m6NutCount)
-    # 3030 M3 t-nut (50 for rails, 10 for other add-ons)
-    addCustomfFastener("3030 M3-T-nut", 60)
-    # 3030 M5 t-nut for z motor mount and others
-    addCustomfFastener("3030 M5-T-nut", 10)
+    if len(sys.argv) > 1:
+        cmd = sys.argv[1]
+        if cmd == 'generate_new_bom':
+            print(f"# Getting BOM from {target_file}")
+            # Get assembly object from filepath
+            cad_assembly = App.open(str(target_file))
+            get_bom_from_freecad_document(cad_assembly)
 
-    # Write to files
-    write_bom_to_file('bom-all.json', bom)
-    write_bom_to_file('bom-fasteners.json', fasteners_bom)
-    write_bom_to_file('bom-printed-parts-main-color).json', {'printed (main color)': printed_bom, 'printed (accent color)': printed_accent_bom})
-    write_bom_to_file('bom-detail.json', detail_bom)
-    write_bom_to_file('bom-other.json', other_bom)
+            # add custom Fasteners that not in the assembly
+            # spring washer for rails mount
+            addCustomfFastener("Spring washer M3", 60)
+            # bolts for 3030 extrusion rails mount
+            addCustomfFastener("Socket head M3x10-Screw", 50)
+            # bolts for 1515 extrusion rail mount
+            addCustomfFastener("Socket head M3x8-Screw", 10)
+            # T-nut for 1515 gantry and bed
+            addCustomfFastener("Square M3-Nut", 30)
+            # count 3030 M6 T-nut = M6 bolt
+            m6NutCount = 0
+            for fastenersName in fasteners_bom.keys():
+                if "Screw" in fastenersName and "M6" in fastenersName:
+                    m6NutCount += fasteners_bom[fastenersName]
+            addCustomfFastener("3030 M6-T-nut", m6NutCount)
+            # 3030 M3 t-nut (50 for rails, 10 for other add-ons)
+            addCustomfFastener("3030 M3-T-nut", 60)
+            # 3030 M5 t-nut for z motor mount and others
+            addCustomfFastener("3030 M5-T-nut", 10)
 
-    print("# completed!")
+            # Write to files
+            write_bom_to_file('bom-all.json', bom)
+            write_bom_to_file('bom-fasteners.json', fasteners_bom)
+            write_bom_to_file('bom-printed-parts-main-color).json', {'printed (main color)': printed_bom, 'printed (accent color)': printed_accent_bom})
+            write_bom_to_file('bom-detail.json', detail_bom)
+            write_bom_to_file('bom-other.json', other_bom)
+
+            print("# completed!")
