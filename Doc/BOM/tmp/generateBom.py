@@ -3,7 +3,7 @@ Run with FreeCAD's bundled interpreter, or as a FreeCAD macro
 """
 from pathlib import Path
 import re
-import FreeCAD
+import FreeCAD as App
 import json
 import os
 import FreeCADGui as Gui
@@ -56,7 +56,7 @@ other_bom = bom[OTHER]
 
 @dataclass
 class BomItem:
-    part: FreeCAD.Part  # Reference to FreeCAD part object
+    part: App.Part  # Reference to FreeCAD part object
     type: BomItemType  # What type of BOM entry (printed, fastener, other)
     name: str = field(init=False)  # We'll get the name from the part.label in the __post_init__ function
 
@@ -105,7 +105,7 @@ def _add_to_detailed_bom(bomItem: BomItem):
         targetDetailBom[bomItem.name] = 1
 
 
-def add_to_bom(part: FreeCAD.Part):
+def add_to_bom(part: App.Part):
     # Sort parts by type
     if fastener_pattern.match(part.Label):
         bomItem = BomItem(part, FASTENER)
@@ -120,7 +120,7 @@ def add_to_bom(part: FreeCAD.Part):
     _add_to_detailed_bom(bomItem)
 
 
-def get_bom_from_freecad_document(assembly: FreeCAD.Document):
+def get_bom_from_freecad_document(assembly: App.Document):
     print("# Getting parts of", assembly.Label)
     for part in [x for x in assembly.Objects if x.TypeId.startswith('Part::')]:
         add_to_bom(part)
@@ -159,7 +159,7 @@ def write_bom_to_file(target_file_name, bomContent):
 
 print(f"# Getting BOM from {target_file}")
 # Get assembly object from filepath
-cad_assembly = FreeCAD.open(str(target_file))
+cad_assembly = App.open(str(target_file))
 get_bom_from_freecad_document(cad_assembly)
 
 # add custom Fasteners that not in the assembly
