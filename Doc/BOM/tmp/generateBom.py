@@ -156,37 +156,37 @@ def write_bom_to_file(target_file_name, bomContent):
     with open(filePath, 'w') as bom_file:
         bom_file.write(json.dumps(sortedDict, indent=2))
 
+if __name__ == '__main__':
+    print(f"# Getting BOM from {target_file}")
+    # Get assembly object from filepath
+    cad_assembly = App.open(str(target_file))
+    get_bom_from_freecad_document(cad_assembly)
 
-print(f"# Getting BOM from {target_file}")
-# Get assembly object from filepath
-cad_assembly = App.open(str(target_file))
-get_bom_from_freecad_document(cad_assembly)
+    # add custom Fasteners that not in the assembly
+    # spring washer for rails mount
+    addCustomfFastener("Spring washer M3", 60)
+    # bolts for 3030 extrusion rails mount
+    addCustomfFastener("Socket head M3x10-Screw", 50)
+    # bolts for 1515 extrusion rail mount
+    addCustomfFastener("Socket head M3x8-Screw", 10)
+    # T-nut for 1515 gantry and bed
+    addCustomfFastener("Square M3-Nut", 30)
+    # count 3030 M6 T-nut = M6 bolt
+    m6NutCount = 0
+    for fastenersName in fasteners_bom.keys():
+        if "Screw" in fastenersName and "M6" in fastenersName:
+            m6NutCount += fasteners_bom[fastenersName]
+    addCustomfFastener("3030 M6-T-nut", m6NutCount)
+    # 3030 M3 t-nut (50 for rails, 10 for other add-ons)
+    addCustomfFastener("3030 M3-T-nut", 60)
+    # 3030 M5 t-nut for z motor mount and others
+    addCustomfFastener("3030 M5-T-nut", 10)
 
-# add custom Fasteners that not in the assembly
-# spring washer for rails mount
-addCustomfFastener("Spring washer M3", 60)
-# bolts for 3030 extrusion rails mount
-addCustomfFastener("Socket head M3x10-Screw", 50)
-# bolts for 1515 extrusion rail mount
-addCustomfFastener("Socket head M3x8-Screw", 10)
-# T-nut for 1515 gantry and bed
-addCustomfFastener("Square M3-Nut", 30)
-# count 3030 M6 T-nut = M6 bolt
-m6NutCount = 0
-for fastenersName in fasteners_bom.keys():
-    if "Screw" in fastenersName and "M6" in fastenersName:
-        m6NutCount += fasteners_bom[fastenersName]
-addCustomfFastener("3030 M6-T-nut", m6NutCount)
-# 3030 M3 t-nut (50 for rails, 10 for other add-ons)
-addCustomfFastener("3030 M3-T-nut", 60)
-# 3030 M5 t-nut for z motor mount and others
-addCustomfFastener("3030 M5-T-nut", 10)
+    # Write to files
+    write_bom_to_file('bom-all.json', bom)
+    write_bom_to_file('bom-fasteners.json', fasteners_bom)
+    write_bom_to_file('bom-printed-parts-main-color).json', {'printed (main color)': printed_bom, 'printed (accent color)': printed_accent_bom})
+    write_bom_to_file('bom-detail.json', detail_bom)
+    write_bom_to_file('bom-other.json', other_bom)
 
-# Write to files
-write_bom_to_file('bom-all.json', bom)
-write_bom_to_file('bom-fasteners.json', fasteners_bom)
-write_bom_to_file('bom-printed-parts-main-color).json', {'printed (main color)': printed_bom, 'printed (accent color)': printed_accent_bom})
-write_bom_to_file('bom-detail.json', detail_bom)
-write_bom_to_file('bom-other.json', other_bom)
-
-print("# completed!")
+    print("# completed!")
