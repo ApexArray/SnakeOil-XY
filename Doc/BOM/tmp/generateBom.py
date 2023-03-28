@@ -19,7 +19,9 @@ else:
     print("Running as macro")
 
 # Use SNAKEOIL_PROJECT_PATH environment variable if exists, else default to @Chip's directory
-SNAKEOIL_PROJECT_PATH = os.getenv('SNAKEOIL_PROJECT_PATH', '/home/chip/Data/Code/SnakeOil-XY/')
+# SNAKEOIL_PROJECT_PATH = os.getenv('SNAKEOIL_PROJECT_PATH', '/home/chip/Data/Code/SnakeOil-XY/')
+BASE_PATH = Path(os.path.dirname(__file__))
+SNAKEOIL_PROJECT_PATH = str(BASE_PATH.parent.parent.parent)
 target_file = Path(SNAKEOIL_PROJECT_PATH).joinpath('CAD/v1-180-assembly.FCStd')
 bom_out_dir = Path(SNAKEOIL_PROJECT_PATH).joinpath('Doc/BOM/tmp')
 # Regex pattern to match all fasteners
@@ -69,7 +71,9 @@ class PrintedPart:
     def __post_init__(self):
         try:
             self.Label = self.part.Label
-            self.parent = self.part.Parents[1][0].Label
+            self.parent = self.part.Parents[0][0].Label
+            if self.parent == "snakeoilxy-180":
+                self.parent = self.part.Parents[1][0].Label
         except:
             pass
 
@@ -216,14 +220,15 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
     main_count = len(main_results)
     accent_count = len(accent_results)
     total_count = main_count + accent_count
-    TAB = '\t'
-    TAB2 = '\t\t'
     if total_count != 1:
         # print(f"# Found {total_count} results for {file_name}")
         if total_count > 1 and total_count not in [main_count, accent_count]:
-            print(f"# {file_name} matches {total_count} part_names")
-            print(f"\tmain_results:\n{TAB2.join([str(part) for part in main_results])}")
-            print(f"\taccent_results\n{TAB2.join([str(part) for part in accent_results])}")
+            print(f"# {file.relative_to(SNAKEOIL_PROJECT_PATH)} matches {total_count} part_names")
+            main_list = '\n'.join([f'  - {part}' for part in main_results])
+            accent_list = '\n'.join([f'  - {part}' for part in accent_results])
+            print(f"main colors:\n{main_list}")
+            print(f"main colors\n{accent_list}")
+            print("\n")
     else:
         if main_count == 1:
             return "main"
