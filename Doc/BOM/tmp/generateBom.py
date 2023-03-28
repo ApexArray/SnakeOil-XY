@@ -1,16 +1,22 @@
 """
 Run with FreeCAD's bundled interpreter, or as a FreeCAD macro
 """
+import os
+FREECADPATH = os.getenv('FREECADPATH', '/usr/lib/freecad-python3/lib/')
+import sys
+sys.path.append(FREECADPATH)
 from pathlib import Path
 import re
 import sys
 from typing import List
 import FreeCAD as App
-import json
-import os
 import FreeCADGui as Gui
+import json
+import logging
 from dataclasses import dataclass, field
 from enum import Enum
+
+LOGGER = logging.getLogger(__name__)
 
 # Open GUI if running from console, otherwise we know we are running from a macro
 if hasattr(Gui, 'showMainWindow'):
@@ -50,7 +56,7 @@ def get_new_bom():
 def get_stl_files():
     dir = Path(SNAKEOIL_PROJECT_PATH)
     stl_files = [x for x in dir.glob("**/*.stl")]
-    print(f"# Found {len(stl_files)} stl files")
+    LOGGER.info(f"# Found {len(stl_files)} stl files")
     return stl_files
 
 # Create new BOM dictionaries
@@ -154,20 +160,20 @@ def add_to_bom(part: App.Part):
     _add_to_main_bom(bomItem)
     _add_to_detailed_bom(bomItem)
 
-def read_printed_parts_from_freecad_document(assembly: App.Document):
-    print("# Getting parts from", assembly.Label)
+def read_printed_parts_from_freecad_document(assembly: App.Document) -> list[App.Part]:
+    LOGGER.debug("# Getting parts from", assembly.Label)
     freecad_printed_parts = [x for x in assembly.Objects if x.TypeId.startswith('Part::')]
     # Recurse through each linked file
     for linked_file in assembly.findObjects("App::Link"):
-        print("# Getting linked parts from", linked_file.Name)
+        LOGGER.debug("# Getting linked parts from", linked_file.Name)
         freecad_printed_parts += read_printed_parts_from_freecad_document(linked_file.LinkedObject.Document)
     return freecad_printed_parts
 
 
 def get_bom_from_freecad_document(printed_parts: List[App.Part]):
     for part in printed_parts:
-        if part.Label in ["knob", "wago-mount", "wago-mounter", 'nut', 'z-belt-mounter-clamp-nut']:
-            print(part)
+        # if part.Label in ["knob", "wago-mount", "wago-mounter", 'nut', 'z-belt-mounter-clamp-nut']:
+        #     LOGGER.warning(PrintedPart(part))
         add_to_bom(part)
 
 
@@ -192,7 +198,7 @@ def write_bom_to_file(target_file_name, bomContent):
     # sort dict
     sortedDict = sort_dictionary_recursive(bomContent)
     filePath = bom_out_dir.joinpath(target_file_name)
-    print(f"# Writing to {target_file_name}")
+    LOGGER.info(f"# Writing to {target_file_name}")
     # Sort dictionary alphabetically by key
     with open(filePath, 'w') as bom_file:
         bom_file.write(json.dumps(sortedDict, indent=2))
@@ -223,11 +229,11 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
     if total_count != 1:
         # print(f"# Found {total_count} results for {file_name}")
         if total_count > 1 and total_count not in [main_count, accent_count]:
-            print(f"# {file.relative_to(SNAKEOIL_PROJECT_PATH)} matches {total_count} part_names")
-            main_list = '\n'.join([f'  - {part}' for part in main_results])
-            accent_list = '\n'.join([f'  - {part}' for part in accent_results])
-            print(f"main colors:\n{main_list}")
-            print(f"accent colors\n{accent_list}")
+            LOGGER.warning(f"# {file.relative_to(SNAKEOIL_PROJECT_PATH)} matches {total_count} part_names")
+            main_list = '\n'.join([f'   - {part}' for part in main_results])
+            accent_list = '\n'.join([f'   - {part}' for part in accent_results])
+            print(f"  main colors:\n{main_list}")
+            print(f"  accent colors\n{accent_list}\n")
     else:
         if main_count == 1:
             return "main"
@@ -255,7 +261,7 @@ if __name__ == '__main__':
     # if len(sys.argv) > 1:
     #     cmd = sys.argv[1]
     #     if cmd == 'generate_new_bom':
-    print(f"# Getting BOM from {target_file}")
+    LOGGER.info(f"# Getting BOM from {target_file}")
     # Get assembly object from filepath
     cad_assembly = App.open(str(target_file))
     printed_parts = read_printed_parts_from_freecad_document(cad_assembly)
