@@ -15,6 +15,7 @@ import json
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
+import shelve
 
 logging.basicConfig(filename='generateBom.log', filemode='a', format='%(levelname)s: %(message)s', level=logging.INFO)
 LOGGER = logging.getLogger()
@@ -43,6 +44,7 @@ printed_parts_colors = [
 PRINTED_MAIN = "main"
 PRINTED_ACCENT = "accent"
 PRINTED_MISSING = "missing"
+PRINTED_UNKNOWN_COLOR = "unknown color"
 FASTENER = "fastener"
 OTHER = "other"
 BomItemType = Enum('BomItemType', [PRINTED_MAIN, PRINTED_ACCENT, FASTENER, OTHER])
@@ -74,10 +76,12 @@ class PrintedPart:
     part: App.Part
     parent: str = field(init=False, default='')
     Label: str = field(init=False)
+    color: str = field(init=False)
 
     def __post_init__(self):
+        self.Label = self.part.Label
+        self.color = check_part_color(self.part)
         try:
-            self.Label = self.part.Label
             self.parent = self.part.Parents[0][0].Label
             if self.parent == "snakeoilxy-180":
                 self.parent = self.part.Parents[1][0].Label
@@ -85,7 +89,7 @@ class PrintedPart:
             pass
 
     def __str__(self) -> str:
-        return f"{self.part.Label} [{self.parent}]"
+        return f"{self.parent}/{self.part.Label}"
     
     def __repr__(self) -> str:
         return self.__str__()
@@ -239,66 +243,86 @@ def load_printed_parts_from_file(filename='bom-printed-parts.json'):
     return main_colors, accent_colors
 
 def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
-    """Check if part_name is a main or accent color. Returns 'main', 'accent' or None"""
+    """Check if part_name is a main or accent color. Returns 'main', 'accent', 0 or obj containing error info"""
     file_name = file.name
     # List all CAD objects by main and accent colors
-    parts_main_color = [part for part in printed_parts if check_part_color(part) == PRINTED_MAIN]
-    parts_accent_color = [part for part in printed_parts if check_part_color(part) == PRINTED_ACCENT]
+    # parts_main_color = [part for part in printed_parts if check_part_color(part) == PRINTED_MAIN]
+    # parts_accent_color = [part for part in printed_parts if check_part_color(part) == PRINTED_ACCENT]
     # Find objects in each list with names container in our filename
-    main_results = [PrintedPart(part) for part in parts_main_color if part.Label in file_name]
-    accent_results = [PrintedPart(part) for part in parts_accent_color if part.Label in file_name]
+    all_results = [PrintedPart(part) for part in printed_parts if part.Label in file_name]
+    main_results = [part for part in all_results if part.color == PRINTED_MAIN]
+    accent_results = [part for part in all_results if part.color == PRINTED_ACCENT]
+    unknown_results = [part for part in all_results if part.color not in [PRINTED_MAIN, PRINTED_ACCENT]]
     # Help variables for logging below
     main_count = len(main_results)
     accent_count = len(accent_results)
-    total_count = main_count + accent_count
+    total_colored_count = main_count + accent_count
     relative_file_path = file.relative_to(SNAKEOIL_PROJECT_PATH)
     main_list = '\n'.join([f'    - {part}' for part in main_results])
     accent_list = '\n'.join([f'    - {part}' for part in accent_results])
     main_color_report = f"  main colors:\n{main_list}\n"
     accent_color_report = f"  accent colors:\n{accent_list}\n"
     # Ideally, we should have exactly one match.
-    if total_count == 1:
+    if total_colored_count == 1:
         if main_count == 1:
             return PRINTED_MAIN
         elif accent_count == 1:
             return PRINTED_ACCENT
         else:
-            raise ValueError(f"total count is {total_count}, main and accent count != 1")
+            raise ValueError(f"total count is {total_colored_count}, main and accent count != 1")
     # Return 0 if no results were found
-    elif total_count == 0:
-        return None
+    elif total_colored_count == 0:
+        if len(unknown_results) > 0:
+            msg = f"{relative_file_path} does not match any known colors, but does match the following unknown_results:\n"
+            msg += str(unknown_results)
+            LOGGER.error(msg)
+            return msg
+        else:
+            return 0
     # Proceed with warning if more than one match, but all matches are either main OR accent color
-    elif total_count > 1 and total_count in [main_count, accent_count]:
+    elif total_colored_count > 1 and total_colored_count in [main_count, accent_count]:
         full_report = f"{relative_file_path} matches multiple CAD objects of the same color:\n"
-        if total_count == main_count:
+        if total_colored_count == main_count:
             full_report += main_color_report
             color = PRINTED_MAIN
-        elif total_count == accent_count:
+        elif total_colored_count == accent_count:
             full_report += accent_color_report
             color = PRINTED_ACCENT
         LOGGER.warning(full_report)
         return color
     # Display error if we found matching results with both main and accent colors
     else:
-        LOGGER.error(
-            f"{relative_file_path} matches different colored CAD objects:\n" + main_color_report + accent_color_report
-        )
+        msg = f"{relative_file_path} matches different colored CAD objects:\n" + main_color_report + accent_color_report
+        LOGGER.error(msg)
+        return msg
 
-def get_filename_color_report(printed_parts: List[App.Part]):
-    """return dictionary of filename['main'|'accent'|None]"""
+def get_filename_color_results(printed_parts: List[App.Part]):
+    """return dictionary of filename['main'|'accent'|0|obj]"""
     stl_files = get_stl_files()
     # main_colors, accent_colors = load_printed_parts_from_file()
     file_results = {part_name: get_part_color_from_filename(part_name, printed_parts) for part_name in stl_files}    # print(file_results)
-    main_parts = [file for (file, result)  in file_results.items() if result == PRINTED_MAIN]
-    accent_parts = [file for (file, result)  in file_results.items() if result == PRINTED_ACCENT]
-    missing_parts = [file for (file, result)  in file_results.items() if result is None]
+    main_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_MAIN]
+    accent_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_ACCENT]
+    missing_parts = [fp for (fp, result) in file_results.items() if result == 0]
+    unknown_parts = [fp for (fp, result) in file_results.items() if result not in [PRINTED_MAIN, PRINTED_ACCENT, 0]]
     LOGGER.info(f"# Total main parts: {len(main_parts)}")
     LOGGER.info(f"# Total accent parts: {len(accent_parts)}")
     LOGGER.info(f"# Total missing parts: {len(missing_parts)}")
-    return {PRINTED_MAIN: main_parts, PRINTED_ACCENT: accent_parts, PRINTED_MISSING: missing_parts}
+    LOGGER.info(f"# Total unknown parts: {len(unknown_parts)}")
+    return {
+        PRINTED_MAIN: main_parts, 
+        PRINTED_ACCENT: accent_parts, 
+        PRINTED_MISSING: missing_parts,
+        PRINTED_UNKNOWN_COLOR: unknown_parts
+        }
 
-def write_filename_reports():
-    pass
+def write_filename_reports(filename_results):
+    for category in [PRINTED_MAIN, PRINTED_ACCENT, PRINTED_MISSING, PRINTED_UNKNOWN_COLOR]:
+        with open(f'{category}-color.log', 'w') as file:
+            results: list[Path] = filename_results[category]
+            formatted_results: list[str] = [str(x.relative_to(SNAKEOIL_PROJECT_PATH)) for x in results]
+            sorted_results = sorted(formatted_results)
+            file.write('\n'.join(sorted_results))
 
 if __name__ == '__main__':
     LOGGER.info(f"# Getting BOM from {target_file}")
@@ -310,4 +334,6 @@ if __name__ == '__main__':
     add_fasteners()
     # Write all BOM files
     write_bom_files()
-    filename_report = get_filename_color_report(printed_parts)
+    # List all CAD objects by main and accent colors
+    filename_results = get_filename_color_results(printed_parts)
+    write_filename_reports(filename_results)
