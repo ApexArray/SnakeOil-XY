@@ -60,6 +60,24 @@ printed_bom = bom[PRINTED_MAIN]
 printed_accent_bom = bom[PRINTED_ACCENT]
 other_bom = bom[OTHER]
 
+@dataclass
+class PrintedPart:
+    part: App.Part
+    parent: str = field(init=False, default='')
+    Label: str = field(init=False)
+
+    def __post_init__(self):
+        try:
+            self.Label = self.part.Label
+            self.parent = self.part.Parents[1][0].Label
+        except:
+            pass
+
+    def __str__(self) -> str:
+        return f"{self.part.Label} [{self.parent}]"
+    
+    def __repr__(self) -> str:
+        return self.__str__()
 
 @dataclass
 class BomItem:
@@ -121,39 +139,32 @@ def check_part_color(part: App.Part):
 
 def add_to_bom(part: App.Part):
     # Sort parts by type
-    part_color = check_part_color(part)
     if fastener_pattern.match(part.Label):
         bomItem = BomItem(part, FASTENER)
-    elif part_color == PRINTED_MAIN:
-        bomItem = BomItem(part, PRINTED_MAIN)
-    elif part_color == PRINTED_ACCENT:
-        bomItem = BomItem(part, PRINTED_ACCENT)        
     else:
-        bomItem = BomItem(part, OTHER)
+        part_color = check_part_color(part)
+        if part_color is not None:
+            bomItem = BomItem(part, part_color)       
+        else:
+            bomItem = BomItem(part, OTHER)
     _add_to_main_bom(bomItem)
     _add_to_detailed_bom(bomItem)
 
-global freecad_printed_parts
-freecad_printed_parts = None
-
 def read_printed_parts_from_freecad_document(assembly: App.Document):
-    global freecad_printed_parts
-    if freecad_printed_parts is None:
-        freecad_printed_parts = [x for x in assembly.Objects if x.TypeId.startswith('Part::')]
+    print("# Getting parts from", assembly.Label)
+    freecad_printed_parts = [x for x in assembly.Objects if x.TypeId.startswith('Part::')]
+    # Recurse through each linked file
+    for linked_file in assembly.findObjects("App::Link"):
+        print("# Getting linked parts from", linked_file.Name)
+        freecad_printed_parts += read_printed_parts_from_freecad_document(linked_file.LinkedObject.Document)
     return freecad_printed_parts
 
 
-def get_bom_from_freecad_document(assembly: App.Document):
-    print("# Getting parts of", assembly.Label)
-    printed_parts = read_printed_parts_from_freecad_document(assembly)
+def get_bom_from_freecad_document(printed_parts: List[App.Part]):
     for part in printed_parts:
         if part.Label in ["knob", "wago-mount", "wago-mounter", 'nut', 'z-belt-mounter-clamp-nut']:
             print(part)
         add_to_bom(part)
-    # Recurse through each linked file
-    for linked_file in assembly.findObjects("App::Link"):
-        print("# Getting fasteners from", linked_file.Name)
-        get_bom_from_freecad_document(linked_file.LinkedObject.Document)
 
 
 def addCustomfFastener(fastenerName, count):
@@ -200,17 +211,19 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
     file_name = file.name
     parts_main_color = [part for part in printed_parts if check_part_color(part) == PRINTED_MAIN]
     parts_accent_color = [part for part in printed_parts if check_part_color(part) == PRINTED_ACCENT]
-    main_results = [part for part in parts_main_color if part.Label in file_name]
-    accent_results = [part for part in parts_accent_color if part.Label in file_name]
+    main_results = [PrintedPart(part) for part in parts_main_color if part.Label in file_name]
+    accent_results = [PrintedPart(part) for part in parts_accent_color if part.Label in file_name]
     main_count = len(main_results)
     accent_count = len(accent_results)
     total_count = main_count + accent_count
+    TAB = '\t'
+    TAB2 = '\t\t'
     if total_count != 1:
         # print(f"# Found {total_count} results for {file_name}")
         if total_count > 1 and total_count not in [main_count, accent_count]:
             print(f"# {file_name} matches {total_count} part_names")
-            print(f"\tmain_results {main_results}")
-            print(f"\taccent_results {accent_results}")
+            print(f"\tmain_results:\n{TAB2.join([str(part) for part in main_results])}")
+            print(f"\taccent_results\n{TAB2.join([str(part) for part in accent_results])}")
     else:
         if main_count == 1:
             return "main"
@@ -219,10 +232,9 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
         else:
             raise ValueError(f"total count is {total_count}, main and accent count != 1")
 
-def get_filename_color_report(assembly: App.Document):
+def get_filename_color_report(printed_parts: List[App.Part]):
     """return dictionary of filename['main'|'accent'|None]"""
     stl_files = get_stl_files()
-    printed_parts = read_printed_parts_from_freecad_document(assembly)
     # main_colors, accent_colors = load_printed_parts_from_file()
     file_results = {part_name: get_part_color_from_filename(part_name, printed_parts) for part_name in stl_files}
     # print(file_results)
@@ -242,7 +254,8 @@ if __name__ == '__main__':
     print(f"# Getting BOM from {target_file}")
     # Get assembly object from filepath
     cad_assembly = App.open(str(target_file))
-    get_bom_from_freecad_document(cad_assembly)
+    printed_parts = read_printed_parts_from_freecad_document(cad_assembly)
+    get_bom_from_freecad_document(printed_parts)
 
     # add custom Fasteners that not in the assembly
     # spring washer for rails mount
@@ -273,4 +286,4 @@ if __name__ == '__main__':
 
     print("# completed!")
 
-    get_filename_color_report(cad_assembly)
+    get_filename_color_report(printed_parts)
