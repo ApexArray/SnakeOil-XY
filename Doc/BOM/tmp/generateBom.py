@@ -16,7 +16,8 @@ import logging
 from dataclasses import dataclass, field
 from enum import Enum
 
-LOGGER = logging.getLogger(__name__)
+logging.basicConfig(filename='generateBom.log', filemode='a', format='%(levelname)s: %(message)s', level=logging.ERROR)
+LOGGER = logging.getLogger()
 
 # Open GUI if running from console, otherwise we know we are running from a macro
 if hasattr(Gui, 'showMainWindow'):
@@ -39,12 +40,11 @@ printed_parts_colors = [
 ]
 
 # Quick references to BOM part types.  Also provides type hinting in the BomPart dataclass
-PRINTED_MAIN = "printed (main)"
-PRINTED_ACCENT = "printed (accent)"
+PRINTED_MAIN = "main"
+PRINTED_ACCENT = "accent"
 FASTENER = "fastener"
 OTHER = "other"
 BomItemType = Enum('BomItemType', [PRINTED_MAIN, PRINTED_ACCENT, FASTENER, OTHER])
-
 
 def get_new_bom():
     """Use this factory to get a new empty BOM dict"""
@@ -120,14 +120,12 @@ class BomItem:
                 if self.part.type == "ISO7090":
                     self.name = f"Standard size {self.name}"
 
-
 def _add_to_main_bom(bomItem: BomItem):
     targetBom = bom[bomItem.type]
     if bomItem.name in targetBom.keys():
         targetBom[bomItem.name] += 1
     else:
         targetBom[bomItem.name] = 1
-
 
 def _add_to_detailed_bom(bomItem: BomItem):
     parentPartName = bomItem.part.Document.Label
@@ -169,20 +167,15 @@ def read_printed_parts_from_freecad_document(assembly: App.Document) -> list[App
         freecad_printed_parts += read_printed_parts_from_freecad_document(linked_file.LinkedObject.Document)
     return freecad_printed_parts
 
-
 def get_bom_from_freecad_document(printed_parts: List[App.Part]):
     for part in printed_parts:
-        # if part.Label in ["knob", "wago-mount", "wago-mounter", 'nut', 'z-belt-mounter-clamp-nut']:
-        #     LOGGER.warning(PrintedPart(part))
         add_to_bom(part)
-
 
 def addCustomfFastener(fastenerName, count):
     if fastenerName in fasteners_bom.keys():
         fasteners_bom[fastenerName] += count
     else:
         fasteners_bom[fastenerName] = count
-
 
 def sort_dictionary_recursive(dictionary):
     sortedDict = {}
@@ -192,7 +185,6 @@ def sort_dictionary_recursive(dictionary):
             val = sort_dictionary_recursive(val)
         sortedDict[i] = val
     return sortedDict
-
 
 def write_bom_to_file(target_file_name, bomContent):
     # sort dict
@@ -219,54 +211,63 @@ def load_printed_parts_from_file(filename='bom-printed-parts.json'):
 def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
     """Check if part_name is a main or accent color. Returns 'main', 'accent' or None"""
     file_name = file.name
+    # List all CAD objects by main and accent colors
     parts_main_color = [part for part in printed_parts if check_part_color(part) == PRINTED_MAIN]
     parts_accent_color = [part for part in printed_parts if check_part_color(part) == PRINTED_ACCENT]
+    # Find objects in each list with names container in our filename
     main_results = [PrintedPart(part) for part in parts_main_color if part.Label in file_name]
     accent_results = [PrintedPart(part) for part in parts_accent_color if part.Label in file_name]
+    # Help variables for logging below
     main_count = len(main_results)
     accent_count = len(accent_results)
     total_count = main_count + accent_count
-    if total_count != 1:
-        # print(f"# Found {total_count} results for {file_name}")
-        if total_count > 1 and total_count not in [main_count, accent_count]:
-            LOGGER.warning(f"# {file.relative_to(SNAKEOIL_PROJECT_PATH)} matches {total_count} part_names")
-            main_list = '\n'.join([f'   - {part}' for part in main_results])
-            accent_list = '\n'.join([f'   - {part}' for part in accent_results])
-            print(f"  main colors:\n{main_list}")
-            print(f"  accent colors\n{accent_list}\n")
-    else:
+    relative_file_path = file.relative_to(SNAKEOIL_PROJECT_PATH)
+    main_list = '\n'.join([f'    - {part}' for part in main_results])
+    accent_list = '\n'.join([f'    - {part}' for part in accent_results])
+    main_color_report = f"  main colors:\n{main_list}\n"
+    accent_color_report = f"  accent colors:\n{accent_list}\n"
+    # Ideally, we should have exactly one match.
+    if total_count == 1:
         if main_count == 1:
-            return "main"
+            return PRINTED_MAIN
         elif accent_count == 1:
-            return "accent"
+            return PRINTED_ACCENT
         else:
             raise ValueError(f"total count is {total_count}, main and accent count != 1")
+    # Return 0 if no results were found
+    elif total_count == 0:
+        return None
+    # Proceed with warning if more than one match, but all matches are either main OR accent color
+    elif total_count > 1 and total_count in [main_count, accent_count]:
+        full_report = f"{relative_file_path} matches multiple CAD objects of the same color:\n"
+        if total_count == main_count:
+            full_report += main_color_report
+            color = PRINTED_MAIN
+        elif total_count == accent_count:
+            full_report += accent_color_report
+            color = PRINTED_ACCENT
+        LOGGER.warning(full_report)
+        return color
+    # Display error if we found matching results with both main and accent colors
+    else:
+        LOGGER.error(
+            f"{relative_file_path} matches different colored CAD objects:\n" + main_color_report + accent_color_report
+        )
 
 def get_filename_color_report(printed_parts: List[App.Part]):
     """return dictionary of filename['main'|'accent'|None]"""
     stl_files = get_stl_files()
     # main_colors, accent_colors = load_printed_parts_from_file()
-    file_results = {part_name: get_part_color_from_filename(part_name, printed_parts) for part_name in stl_files}
-    # print(file_results)
-    total_main_parts = len([file for (file, result)  in file_results.items() if result == 'main'])
-    total_accent_parts = len([file for (file, result)  in file_results.items() if result == 'accent'])
+    file_results = {part_name: get_part_color_from_filename(part_name, printed_parts) for part_name in stl_files}    # print(file_results)
+    total_main_parts = len([file for (file, result)  in file_results.items() if result == PRINTED_MAIN])
+    total_accent_parts = len([file for (file, result)  in file_results.items() if result == PRINTED_ACCENT])
     total_missing_parts = len([file for (file, result)  in file_results.items() if result is None])
-    print(f"# Total main parts: {total_main_parts}")
-    print(f"# Total accent parts: {total_accent_parts}")
-    print(f"# Total missing parts: {total_missing_parts}")
+    LOGGER.info(f"# Total main parts: {total_main_parts}")
+    LOGGER.info(f"# Total accent parts: {total_accent_parts}")
+    LOGGER.info(f"# Total missing parts: {total_missing_parts}")
     return file_results
 
-if __name__ == '__main__':
-
-    # if len(sys.argv) > 1:
-    #     cmd = sys.argv[1]
-    #     if cmd == 'generate_new_bom':
-    LOGGER.info(f"# Getting BOM from {target_file}")
-    # Get assembly object from filepath
-    cad_assembly = App.open(str(target_file))
-    printed_parts = read_printed_parts_from_freecad_document(cad_assembly)
-    get_bom_from_freecad_document(printed_parts)
-
+def add_fasteners():
     # add custom Fasteners that not in the assembly
     # spring washer for rails mount
     addCustomfFastener("Spring washer M3", 60)
@@ -287,6 +288,7 @@ if __name__ == '__main__':
     # 3030 M5 t-nut for z motor mount and others
     addCustomfFastener("3030 M5-T-nut", 10)
 
+def write_bom_files():
     # Write to files
     write_bom_to_file('bom-all.json', bom)
     write_bom_to_file('bom-fasteners.json', fasteners_bom)
@@ -294,6 +296,14 @@ if __name__ == '__main__':
     write_bom_to_file('bom-detail.json', detail_bom)
     write_bom_to_file('bom-other.json', other_bom)
 
-    print("# completed!")
-
-    get_filename_color_report(printed_parts)
+if __name__ == '__main__':
+    LOGGER.info(f"# Getting BOM from {target_file}")
+    # Get assembly object from filepath
+    cad_assembly = App.open(str(target_file))
+    printed_parts = read_printed_parts_from_freecad_document(cad_assembly)
+    get_bom_from_freecad_document(printed_parts)
+    # Add custom fasteners (not in CAD)
+    add_fasteners()
+    # Write all BOM files
+    write_bom_files()
+    filename_report = get_filename_color_report(printed_parts)
