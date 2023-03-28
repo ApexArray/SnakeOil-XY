@@ -227,8 +227,7 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
             main_list = '\n'.join([f'  - {part}' for part in main_results])
             accent_list = '\n'.join([f'  - {part}' for part in accent_results])
             print(f"main colors:\n{main_list}")
-            print(f"main colors\n{accent_list}")
-            print("\n")
+            print(f"accent colors\n{accent_list}")
     else:
         if main_count == 1:
             return "main"
@@ -285,7 +284,7 @@ if __name__ == '__main__':
     # Write to files
     write_bom_to_file('bom-all.json', bom)
     write_bom_to_file('bom-fasteners.json', fasteners_bom)
-    write_bom_to_file('bom-printed-parts-main-color).json', {'printed (main color)': printed_bom, 'printed (accent color)': printed_accent_bom})
+    write_bom_to_file('bom-printed-parts.json', {'printed (main color)': printed_bom, 'printed (accent color)': printed_accent_bom})
     write_bom_to_file('bom-detail.json', detail_bom)
     write_bom_to_file('bom-other.json', other_bom)
 
