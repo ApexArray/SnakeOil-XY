@@ -16,7 +16,7 @@ import logging
 from dataclasses import dataclass, field
 from enum import Enum
 
-logging.basicConfig(filename='generateBom.log', filemode='a', format='%(levelname)s: %(message)s', level=logging.ERROR)
+logging.basicConfig(filename='generateBom.log', filemode='a', format='%(levelname)s: %(message)s', level=logging.INFO)
 LOGGER = logging.getLogger()
 
 # Open GUI if running from console, otherwise we know we are running from a macro
@@ -42,6 +42,7 @@ printed_parts_colors = [
 # Quick references to BOM part types.  Also provides type hinting in the BomPart dataclass
 PRINTED_MAIN = "main"
 PRINTED_ACCENT = "accent"
+PRINTED_MISSING = "missing"
 FASTENER = "fastener"
 OTHER = "other"
 BomItemType = Enum('BomItemType', [PRINTED_MAIN, PRINTED_ACCENT, FASTENER, OTHER])
@@ -195,6 +196,35 @@ def write_bom_to_file(target_file_name, bomContent):
     with open(filePath, 'w') as bom_file:
         bom_file.write(json.dumps(sortedDict, indent=2))
 
+def add_fasteners():
+    # add custom Fasteners that not in the assembly
+    # spring washer for rails mount
+    addCustomfFastener("Spring washer M3", 60)
+    # bolts for 3030 extrusion rails mount
+    addCustomfFastener("Socket head M3x10-Screw", 50)
+    # bolts for 1515 extrusion rail mount
+    addCustomfFastener("Socket head M3x8-Screw", 10)
+    # T-nut for 1515 gantry and bed
+    addCustomfFastener("Square M3-Nut", 30)
+    # count 3030 M6 T-nut = M6 bolt
+    m6NutCount = 0
+    for fastenersName in fasteners_bom.keys():
+        if "Screw" in fastenersName and "M6" in fastenersName:
+            m6NutCount += fasteners_bom[fastenersName]
+    addCustomfFastener("3030 M6-T-nut", m6NutCount)
+    # 3030 M3 t-nut (50 for rails, 10 for other add-ons)
+    addCustomfFastener("3030 M3-T-nut", 60)
+    # 3030 M5 t-nut for z motor mount and others
+    addCustomfFastener("3030 M5-T-nut", 10)
+
+def write_bom_files():
+    # Write to files
+    write_bom_to_file('bom-all.json', bom)
+    write_bom_to_file('bom-fasteners.json', fasteners_bom)
+    write_bom_to_file('bom-printed-parts.json', {'printed (main color)': printed_bom, 'printed (accent color)': printed_accent_bom})
+    write_bom_to_file('bom-detail.json', detail_bom)
+    write_bom_to_file('bom-other.json', other_bom)
+
 global parts_dict
 parts_dict = None
 
@@ -259,42 +289,16 @@ def get_filename_color_report(printed_parts: List[App.Part]):
     stl_files = get_stl_files()
     # main_colors, accent_colors = load_printed_parts_from_file()
     file_results = {part_name: get_part_color_from_filename(part_name, printed_parts) for part_name in stl_files}    # print(file_results)
-    total_main_parts = len([file for (file, result)  in file_results.items() if result == PRINTED_MAIN])
-    total_accent_parts = len([file for (file, result)  in file_results.items() if result == PRINTED_ACCENT])
-    total_missing_parts = len([file for (file, result)  in file_results.items() if result is None])
-    LOGGER.info(f"# Total main parts: {total_main_parts}")
-    LOGGER.info(f"# Total accent parts: {total_accent_parts}")
-    LOGGER.info(f"# Total missing parts: {total_missing_parts}")
-    return file_results
+    main_parts = [file for (file, result)  in file_results.items() if result == PRINTED_MAIN]
+    accent_parts = [file for (file, result)  in file_results.items() if result == PRINTED_ACCENT]
+    missing_parts = [file for (file, result)  in file_results.items() if result is None]
+    LOGGER.info(f"# Total main parts: {len(main_parts)}")
+    LOGGER.info(f"# Total accent parts: {len(accent_parts)}")
+    LOGGER.info(f"# Total missing parts: {len(missing_parts)}")
+    return {PRINTED_MAIN: main_parts, PRINTED_ACCENT: accent_parts, PRINTED_MISSING: missing_parts}
 
-def add_fasteners():
-    # add custom Fasteners that not in the assembly
-    # spring washer for rails mount
-    addCustomfFastener("Spring washer M3", 60)
-    # bolts for 3030 extrusion rails mount
-    addCustomfFastener("Socket head M3x10-Screw", 50)
-    # bolts for 1515 extrusion rail mount
-    addCustomfFastener("Socket head M3x8-Screw", 10)
-    # T-nut for 1515 gantry and bed
-    addCustomfFastener("Square M3-Nut", 30)
-    # count 3030 M6 T-nut = M6 bolt
-    m6NutCount = 0
-    for fastenersName in fasteners_bom.keys():
-        if "Screw" in fastenersName and "M6" in fastenersName:
-            m6NutCount += fasteners_bom[fastenersName]
-    addCustomfFastener("3030 M6-T-nut", m6NutCount)
-    # 3030 M3 t-nut (50 for rails, 10 for other add-ons)
-    addCustomfFastener("3030 M3-T-nut", 60)
-    # 3030 M5 t-nut for z motor mount and others
-    addCustomfFastener("3030 M5-T-nut", 10)
-
-def write_bom_files():
-    # Write to files
-    write_bom_to_file('bom-all.json', bom)
-    write_bom_to_file('bom-fasteners.json', fasteners_bom)
-    write_bom_to_file('bom-printed-parts.json', {'printed (main color)': printed_bom, 'printed (accent color)': printed_accent_bom})
-    write_bom_to_file('bom-detail.json', detail_bom)
-    write_bom_to_file('bom-other.json', other_bom)
+def write_filename_reports():
+    pass
 
 if __name__ == '__main__':
     LOGGER.info(f"# Getting BOM from {target_file}")
