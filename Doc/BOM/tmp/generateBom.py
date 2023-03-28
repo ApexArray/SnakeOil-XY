@@ -45,6 +45,7 @@ PRINTED_MAIN = "main"
 PRINTED_ACCENT = "accent"
 PRINTED_MISSING = "missing"
 PRINTED_UNKNOWN_COLOR = "unknown color"
+PRINTED_MISSING_CAD_FILE = "missing CAD file"
 FASTENER = "fastener"
 OTHER = "other"
 BomItemType = Enum('BomItemType', [PRINTED_MAIN, PRINTED_ACCENT, FASTENER, OTHER])
@@ -273,12 +274,12 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
     # Return 0 if no results were found
     elif total_colored_count == 0:
         if len(unknown_results) > 0:
-            msg = f"{relative_file_path} does not match any known colors, but does match the following unknown_results:\n"
+            msg = f"does not match any known colors, but does match the following unknown_results:\n"
             msg += str(unknown_results)
-            LOGGER.error(msg)
+            LOGGER.error(f"{relative_file_path}\n{msg}")
             return msg
         else:
-            return 0
+            return ""
     # Proceed with warning if more than one match, but all matches are either main OR accent color
     elif total_colored_count > 1 and total_colored_count in [main_count, accent_count]:
         full_report = f"{relative_file_path} matches multiple CAD objects of the same color:\n"
@@ -292,8 +293,8 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
         return color
     # Display error if we found matching results with both main and accent colors
     else:
-        msg = f"{relative_file_path} matches different colored CAD objects:\n" + main_color_report + accent_color_report
-        LOGGER.error(msg)
+        msg = f"matches different colored CAD objects:\n" + main_color_report + accent_color_report
+        LOGGER.error(f"{relative_file_path}\n{msg}")
         return msg
 
 def get_filename_color_results(printed_parts: List[App.Part]):
@@ -304,7 +305,7 @@ def get_filename_color_results(printed_parts: List[App.Part]):
     main_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_MAIN]
     accent_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_ACCENT]
     missing_parts = [fp for (fp, result) in file_results.items() if result == 0]
-    unknown_parts = [fp for (fp, result) in file_results.items() if result not in [PRINTED_MAIN, PRINTED_ACCENT, 0]]
+    unknown_parts = [f"{fp} {result}" for (fp, result) in file_results.items() if result not in [PRINTED_MAIN, PRINTED_ACCENT]]
     LOGGER.info(f"# Total main parts: {len(main_parts)}")
     LOGGER.info(f"# Total accent parts: {len(accent_parts)}")
     LOGGER.info(f"# Total missing parts: {len(missing_parts)}")
