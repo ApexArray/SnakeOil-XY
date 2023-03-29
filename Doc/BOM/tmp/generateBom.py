@@ -199,15 +199,15 @@ def add_to_bom(part: App.Part):
 
 def get_cad_objects_from_freecad(assembly: App.Document) -> list[App.Part]:
     LOGGER.debug("# Getting parts from", assembly.Label)
-    freecad_printed_parts = [x for x in assembly.Objects if x.TypeId.startswith('Part::')]
+    freecad_parts = [x for x in assembly.Objects if x.TypeId.startswith('Part::')]
     # Recurse through each linked file
     for linked_file in assembly.findObjects("App::Link"):
         LOGGER.debug("# Getting linked parts from", linked_file.Name)
-        freecad_printed_parts += get_cad_objects_from_freecad(linked_file.LinkedObject.Document)
-    return freecad_printed_parts
+        freecad_parts += get_cad_objects_from_freecad(linked_file.LinkedObject.Document)
+    return freecad_parts
 
-def get_bom_from_freecad_document(printed_parts: List[App.Part]):
-    for part in printed_parts:
+def get_bom_from_freecad_document(cad_parts: List[App.Part]):
+    for part in cad_parts:
         add_to_bom(part)
 
 def addCustomfFastener(fastenerName, count):
