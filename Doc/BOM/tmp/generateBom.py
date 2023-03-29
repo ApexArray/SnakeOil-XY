@@ -64,17 +64,18 @@ def get_new_bom():
     return _bom
 
 def filter_stl_files(stl_files: list[Path]):
-    removed = False
+    filtered_stl_files = []
     for file in stl_files:
+        keep = True
         for excluded_fp in EXCLUDE_DIRS:
             if str(file).startswith(str(excluded_fp)):
-                stl_files.remove(file)
-                removed = True
-        if removed: continue
+                keep = False
         for excluded_str in EXCLUDE_STRINGS:
-            if excluded_str in str(file):
-                stl_files.remove(file)
-    return stl_files
+            if excluded_str.lower() in str(file).lower():
+                keep = False
+        if keep == True:
+            filtered_stl_files.append(file)
+    return filtered_stl_files
 
 def get_stl_files():
     dir = Path(SNAKEOIL_PROJECT_PATH)
@@ -196,13 +197,13 @@ def add_to_bom(part: App.Part):
     _add_to_main_bom(bomItem)
     _add_to_detailed_bom(bomItem)
 
-def read_printed_parts_from_freecad_document(assembly: App.Document) -> list[App.Part]:
+def get_cad_objects_from_freecad(assembly: App.Document) -> list[App.Part]:
     LOGGER.debug("# Getting parts from", assembly.Label)
     freecad_printed_parts = [x for x in assembly.Objects if x.TypeId.startswith('Part::')]
     # Recurse through each linked file
     for linked_file in assembly.findObjects("App::Link"):
         LOGGER.debug("# Getting linked parts from", linked_file.Name)
-        freecad_printed_parts += read_printed_parts_from_freecad_document(linked_file.LinkedObject.Document)
+        freecad_printed_parts += get_cad_objects_from_freecad(linked_file.LinkedObject.Document)
     return freecad_printed_parts
 
 def get_bom_from_freecad_document(printed_parts: List[App.Part]):
@@ -364,7 +365,7 @@ if __name__ == '__main__':
     LOGGER.info(f"# Getting BOM from {target_file}")
     # Get assembly object from filepath
     cad_assembly = App.open(str(target_file))
-    cad_parts = read_printed_parts_from_freecad_document(cad_assembly)
+    cad_parts = get_cad_objects_from_freecad(cad_assembly)
     get_bom_from_freecad_document(cad_parts)
     # Add custom fasteners (not in CAD)
     add_fasteners()
