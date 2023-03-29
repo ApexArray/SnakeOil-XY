@@ -23,7 +23,7 @@ from lib.CAD import (
     )
 
 logging.basicConfig(
-    filename='generateBom.log', filemode='a', format='%(levelname)s: %(message)s', level=logging.INFO
+    filename='generateBom.log', filemode='w', format='%(levelname)s: %(message)s', level=logging.INFO
     )
 LOGGER = logging.getLogger()
 
@@ -242,12 +242,15 @@ def get_filename_color_results(printed_parts: List[BomItem]):
     conflicting_parts = [
         f"{fp} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_CONFLICTING_COLORS)
         ]
-    LOGGER.info(f"# Total STL files: {len(stl_files)}")
-    LOGGER.info(f"# Total main parts: {len(main_parts)}")
-    LOGGER.info(f"# Total accent parts: {len(accent_parts)}")
-    LOGGER.info(f"# Total missing parts: {len(missing_parts)}")
-    LOGGER.info(f"# Total unknown colored parts: {len(unknown_color_parts)}")
-    LOGGER.info(f"# Total conflicting parts: {len(conflicting_parts)}")
+    msg = f"""# Total STL files: {len(stl_files)}
+# Total main parts: {len(main_parts)}
+# Total accent parts: {len(accent_parts)}
+# Total missing parts: {len(missing_parts)}
+# Total unknown colored parts: {len(unknown_color_parts)}
+# Total conflicting parts: {len(conflicting_parts)}"""
+    LOGGER.info("\n"+msg)
+    with open('results.txt', 'w') as file:
+        file.write(msg)
     assert len(stl_files) == sum([
         len(main_parts), len(accent_parts), len(missing_parts), 
         len(unknown_color_parts), len(conflicting_parts)
