@@ -34,18 +34,13 @@ target_file = Path(SNAKEOIL_PROJECT_PATH).joinpath('CAD/v1-180-assembly.FCStd')
 bom_out_dir = Path(SNAKEOIL_PROJECT_PATH).joinpath('Doc/BOM/tmp')
 # Regex pattern to match all fasteners
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
-# If a shape color in this list, the object will be treated as a printed part
-printed_parts_colors = [
-    (0.3333333432674408, 1.0, 1.0, 0.0),  # Teal
-    (0.6666666865348816, 0.6666666865348816, 1.0, 0.0),  # Blue
-]
 
 # Quick references to BOM part types.  Also provides type hinting in the BomPart dataclass
 PRINTED_MAIN = "main"
 PRINTED_ACCENT = "accent"
 PRINTED_MISSING = "missing"
-PRINTED_UNKNOWN_COLOR = "unknown color"
-PRINTED_MISSING_CAD_FILE = "missing CAD file"
+PRINTED_UNKNOWN_COLOR = "unknown"
+PRINTED_CONFLICTING_COLORS = "conflicting"
 FASTENER = "fastener"
 OTHER = "other"
 BomItemType = Enum('BomItemType', [PRINTED_MAIN, PRINTED_ACCENT, FASTENER, OTHER])
@@ -78,10 +73,12 @@ class PrintedPart:
     parent: str = field(init=False, default='')
     Label: str = field(init=False)
     color: str = field(init=False)
+    raw_color: tuple = field(init=False)
 
     def __post_init__(self):
         self.Label = self.part.Label
         self.color = check_part_color(self.part)
+        self.raw_color = self.part.ViewObject.ShapeColor
         try:
             self.parent = self.part.Parents[0][0].Label
             if self.parent == "snakeoilxy-180":
@@ -246,9 +243,6 @@ def load_printed_parts_from_file(filename='bom-printed-parts.json'):
 def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
     """Check if part_name is a main or accent color. Returns 'main', 'accent', 0 or obj containing error info"""
     file_name = file.name
-    # List all CAD objects by main and accent colors
-    # parts_main_color = [part for part in printed_parts if check_part_color(part) == PRINTED_MAIN]
-    # parts_accent_color = [part for part in printed_parts if check_part_color(part) == PRINTED_ACCENT]
     # Find objects in each list with names container in our filename
     all_results = [PrintedPart(part) for part in printed_parts if part.Label in file_name]
     main_results = [part for part in all_results if part.color == PRINTED_MAIN]
@@ -274,27 +268,25 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
     # Return 0 if no results were found
     elif total_colored_count == 0:
         if len(unknown_results) > 0:
-            msg = f"does not match any known colors, but does match the following unknown_results:\n"
+            msg = f"{PRINTED_UNKNOWN_COLOR} colors found:\n"
             msg += str(unknown_results)
-            LOGGER.error(f"{relative_file_path}\n{msg}")
+            LOGGER.error(f"{relative_file_path} {msg}")
             return msg
         else:
-            return ""
+            return PRINTED_MISSING
     # Proceed with warning if more than one match, but all matches are either main OR accent color
     elif total_colored_count > 1 and total_colored_count in [main_count, accent_count]:
         full_report = f"{relative_file_path} matches multiple CAD objects of the same color:\n"
         if total_colored_count == main_count:
-            full_report += main_color_report
-            color = PRINTED_MAIN
+            LOGGER.warning(full_report + main_color_report)
+            return PRINTED_MAIN
         elif total_colored_count == accent_count:
-            full_report += accent_color_report
-            color = PRINTED_ACCENT
-        LOGGER.warning(full_report)
-        return color
+            LOGGER.warning(full_report + accent_color_report)
+            return PRINTED_ACCENT
     # Display error if we found matching results with both main and accent colors
     else:
-        msg = f"matches different colored CAD objects:\n" + main_color_report + accent_color_report
-        LOGGER.error(f"{relative_file_path}\n{msg}")
+        msg = f"{PRINTED_CONFLICTING_COLORS} colors found:\n" + main_color_report + accent_color_report
+        LOGGER.error(f"{relative_file_path} {msg}")
         return msg
 
 def get_filename_color_results(printed_parts: List[App.Part]):
@@ -302,26 +294,32 @@ def get_filename_color_results(printed_parts: List[App.Part]):
     stl_files = get_stl_files()
     # main_colors, accent_colors = load_printed_parts_from_file()
     file_results = {part_name: get_part_color_from_filename(part_name, printed_parts) for part_name in stl_files}    # print(file_results)
-    main_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_MAIN]
-    accent_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_ACCENT]
-    missing_parts = [fp for (fp, result) in file_results.items() if result == 0]
-    unknown_parts = [f"{fp} {result}" for (fp, result) in file_results.items() if result not in [PRINTED_MAIN, PRINTED_ACCENT]]
+    main_parts = [fp.relative_to(SNAKEOIL_PROJECT_PATH) for (fp, result) in file_results.items() if result == PRINTED_MAIN]
+    accent_parts = [fp.relative_to(SNAKEOIL_PROJECT_PATH) for (fp, result) in file_results.items() if result == PRINTED_ACCENT]
+    missing_parts = [fp.relative_to(SNAKEOIL_PROJECT_PATH) for (fp, result) in file_results.items() if result.startswith(PRINTED_MISSING)]
+    unknown_color_parts = [
+        f"{fp.relative_to(SNAKEOIL_PROJECT_PATH)} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_UNKNOWN_COLOR)
+        ]
+    conflicting_parts = [
+        f"{fp.relative_to(SNAKEOIL_PROJECT_PATH)} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_CONFLICTING_COLORS)
+        ]
     LOGGER.info(f"# Total main parts: {len(main_parts)}")
     LOGGER.info(f"# Total accent parts: {len(accent_parts)}")
     LOGGER.info(f"# Total missing parts: {len(missing_parts)}")
-    LOGGER.info(f"# Total unknown parts: {len(unknown_parts)}")
+    LOGGER.info(f"# Total unknown colored parts: {len(unknown_color_parts)}")
     return {
         PRINTED_MAIN: main_parts, 
         PRINTED_ACCENT: accent_parts, 
         PRINTED_MISSING: missing_parts,
-        PRINTED_UNKNOWN_COLOR: unknown_parts
+        PRINTED_UNKNOWN_COLOR: unknown_color_parts,
+        PRINTED_CONFLICTING_COLORS: conflicting_parts
         }
 
 def write_filename_reports(filename_results):
-    for category in [PRINTED_MAIN, PRINTED_ACCENT, PRINTED_MISSING, PRINTED_UNKNOWN_COLOR]:
+    for category in [PRINTED_MAIN, PRINTED_ACCENT, PRINTED_MISSING, PRINTED_UNKNOWN_COLOR, PRINTED_CONFLICTING_COLORS]:
         with open(f'{category}-color.log', 'w') as file:
             results: list[Path] = filename_results[category]
-            formatted_results: list[str] = [str(x.relative_to(SNAKEOIL_PROJECT_PATH)) for x in results]
+            formatted_results: list[str] = [str(x) for x in results]
             sorted_results = sorted(formatted_results)
             file.write('\n'.join(sorted_results))
 
