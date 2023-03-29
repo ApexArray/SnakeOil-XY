@@ -8,7 +8,7 @@ sys.path.append(FREECADPATH)
 from pathlib import Path
 import re
 import sys
-from typing import List
+from typing import List, Union
 import FreeCAD as App
 import FreeCADGui as Gui
 import json
@@ -32,8 +32,19 @@ BASE_PATH = Path(os.path.dirname(__file__))
 SNAKEOIL_PROJECT_PATH = str(BASE_PATH.parent.parent.parent)
 target_file = Path(SNAKEOIL_PROJECT_PATH).joinpath('CAD/v1-180-assembly.FCStd')
 bom_out_dir = Path(SNAKEOIL_PROJECT_PATH).joinpath('Doc/BOM/tmp')
+STL_PATH = (Path(SNAKEOIL_PROJECT_PATH) / 'BETA3_Standard_Release_STL' / 'STLs').relative_to(SNAKEOIL_PROJECT_PATH)
+EXCLUDE_DIRS = [
+    STL_PATH / "Add-on",
+    STL_PATH / "Tools",
+]
+EXCLUDE_STRINGS = [
+    "OPTIONAL"
+]
 # Regex pattern to match all fasteners
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
+
+# STL_GLOB = "**/*.stl"
+STL_GLOB = f"{STL_PATH}/**/*.stl"
 
 # Quick references to BOM part types.  Also provides type hinting in the BomPart dataclass
 PRINTED_MAIN = "main"
@@ -52,9 +63,23 @@ def get_new_bom():
         _bom[partType.name] = {}
     return _bom
 
+def filter_stl_files(stl_files: list[Path]):
+    removed = False
+    for file in stl_files:
+        for excluded_fp in EXCLUDE_DIRS:
+            if str(file).startswith(str(excluded_fp)):
+                stl_files.remove(file)
+                removed = True
+        if removed: continue
+        for excluded_str in EXCLUDE_STRINGS:
+            if excluded_str in str(file):
+                stl_files.remove(file)
+    return stl_files
+
 def get_stl_files():
     dir = Path(SNAKEOIL_PROJECT_PATH)
-    stl_files = [x for x in dir.glob("**/*.stl")]
+    stl_files = [x.relative_to(SNAKEOIL_PROJECT_PATH) for x in dir.glob(STL_GLOB)]
+    stl_files = filter_stl_files(stl_files)
     LOGGER.info(f"# Found {len(stl_files)} stl files")
     return stl_files
 
@@ -69,6 +94,7 @@ other_bom = bom[OTHER]
 
 @dataclass
 class PrintedPart:
+    """Helper dataclass """
     part: App.Part
     parent: str = field(init=False, default='')
     Label: str = field(init=False)
@@ -77,7 +103,7 @@ class PrintedPart:
 
     def __post_init__(self):
         self.Label = self.part.Label
-        self.color = check_part_color(self.part)
+        self.color = get_printed_part_color(self.part)
         self.raw_color = self.part.ViewObject.ShapeColor
         try:
             self.parent = self.part.Parents[0][0].Label
@@ -140,7 +166,16 @@ def _add_to_detailed_bom(bomItem: BomItem):
     else:
         targetDetailBom[bomItem.name] = 1
 
-def check_part_color(part: App.Part):
+def get_printed_part_color(part: App.Part):
+    """Checks if CAD object is a printed part, as determined by its color (teal=main, blue=accent)
+
+    Args:
+        part (App.Part): FreeCAD object to check
+
+    Returns:
+        str: friendly name of color (ex: main, accent)
+        None: if not a known color for printed parts
+    """
     if part.ViewObject.ShapeColor == (0.3333333432674408, 1.0, 1.0, 0.0):  # Teal
         return PRINTED_MAIN
     elif part.ViewObject.ShapeColor == (0.6666666865348816, 0.6666666865348816, 1.0, 0.0):  # Blue
@@ -153,7 +188,7 @@ def add_to_bom(part: App.Part):
     if fastener_pattern.match(part.Label):
         bomItem = BomItem(part, FASTENER)
     else:
-        part_color = check_part_color(part)
+        part_color = get_printed_part_color(part)
         if part_color is not None:
             bomItem = BomItem(part, part_color)       
         else:
@@ -240,9 +275,9 @@ def load_printed_parts_from_file(filename='bom-printed-parts.json'):
     accent_colors = parts_dict['printed (accent color)']
     return main_colors, accent_colors
 
-def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
+def get_part_color_from_filename(file_path: Path, printed_parts: List[App.Part]):
     """Check if part_name is a main or accent color. Returns 'main', 'accent', 0 or obj containing error info"""
-    file_name = file.name
+    file_name = file_path.name
     # Find objects in each list with names container in our filename
     all_results = [PrintedPart(part) for part in printed_parts if part.Label in file_name]
     main_results = [part for part in all_results if part.color == PRINTED_MAIN]
@@ -252,7 +287,6 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
     main_count = len(main_results)
     accent_count = len(accent_results)
     total_colored_count = main_count + accent_count
-    relative_file_path = file.relative_to(SNAKEOIL_PROJECT_PATH)
     main_list = '\n'.join([f'    - {part}' for part in main_results])
     accent_list = '\n'.join([f'    - {part}' for part in accent_results])
     main_color_report = f"  main colors:\n{main_list}\n"
@@ -270,13 +304,13 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
         if len(unknown_results) > 0:
             msg = f"{PRINTED_UNKNOWN_COLOR} colors found:\n"
             msg += str(unknown_results)
-            LOGGER.error(f"{relative_file_path} {msg}")
+            LOGGER.error(f"{file_path} {msg}")
             return msg
         else:
             return PRINTED_MISSING
     # Proceed with warning if more than one match, but all matches are either main OR accent color
     elif total_colored_count > 1 and total_colored_count in [main_count, accent_count]:
-        full_report = f"{relative_file_path} matches multiple CAD objects of the same color:\n"
+        full_report = f"{file_path} matches multiple CAD objects of the same color:\n"
         if total_colored_count == main_count:
             LOGGER.warning(full_report + main_color_report)
             return PRINTED_MAIN
@@ -286,7 +320,7 @@ def get_part_color_from_filename(file: Path, printed_parts: List[App.Part]):
     # Display error if we found matching results with both main and accent colors
     else:
         msg = f"{PRINTED_CONFLICTING_COLORS} colors found:\n" + main_color_report + accent_color_report
-        LOGGER.error(f"{relative_file_path} {msg}")
+        LOGGER.error(f"{file_path} {msg}")
         return msg
 
 def get_filename_color_results(printed_parts: List[App.Part]):
@@ -294,19 +328,22 @@ def get_filename_color_results(printed_parts: List[App.Part]):
     stl_files = get_stl_files()
     # main_colors, accent_colors = load_printed_parts_from_file()
     file_results = {part_name: get_part_color_from_filename(part_name, printed_parts) for part_name in stl_files}    # print(file_results)
-    main_parts = [fp.relative_to(SNAKEOIL_PROJECT_PATH) for (fp, result) in file_results.items() if result == PRINTED_MAIN]
-    accent_parts = [fp.relative_to(SNAKEOIL_PROJECT_PATH) for (fp, result) in file_results.items() if result == PRINTED_ACCENT]
-    missing_parts = [fp.relative_to(SNAKEOIL_PROJECT_PATH) for (fp, result) in file_results.items() if result.startswith(PRINTED_MISSING)]
+    main_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_MAIN]
+    accent_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_ACCENT]
+    missing_parts = [fp for (fp, result) in file_results.items() if result.startswith(PRINTED_MISSING)]
     unknown_color_parts = [
-        f"{fp.relative_to(SNAKEOIL_PROJECT_PATH)} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_UNKNOWN_COLOR)
+        f"{fp} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_UNKNOWN_COLOR)
         ]
     conflicting_parts = [
-        f"{fp.relative_to(SNAKEOIL_PROJECT_PATH)} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_CONFLICTING_COLORS)
+        f"{fp} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_CONFLICTING_COLORS)
         ]
+    LOGGER.info(f"# Total STL files: {len(stl_files)}")
     LOGGER.info(f"# Total main parts: {len(main_parts)}")
     LOGGER.info(f"# Total accent parts: {len(accent_parts)}")
     LOGGER.info(f"# Total missing parts: {len(missing_parts)}")
     LOGGER.info(f"# Total unknown colored parts: {len(unknown_color_parts)}")
+    LOGGER.info(f"# Total conflicting parts: {len(conflicting_parts)}")
+    assert len(stl_files) == len(main_parts) + len(accent_parts) + len(missing_parts) + len(unknown_color_parts) + len(conflicting_parts)
     return {
         PRINTED_MAIN: main_parts, 
         PRINTED_ACCENT: accent_parts, 
@@ -327,12 +364,12 @@ if __name__ == '__main__':
     LOGGER.info(f"# Getting BOM from {target_file}")
     # Get assembly object from filepath
     cad_assembly = App.open(str(target_file))
-    printed_parts = read_printed_parts_from_freecad_document(cad_assembly)
-    get_bom_from_freecad_document(printed_parts)
+    cad_parts = read_printed_parts_from_freecad_document(cad_assembly)
+    get_bom_from_freecad_document(cad_parts)
     # Add custom fasteners (not in CAD)
     add_fasteners()
     # Write all BOM files
     write_bom_files()
     # List all CAD objects by main and accent colors
-    filename_results = get_filename_color_results(printed_parts)
+    filename_results = get_filename_color_results(cad_parts)
     write_filename_reports(filename_results)
