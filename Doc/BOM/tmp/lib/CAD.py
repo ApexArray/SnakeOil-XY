@@ -57,12 +57,14 @@ class BomItem:
     type: BomItemType = field(init=False)  # What type of BOM entry (printed, fastener, other)
     name: str = field(init=False)  # We'll get the name from the part.label in the __post_init__ function
     parent: str = field(init=False, default='')
+    document: str = field(init=False, default='')
     color_category: str = field(init=False)
     raw_color: tuple = field(init=False)
 
-    def __post_init__(self, part):
+    def __post_init__(self, part: App.Part):
         self.name = part.Label
         self.raw_color = part.ViewObject.ShapeColor
+        self.document = part.Document.Label
         # Remove numbers at end if they exist (e.g. 'M3-Washer004' becomes 'M3-Washer')
         while self.name[-1].isnumeric():
             self.name = self.name[:-1]
