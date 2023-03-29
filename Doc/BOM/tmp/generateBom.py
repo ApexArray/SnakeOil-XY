@@ -2,8 +2,10 @@
 Run with FreeCAD's bundled interpreter, or as a FreeCAD macro
 """
 import os
-FREECADPATH = os.getenv('FREECADPATH', '/usr/lib/freecad-python3/lib/')
-FREECADPATH = os.getenv('FREECADPATH', 'C:/Program Files/FreeCAD 0.20/bin')
+if os.name == 'nt':
+    FREECADPATH = os.getenv('FREECADPATH', 'C:/Program Files/FreeCAD 0.20/bin')
+else:
+    FREECADPATH = os.getenv('FREECADPATH', '/usr/lib/freecad-python3/lib/')
 import sys
 sys.path.append(FREECADPATH)
 from pathlib import Path
@@ -14,9 +16,7 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import json
 import logging
-from dataclasses import dataclass, field
 from enum import Enum
-import shelve
 from lib.CAD import (
     BomItem, PRINTED_MAIN, PRINTED_ACCENT, PRINTED_MISSING, PRINTED_UNKNOWN_COLOR, PRINTED_CONFLICTING_COLORS, 
     FASTENER, OTHER, get_cad_objects_from_freecad, get_cad_objects_from_cache, write_cad_objects_to_cache
