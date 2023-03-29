@@ -7,3 +7,4 @@ Doc/img/bracket-all.png
 Doc/img/bracket-normal.png
 Doc/img/HBLFSN6.png
 *.log
+__pycache__
