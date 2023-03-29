@@ -27,12 +27,6 @@ logging.basicConfig(
     )
 LOGGER = logging.getLogger()
 
-# Open GUI if running from console, otherwise we know we are running from a macro
-if hasattr(Gui, 'showMainWindow'):
-    Gui.showMainWindow()
-else:
-    print("Running as macro")
-
 # Use SNAKEOIL_PROJECT_PATH environment variable if exists, else default to @Chip's directory
 # SNAKEOIL_PROJECT_PATH = os.getenv('SNAKEOIL_PROJECT_PATH', '/home/chip/Data/Code/SnakeOil-XY/')
 BASE_PATH = Path(os.path.dirname(__file__))
@@ -283,6 +277,11 @@ if __name__ == '__main__':
         cad_parts = get_cad_objects_from_cache()
     except KeyError:
         LOGGER.info("# No cached freecad_objects found. Reading from CAD file")
+        # Open GUI if running from console, otherwise we know we are running from a macro
+        if hasattr(Gui, 'showMainWindow'):
+            Gui.showMainWindow()
+        else:
+            print("Running as macro")
         cad_assembly = App.open(str(target_file))
         cad_parts = get_cad_objects_from_freecad(cad_assembly)
         write_cad_objects_to_cache(cad_parts)
