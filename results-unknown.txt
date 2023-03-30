@@ -1,0 +1,32 @@
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BL.stl unknown colors found:
+[bottom-panel/panel-BL]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BR.stl unknown colors found:
+[bottom-panel/panel-BR]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FL.stl unknown colors found:
+[bottom-panel/panel-FL]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FR.stl unknown colors found:
+[bottom-panel/panel-FR]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-BL.stl unknown colors found:
+[bottom-panel/panel-BL]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-BR.stl unknown colors found:
+[bottom-panel/panel-BR]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-FL.stl unknown colors found:
+[bottom-panel/panel-FL]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-FR.stl unknown colors found:
+[bottom-panel/panel-FR]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/alt/1x_RS-25-5-PSU-mounter.stl unknown colors found:
+[rear-bottom-panel/RS-25-5-PSU]
+BETA3_Standard_Release_STL/STLs/Panels/Front-panel/3x_frame-magnet-mount.stl unknown colors found:
+[front-panel/frame-magnet-mount, front-panel/frame-magnet-mount, front-panel/frame-magnet-mount]
+BETA3_Standard_Release_STL/STLs/Panels/Side-panel/24x_mounter-outer.stl unknown colors found:
+[left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer]
+BETA3_Standard_Release_STL/STLs/Panels/Top-panel/12x_mounter-outer.stl unknown colors found:
+[left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, left-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, top-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer, right-panel/mounter-outer]
+BETA3_Standard_Release_STL/STLs/XY-axis/2x_ab-motor-spacer.stl unknown colors found:
+[snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer]
+BETA3_Standard_Release_STL/STLs/Z-axis/12x_z-motor-spacer.stl unknown colors found:
+[snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer]
+BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_spacer-0p5mm.stl unknown colors found:
+[counter-weight-top-arm/spacer-0p5mm, counter-weight-top-arm/spacer-0p5mm]
+BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_spacer-1mm.stl unknown colors found:
+[counter-weight-top-arm/spacer-1mm, counter-weight-top-arm/spacer-1mm]
