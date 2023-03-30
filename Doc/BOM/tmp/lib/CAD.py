@@ -10,8 +10,6 @@ import re
 import sys
 from typing import Dict, List
 import FreeCAD as App  # type: ignore
-import FreeCADGui as Gui  # type: ignore
-import json
 import logging
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
