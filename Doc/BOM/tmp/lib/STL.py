@@ -43,13 +43,13 @@ def get_stl_files(snakeoil_project_path: Path, target_stl_path: Path,
     LOGGER.info(f"# Found {len(stl_files)} stl files")
     return stl_files
 
-def write_file_color_reports(filename_results: Dict[str, List[Union[Path, str]]]):
+def write_file_color_reports(filename_results: Dict[str, Union[List[Path], List[str]]]):
     for category in [
         CAD.PRINTED_MAIN, CAD.PRINTED_ACCENT, CAD.PRINTED_MISSING, 
         CAD.PRINTED_UNKNOWN_COLOR, CAD.PRINTED_CONFLICTING_COLORS
         ]:
         with open(BASE_PATH / f'color-results-{category}.txt', 'w') as file:
-            results: List[Union[str, Path]] = filename_results[category]
+            results = filename_results[category]
             if issubclass(type(results[0]), Path):
                 formatted_results: List[str] = [x.as_posix() for x in results]  # type: ignore
             elif type(results[0]) is str:

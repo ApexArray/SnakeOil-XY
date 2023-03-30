@@ -202,7 +202,7 @@ def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]) -> 
         LOGGER.error(f"{file_name} {msg}")
         return msg
 
-def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) -> Dict[str, List[Union[Path, str]]]:
+def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) -> Dict[str, Union[List[Path], List[str]]]:
     """return dictionary of filename['main'|'accent'|0|obj]"""
     # main_colors, accent_colors = load_printed_parts_from_file()
     file_results = {
