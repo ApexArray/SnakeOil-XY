@@ -35,6 +35,21 @@ EXCLUDE_STRINGS = [
     "OPTIONAL"
 ]
 
+def generate_bom(cad_parts):
+    """Builds bom from CAD objects and writes bom-*.json files"""
+    BOM.get_bom_from_freecad_document(cad_parts)
+    # Add custom fasteners (not in CAD)
+    BOM.add_fasteners()
+    # Write all BOM files
+    BOM.write_bom_files()
+
+def generate_filename_color_reports(cad_parts):
+    """Builds filename color reports and writes to color-results-*.txt"""
+    # List all CAD objects by main and accent colors
+    stl_files = STL.get_stl_files(SNAKEOIL_PROJECT_PATH, STL_PATH, EXCLUDE_DIRS, EXCLUDE_STRINGS)
+    filename_results = CAD.get_filename_color_results(stl_files, cad_parts)
+    STL.write_file_color_reports(filename_results)
+
 if __name__ == '__main__':
     LOGGER.info(f"# Getting BOM from {CAD_FILE}")
     # Get assembly object from filepath
@@ -50,12 +65,7 @@ if __name__ == '__main__':
         cad_assembly = App.open(str(CAD_FILE))
         cad_parts = CAD.get_cad_objects_from_freecad(cad_assembly)
         CAD.write_cad_objects_to_cache(cad_parts)
-    BOM.get_bom_from_freecad_document(cad_parts)
-    # Add custom fasteners (not in CAD)
-    BOM.add_fasteners()
-    # Write all BOM files
-    BOM.write_bom_files()
-    # List all CAD objects by main and accent colors
-    stl_files = STL.get_stl_files(SNAKEOIL_PROJECT_PATH, STL_PATH, EXCLUDE_DIRS, EXCLUDE_STRINGS)
-    filename_results = CAD.get_filename_color_results(stl_files, cad_parts)
-    STL.write_file_color_reports(filename_results)
+    # Generate bom-*.json files
+    generate_bom(cad_parts)
+    # Generate color-results-*.txt files
+    generate_filename_color_reports(cad_parts)
