@@ -28,7 +28,8 @@ OTHER = "other"
 BASE_PATH = Path(os.path.dirname(__file__)).parent
 
 logging.basicConfig(
-    filename='generateBom.log', filemode='a', format='%(levelname)s: %(message)s', level=logging.INFO
+    # filename='generateBom.log', filemode='a', 
+    format='%(levelname)s: %(message)s', level=logging.INFO
     )
 LOGGER = logging.getLogger()
 
@@ -182,10 +183,10 @@ def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]):
     elif total_colored_count > 1 and total_colored_count in [main_count, accent_count]:
         full_report = f"{file_name} matches multiple CAD objects of the same color:\n"
         if total_colored_count == main_count:
-            LOGGER.warning(full_report + main_color_report)
+            LOGGER.debug(full_report + main_color_report)
             return PRINTED_MAIN
         elif total_colored_count == accent_count:
-            LOGGER.warning(full_report + accent_color_report)
+            LOGGER.debug(full_report + accent_color_report)
             return PRINTED_ACCENT
     # Display error if we found matching results with both main and accent colors
     else:
