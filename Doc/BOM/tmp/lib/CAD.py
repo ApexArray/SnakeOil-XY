@@ -8,11 +8,10 @@ sys.path.append(FREECADPATH)
 from pathlib import Path
 import re
 import sys
-from typing import Dict, List, Literal, Union
+from typing import Dict, List, Union
 import FreeCAD as App  # type: ignore
 import logging
 from dataclasses import InitVar, dataclass, field
-from enum import Enum
 import shelve
 import re
 
@@ -25,6 +24,11 @@ PRINTED_CONFLICTING_COLORS = "conflicting"
 FASTENER = "fastener"
 OTHER = "other"
 
+# Allowed types in a BOM
+BOM_ITEM_TYPES = [
+    PRINTED_MAIN, PRINTED_ACCENT, FASTENER, OTHER
+]
+
 BASE_PATH = Path(os.path.dirname(__file__)).parent
 
 logging.basicConfig(
@@ -32,13 +36,6 @@ logging.basicConfig(
     format='%(levelname)s: %(message)s', level=logging.INFO
     )
 LOGGER = logging.getLogger()
-
-class BomItemType(Enum):
-    """Allowed types in BOM files"""
-    PRINTED_MAIN = PRINTED_MAIN
-    PRINTED_ACCENT = PRINTED_ACCENT
-    FASTENER = FASTENER
-    OTHER = OTHER
 
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
 revision_pattern = r'-.\d+$'  # Used to identify and strip revision numbers from CAD part names
@@ -54,16 +51,16 @@ def get_printed_part_color(part: App.Part):
         None: if not a known color for printed parts
     """
     if part.ViewObject.ShapeColor == (0.3333333432674408, 1.0, 1.0, 0.0):  # Teal
-        return BomItemType.PRINTED_MAIN
+        return PRINTED_MAIN
     elif part.ViewObject.ShapeColor == (0.6666666865348816, 0.6666666865348816, 1.0, 0.0):  # Blue
-        return BomItemType.PRINTED_ACCENT
+        return PRINTED_ACCENT
     else:
         return None
 
 @dataclass
 class BomItem:
     part: InitVar[App.Part]
-    bom_item_type: BomItemType = field(init=False)  # What type of BOM entry (printed, fastener, other)
+    bom_item_type: str = field(init=False)  # What type of BOM entry (printed, fastener, other)
     name: str = field(init=False)  # We'll get the name from the part.label in the __post_init__ function
     clean_name: str = field(init=False)
     parent: str = field(init=False, default='')
@@ -80,13 +77,13 @@ class BomItem:
         while self.name[-1].isnumeric():
             self.name = self.name[:-1]
         if fastener_pattern.match(part.Label):
-            self.bom_item_type = BomItemType.FASTENER
+            self.bom_item_type = FASTENER
         else:
             color_category = get_printed_part_color(part)
             if color_category is not None:
                 self.bom_item_type = color_category
             else:
-                self.bom_item_type = BomItemType.OTHER
+                self.bom_item_type = OTHER
         # Add descriptive fastener names
         if self.bom_item_type == FASTENER:
             if hasattr(part, 'type'):

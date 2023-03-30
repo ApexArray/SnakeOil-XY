@@ -48,6 +48,7 @@ def generate_filename_color_reports(cad_parts):
     stl_files = STL.get_stl_files(SNAKEOIL_PROJECT_PATH, STL_PATH, STL_EXCLUDE_DIRS, STL_EXCLUDE_STRINGS)
     filename_results = CAD.get_filename_color_results(stl_files, cad_parts)
     STL.write_file_color_reports(filename_results)
+    return filename_results
 
 if __name__ == '__main__':
     LOGGER.info(f"# Getting BOM from {CAD_FILE}")
@@ -67,4 +68,5 @@ if __name__ == '__main__':
     # Generate bom-*.json files
     generate_bom(cad_parts)
     # Generate color-results-*.txt files
-    generate_filename_color_reports(cad_parts)
+    filename_results = generate_filename_color_reports(cad_parts)
+    

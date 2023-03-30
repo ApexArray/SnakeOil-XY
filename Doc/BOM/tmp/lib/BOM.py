@@ -15,13 +15,11 @@ BASE_PATH = Path(os.path.dirname(__file__))
 LOGGER = logging.getLogger()
 bom_out_dir = Path(BASE_PATH).parent
 
-BomItemType = Enum('BomItemType', [CAD.PRINTED_MAIN, CAD.PRINTED_ACCENT, CAD.FASTENER, CAD.OTHER])
-
 def get_new_bom():
     """Use this factory to get a new empty BOM dict"""
     _bom = {}
-    for partType in BomItemType:
-        _bom[partType.name] = {}
+    for partType in CAD.BOM_ITEM_TYPES:
+        _bom[partType] = {}
     return _bom
 
 # Create new BOM dictionaries
