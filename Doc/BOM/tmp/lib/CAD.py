@@ -39,6 +39,9 @@ LOGGER = logging.getLogger()
 
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
 revision_pattern = r'-.\d+$'  # Used to identify and strip revision numbers from CAD part names
+# name cleaning patterns
+revision_pattern = re.compile(r'-.\d+$')  # Used to identify and strip revision numbers from CAD part names
+part_count_pattern = re.compile(r'^\d{1,2}x[_-]')  # Remove part counts at beginning of STL file names
 
 def get_printed_part_color(part: App.Part):
     """Checks if CAD object is a printed part, as determined by its color (teal=main, blue=accent)
@@ -139,21 +142,37 @@ def get_cad_objects_from_freecad(assembly: App.Document) -> List[BomItem]:
 
 def clean_name(name: str):
     name = name.replace('_', '-')
-    matches = re.findall(revision_pattern, name)
-    if matches:
-        if len(matches) > 1:
-            print("ERROR: multiple regex matches found")
-            print(f"  {'  '.join(matches)}")
-        name = name.replace(matches[0], '')
+    name = name.replace('.stl', '')
+    for pattern in [revision_pattern, part_count_pattern]:
+        matches = re.findall(pattern, name)
+        if matches:
+            if len(matches) > 1:
+                print("ERROR: multiple regex matches found")
+                print(f"  {'  '.join(matches)}")
+            name = name.replace(matches[0], '')
     # Remove numbers at end if they exist (e.g. 'M3-Washer004' becomes 'M3-Washer')
     while name[-1].isnumeric():
         name = name[:-1]
     return name
 
+def search_cad_objects__cad_part_name_in_filename(file_name: str, cad_objects: List[BomItem]):
+    """Returns list of CAD objects if cad part name in file_name"""
+    file_name = clean_name(file_name)
+    return [part for part in cad_objects if part.clean_name in file_name]
+
+def search_cad_objects__filename_in_cad_part_name(file_name: str, cad_objects: List[BomItem]):
+    """Returns list of CAD objects if file_name is in cad part name"""
+    return [part for part in cad_objects if clean_name(file_name) in part.clean_name]
+
 def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]) -> str:
     """Check if part_name is a main or accent color. Returns 'main', 'accent', 0 or obj containing error info"""
     # Find objects in each list with names container in our filename
-    all_results = [part for part in cad_objects if part.clean_name in clean_name(file_name)]
+    all_results = search_cad_objects__cad_part_name_in_filename(file_name, cad_objects)
+    if not all_results:
+        LOGGER.info(f"Trying alternative search method for {file_name}")
+        all_results = search_cad_objects__filename_in_cad_part_name(file_name, cad_objects)
+        if all_results:
+            LOGGER.info(f"Found {len(all_results)} matches using alternative serach method for {file_name}")
     main_results = [part for part in all_results if part.bom_item_type == PRINTED_MAIN]
     accent_results = [part for part in all_results if part.bom_item_type == PRINTED_ACCENT]
     unknown_results = [part for part in all_results if part.bom_item_type not in [PRINTED_MAIN, PRINTED_ACCENT]]

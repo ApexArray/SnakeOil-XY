@@ -26,6 +26,7 @@ BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_lrs-xx-200-psu-mounter.st
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_sonoff-mount.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_wago-mount.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/2x_bottom-din-holder.stl
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/4x_foot.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/1x_door-magnet-mount-large.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_door-magnet-mount-small.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_front-hinge.stl
@@ -64,6 +65,7 @@ BETA3_Standard_Release_STL/STLs/Z-axis/2x_z-idler-mounter-left.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/2x_z-motor-body-left.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/2x_z-motor-top-plate-left.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/2x_z-rail-block-mount-left.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/2x_z-rail-block-mount-right.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/3x_z-belt-mounter-middle.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/alt/motor-top-plate-for-35mm-bracket_Apex/1x_z-motor-top-plate-right-(fits-35mm-corner-bracket)-v3.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/alt/motor-top-plate-for-35mm-bracket_Apex/2x_z-motor-top-plate-left-(fits-35mm-corner-bracket)-v3.stl
@@ -101,3 +103,4 @@ BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/bed-arm-thread
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-back-plate.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-front-mounter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-front-plate.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_z-rail-block-mount-right.stl
