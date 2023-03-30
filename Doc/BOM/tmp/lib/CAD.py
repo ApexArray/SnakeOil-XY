@@ -14,6 +14,7 @@ import logging
 from dataclasses import InitVar, dataclass, field
 import shelve
 import re
+from difflib import SequenceMatcher
 
 # Quick references to BOM part types.  Also provides type hinting in the BomPart dataclass
 PRINTED_MAIN = "main"
@@ -162,17 +163,29 @@ def search_cad_objects__cad_part_name_in_filename(file_name: str, cad_objects: L
 
 def search_cad_objects__filename_in_cad_part_name(file_name: str, cad_objects: List[BomItem]):
     """Returns list of CAD objects if file_name is in cad part name"""
-    return [part for part in cad_objects if clean_name(file_name) in part.clean_name]
+    file_name = clean_name(file_name)
+    return [part for part in cad_objects if file_name in part.clean_name]
+
+def search_cad_objects__fuzzy(file_name: str, cad_objects: List[BomItem], cutoff_ratio=0.9):
+    file_name = clean_name(file_name)
+    return [part for part in cad_objects if (
+        SequenceMatcher(None, file_name, part.clean_name).ratio() >= cutoff_ratio
+        )]
 
 def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]) -> str:
     """Check if part_name is a main or accent color. Returns 'main', 'accent', 0 or obj containing error info"""
     # Find objects in each list with names container in our filename
     all_results = search_cad_objects__cad_part_name_in_filename(file_name, cad_objects)
     if not all_results:
-        LOGGER.info(f"Trying alternative search method for {file_name}")
+        LOGGER.debug(f"Trying alternative search method for {file_name}")
         all_results = search_cad_objects__filename_in_cad_part_name(file_name, cad_objects)
         if all_results:
-            LOGGER.info(f"Found {len(all_results)} matches using alternative serach method for {file_name}")
+            LOGGER.debug(f"Found {len(all_results)} matches using alternative serach method for {file_name}")
+        else:
+            LOGGER.debug(f"Trying fuzzy search method for {file_name}")
+            all_results = search_cad_objects__fuzzy(file_name, cad_objects)
+            if all_results:
+                LOGGER.warning(f"Found fuzzy matches {file_name} -> {all_results}")
     main_results = [part for part in all_results if part.bom_item_type == PRINTED_MAIN]
     accent_results = [part for part in all_results if part.bom_item_type == PRINTED_ACCENT]
     unknown_results = [part for part in all_results if part.bom_item_type not in [PRINTED_MAIN, PRINTED_ACCENT]]

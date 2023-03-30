@@ -7,6 +7,7 @@ BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-default.s
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-low.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-wide-low.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-wide.stl
+BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-bottom-plate.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/2x_extruder-belt-clamp.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/2x_extruder-belt-tesioner.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_top-plate-with-endstop-1515.stl
@@ -46,6 +47,7 @@ BETA3_Standard_Release_STL/STLs/Z-axis/2x_z-motor-back-plate-left.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/2x_z-motor-front-plate-left.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/3x_z-belt-block-mount.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/3x_z-belt-mounter-clamp-nut.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/1x_bed-cable-router.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/1x_bed-cable-supporter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/bed-arm-threaded-ball-coupler(default-in-beta-2)/3x_spacer.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/1x_bed-cable-mounter.stl

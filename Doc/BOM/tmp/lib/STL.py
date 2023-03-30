@@ -13,6 +13,7 @@ from pathlib import Path
 import sys
 from typing import Dict, List, Union
 from lib import CAD
+from difflib import SequenceMatcher
 
 logging.basicConfig(
     # filename='generateBom.log', filemode='w', 
