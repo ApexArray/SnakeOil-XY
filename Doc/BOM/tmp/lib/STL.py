@@ -36,10 +36,9 @@ def filter_stl_files(stl_files: List[Path], exclude_dirs: List[Path] = [], exclu
             filtered_stl_files.append(file)
     return filtered_stl_files
 
-def get_stl_files(snakeoil_project_path: Path, target_stl_path: str, 
+def get_stl_files(snakeoil_project_path: Path, target_stl_path: Path, 
                   exclude_dirs: List[Path] = [], exclude_strings: List[str] = []) -> List[Path]:
-    dir = Path(snakeoil_project_path)
-    stl_files = [x.relative_to(dir) for x in dir.glob(f"{target_stl_path}/**/*.stl")]
+    stl_files = [x.relative_to(snakeoil_project_path) for x in snakeoil_project_path.glob(f"{target_stl_path}/**/*.stl")]
     stl_files = filter_stl_files(stl_files, exclude_dirs, exclude_strings)
     LOGGER.info(f"# Found {len(stl_files)} stl files")
     return stl_files
@@ -50,8 +49,12 @@ def write_file_color_reports(filename_results: Dict[str, List[Union[Path, str]]]
         CAD.PRINTED_UNKNOWN_COLOR, CAD.PRINTED_CONFLICTING_COLORS
         ]:
         with open(BASE_PATH / f'color-results-{category}.txt', 'w') as file:
-            results: list[Path] = filename_results[category]
+            results: List[Union[str, Path]] = filename_results[category]
             if issubclass(type(results[0]), Path):
-                results: list[str] = [x.as_posix() for x in results]
-            sorted_results = sorted(results)
+                formatted_results: List[str] = [x.as_posix() for x in results]  # type: ignore
+            elif type(results[0]) is str:
+                formatted_results = [str(x) for x in results]
+            else:
+                raise TypeError(f"Results must be str or Path, found {type(results[0])}")
+            sorted_results = sorted(formatted_results)
             file.write('\n'.join(sorted_results))

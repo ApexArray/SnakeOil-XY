@@ -22,8 +22,8 @@ logging.basicConfig(
 LOGGER = logging.getLogger()
 
 BASE_PATH = Path(os.path.dirname(__file__))
-SNAKEOIL_PROJECT_PATH = str(BASE_PATH.parent.parent.parent)
-CAD_FILE = Path(SNAKEOIL_PROJECT_PATH).joinpath('CAD/v1-180-assembly.FCStd')
+SNAKEOIL_PROJECT_PATH = BASE_PATH.parent.parent.parent
+CAD_FILE = SNAKEOIL_PROJECT_PATH / 'CAD/v1-180-assembly.FCStd'
 STL_PATH = (
     Path(SNAKEOIL_PROJECT_PATH) / 'BETA3_Standard_Release_STL' / 'STLs'
     ).relative_to(SNAKEOIL_PROJECT_PATH)

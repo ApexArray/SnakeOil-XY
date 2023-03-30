@@ -34,7 +34,7 @@ printed_accent_bom = bom[CAD.PRINTED_ACCENT]
 other_bom = bom[CAD.OTHER]
 
 def _add_to_main_bom(bomItem: CAD.BomItem):
-    targetBom = bom[bomItem.type]
+    targetBom = bom[bomItem.bom_item_type]
     if bomItem.name in targetBom.keys():
         targetBom[bomItem.name] += 1
     else:
@@ -44,7 +44,7 @@ def _add_to_detailed_bom(bomItem: CAD.BomItem):
     documentName = bomItem.document
     if documentName not in detail_bom.keys():
         detail_bom[documentName] = get_new_bom()
-    targetDetailBom = detail_bom[documentName][bomItem.type]
+    targetDetailBom = detail_bom[documentName][bomItem.bom_item_type]
     if bomItem.name in targetDetailBom.keys():
         targetDetailBom[bomItem.name] += 1
     else:

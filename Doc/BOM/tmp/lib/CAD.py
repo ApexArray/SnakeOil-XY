@@ -8,7 +8,7 @@ sys.path.append(FREECADPATH)
 from pathlib import Path
 import re
 import sys
-from typing import Dict, List
+from typing import Dict, List, Literal, Union
 import FreeCAD as App  # type: ignore
 import logging
 from dataclasses import InitVar, dataclass, field
@@ -33,7 +33,13 @@ logging.basicConfig(
     )
 LOGGER = logging.getLogger()
 
-BomItemType = Enum('BomItemType', [PRINTED_MAIN, PRINTED_ACCENT, FASTENER, OTHER])
+class BomItemType(Enum):
+    """Allowed types in BOM files"""
+    PRINTED_MAIN = PRINTED_MAIN
+    PRINTED_ACCENT = PRINTED_ACCENT
+    FASTENER = FASTENER
+    OTHER = OTHER
+
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
 revision_pattern = r'-.\d+$'  # Used to identify and strip revision numbers from CAD part names
 
@@ -48,16 +54,16 @@ def get_printed_part_color(part: App.Part):
         None: if not a known color for printed parts
     """
     if part.ViewObject.ShapeColor == (0.3333333432674408, 1.0, 1.0, 0.0):  # Teal
-        return PRINTED_MAIN
+        return BomItemType.PRINTED_MAIN
     elif part.ViewObject.ShapeColor == (0.6666666865348816, 0.6666666865348816, 1.0, 0.0):  # Blue
-        return PRINTED_ACCENT
+        return BomItemType.PRINTED_ACCENT
     else:
         return None
 
 @dataclass
 class BomItem:
     part: InitVar[App.Part]
-    type: BomItemType = field(init=False)  # What type of BOM entry (printed, fastener, other)
+    bom_item_type: BomItemType = field(init=False)  # What type of BOM entry (printed, fastener, other)
     name: str = field(init=False)  # We'll get the name from the part.label in the __post_init__ function
     clean_name: str = field(init=False)
     parent: str = field(init=False, default='')
@@ -74,15 +80,15 @@ class BomItem:
         while self.name[-1].isnumeric():
             self.name = self.name[:-1]
         if fastener_pattern.match(part.Label):
-            self.type = FASTENER
+            self.bom_item_type = BomItemType.FASTENER
         else:
             color_category = get_printed_part_color(part)
             if color_category is not None:
-                self.type = color_category
+                self.bom_item_type = color_category
             else:
-                self.type = OTHER
+                self.bom_item_type = BomItemType.OTHER
         # Add descriptive fastener names
-        if self.type == FASTENER:
+        if self.bom_item_type == FASTENER:
             if hasattr(part, 'type'):
                 if part.type == "ISO4762":
                     self.name = f"Socket head {self.name}"
@@ -147,13 +153,13 @@ def clean_name(name: str):
         name = name[:-1]
     return name
 
-def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]):
+def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]) -> str:
     """Check if part_name is a main or accent color. Returns 'main', 'accent', 0 or obj containing error info"""
     # Find objects in each list with names container in our filename
     all_results = [part for part in cad_objects if part.clean_name in clean_name(file_name)]
-    main_results = [part for part in all_results if part.type == PRINTED_MAIN]
-    accent_results = [part for part in all_results if part.type == PRINTED_ACCENT]
-    unknown_results = [part for part in all_results if part.type not in [PRINTED_MAIN, PRINTED_ACCENT]]
+    main_results = [part for part in all_results if part.bom_item_type == PRINTED_MAIN]
+    accent_results = [part for part in all_results if part.bom_item_type == PRINTED_ACCENT]
+    unknown_results = [part for part in all_results if part.bom_item_type not in [PRINTED_MAIN, PRINTED_ACCENT]]
     # Help variables for logging below
     main_count = len(main_results)
     accent_count = len(accent_results)
@@ -188,13 +194,15 @@ def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]):
         elif total_colored_count == accent_count:
             LOGGER.debug(full_report + accent_color_report)
             return PRINTED_ACCENT
+        else:
+            raise Exception("Total color count does not match main_count or accent_count")
     # Display error if we found matching results with both main and accent colors
     else:
         msg = f"{PRINTED_CONFLICTING_COLORS} colors found:\n" + main_color_report + accent_color_report
         LOGGER.error(f"{file_name} {msg}")
         return msg
 
-def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) -> Dict[str, List[Path]]:
+def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) -> Dict[str, List[Union[Path, str]]]:
     """return dictionary of filename['main'|'accent'|0|obj]"""
     # main_colors, accent_colors = load_printed_parts_from_file()
     file_results = {
