@@ -27,6 +27,8 @@ PRINTED_CONFLICTING_COLORS = "conflicting"
 FASTENER = "fastener"
 OTHER = "other"
 
+BASE_PATH = Path(os.path.dirname(__file__)).parent
+
 logging.basicConfig(
     filename='generateBom.log', filemode='a', format='%(levelname)s: %(message)s', level=logging.INFO
     )
@@ -215,7 +217,7 @@ def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) 
 # Total unknown colored parts: {len(unknown_color_parts)}
 # Total conflicting parts: {len(conflicting_parts)}"""
     LOGGER.info("\n"+msg)
-    with open('results.txt', 'w') as file:
+    with open(BASE_PATH / 'color-results-overview.txt', 'w') as file:
         file.write(msg)
     assert len(stl_files) == sum([
         len(main_parts), len(accent_parts), len(missing_parts), 

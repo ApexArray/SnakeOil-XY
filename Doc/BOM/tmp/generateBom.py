@@ -183,7 +183,7 @@ def write_filename_reports(filename_results: Dict[str, List[Union[Path, str]]]):
     for category in [
         PRINTED_MAIN, PRINTED_ACCENT, PRINTED_MISSING, PRINTED_UNKNOWN_COLOR, PRINTED_CONFLICTING_COLORS
         ]:
-        with open(f'results-{category}.txt', 'w') as file:
+        with open(BASE_PATH / f'color-results-{category}.txt', 'w') as file:
             results: list[Path] = filename_results[category]
             if issubclass(type(results[0]), Path):
                 results: list[str] = [x.as_posix() for x in results]
