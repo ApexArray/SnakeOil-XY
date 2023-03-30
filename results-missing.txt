@@ -1,4 +1,3 @@
-BETA3_Standard_Release_STL/STLs/E-axis/can-board/1x_can-pcb-mounter.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-bottom-plate.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-cable-support.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/2x_extruder-belt-clamp.stl

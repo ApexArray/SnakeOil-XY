@@ -1,3 +1,4 @@
+BETA3_Standard_Release_STL/STLs/E-axis/can-board/1x_can-pcb-mounter-cable-guide.stl
 BETA3_Standard_Release_STL/STLs/E-axis/can-board/2x_can-pcb-spacer.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_bltouch-mount-lighter.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_bltouch-mount-mirror.stl
