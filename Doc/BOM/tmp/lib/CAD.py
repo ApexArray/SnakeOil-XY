@@ -8,7 +8,7 @@ sys.path.append(FREECADPATH)
 from pathlib import Path
 import re
 import sys
-from typing import List, Union
+from typing import Dict, List
 import FreeCAD as App  # type: ignore
 import FreeCADGui as Gui  # type: ignore
 import json
@@ -193,7 +193,7 @@ def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]):
         LOGGER.error(f"{file_name} {msg}")
         return msg
 
-def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]):
+def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) -> Dict[str, List[Path]]:
     """return dictionary of filename['main'|'accent'|0|obj]"""
     # main_colors, accent_colors = load_printed_parts_from_file()
     file_results = {
@@ -203,10 +203,10 @@ def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]):
     accent_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_ACCENT]
     missing_parts = [fp for (fp, result) in file_results.items() if result.startswith(PRINTED_MISSING)]
     unknown_color_parts = [
-        f"{fp} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_UNKNOWN_COLOR)
+        f"{fp.as_posix()} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_UNKNOWN_COLOR)
         ]
     conflicting_parts = [
-        f"{fp} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_CONFLICTING_COLORS)
+        f"{fp.as_posix()} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_CONFLICTING_COLORS)
         ]
     msg = f"""# Total STL files: {len(stl_files)}
 # Total main parts: {len(main_parts)}

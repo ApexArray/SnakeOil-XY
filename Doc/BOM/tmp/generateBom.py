@@ -11,7 +11,7 @@ sys.path.append(FREECADPATH)
 from pathlib import Path
 import re
 import sys
-from typing import List, Union
+from typing import Dict, List, Union
 import FreeCAD as App  # type: ignore
 import FreeCADGui as Gui  # type: ignore
 import json
@@ -179,14 +179,15 @@ def load_printed_parts_from_file(filename='bom-printed-parts.json'):
     accent_colors = parts_dict['printed (accent color)']
     return main_colors, accent_colors
 
-def write_filename_reports(filename_results):
+def write_filename_reports(filename_results: Dict[str, List[Union[Path, str]]]):
     for category in [
         PRINTED_MAIN, PRINTED_ACCENT, PRINTED_MISSING, PRINTED_UNKNOWN_COLOR, PRINTED_CONFLICTING_COLORS
         ]:
         with open(f'results-{category}.txt', 'w') as file:
             results: list[Path] = filename_results[category]
-            formatted_results: list[str] = [str(x) for x in results]
-            sorted_results = sorted(formatted_results)
+            if issubclass(type(results[0]), Path):
+                results: list[str] = [x.as_posix() for x in results]
+            sorted_results = sorted(results)
             file.write('\n'.join(sorted_results))
 
 if __name__ == '__main__':
