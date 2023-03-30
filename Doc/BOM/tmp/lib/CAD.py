@@ -16,6 +16,7 @@ import logging
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 import shelve
+import re
 
 # Quick references to BOM part types.  Also provides type hinting in the BomPart dataclass
 PRINTED_MAIN = "main"
@@ -33,6 +34,7 @@ LOGGER = logging.getLogger()
 
 BomItemType = Enum('BomItemType', [PRINTED_MAIN, PRINTED_ACCENT, FASTENER, OTHER])
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
+revision_pattern = r'-.\d+$'  # Used to identify and strip revision numbers from CAD part names
 
 def get_printed_part_color(part: App.Part):
     """Checks if CAD object is a printed part, as determined by its color (teal=main, blue=accent)
@@ -56,6 +58,7 @@ class BomItem:
     part: InitVar[App.Part]
     type: BomItemType = field(init=False)  # What type of BOM entry (printed, fastener, other)
     name: str = field(init=False)  # We'll get the name from the part.label in the __post_init__ function
+    clean_name: str = field(init=False)
     parent: str = field(init=False, default='')
     document: str = field(init=False, default='')
     color_category: str = field(init=False)
@@ -65,6 +68,7 @@ class BomItem:
         self.name = part.Label
         self.raw_color = part.ViewObject.ShapeColor
         self.document = part.Document.Label
+        self.clean_name = clean_name(self.name)
         # Remove numbers at end if they exist (e.g. 'M3-Washer004' becomes 'M3-Washer')
         while self.name[-1].isnumeric():
             self.name = self.name[:-1]
@@ -130,12 +134,22 @@ def get_cad_objects_from_freecad(assembly: App.Document) -> List[BomItem]:
     return freecad_objects
 
 def clean_name(name: str):
-    return name.replace('_', '-')
+    name = name.replace('_', '-')
+    matches = re.findall(revision_pattern, name)
+    if matches:
+        if len(matches) > 1:
+            print("ERROR: multiple regex matches found")
+            print(f"  {'  '.join(matches)}")
+        name = name.replace(matches[0], '')
+    # Remove numbers at end if they exist (e.g. 'M3-Washer004' becomes 'M3-Washer')
+    while name[-1].isnumeric():
+        name = name[:-1]
+    return name
 
 def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]):
     """Check if part_name is a main or accent color. Returns 'main', 'accent', 0 or obj containing error info"""
     # Find objects in each list with names container in our filename
-    all_results = [part for part in cad_objects if clean_name(part.name) in clean_name(file_name)]
+    all_results = [part for part in cad_objects if part.clean_name in clean_name(file_name)]
     main_results = [part for part in all_results if part.type == PRINTED_MAIN]
     accent_results = [part for part in all_results if part.type == PRINTED_ACCENT]
     unknown_results = [part for part in all_results if part.type not in [PRINTED_MAIN, PRINTED_ACCENT]]

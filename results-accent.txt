@@ -7,6 +7,7 @@ BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-default.s
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-low.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-wide-low.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-wide.stl
+BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/2x_extruder-belt-clamp.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/2x_extruder-belt-tesioner.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_top-plate-with-endstop-1515.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_top-plate-with-endstop-2020.stl
@@ -22,6 +23,8 @@ BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/250_MACHINE_ONLY_2x_gas
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/250_MACHINE_ONLY_2x_gasket-top-250.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/2x_gasket-side-long.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/2x_gasket-side-short.stl
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/18x_panel-mounter.stl
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/17x_panel-mounter.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_ac-socket-mounter.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_nut.stl
 BETA3_Standard_Release_STL/STLs/Panels/Side-panel/24x_mounter-inner.stl
