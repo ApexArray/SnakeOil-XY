@@ -1,5 +1,4 @@
 BETA3_Standard_Release_STL/STLs/E-axis/can-board/1x_can-pcb-mounter.stl
-BETA3_Standard_Release_STL/STLs/E-axis/can-board/2x_can-pcb-spacer.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-bottom-plate.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-cable-support.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/2x_extruder-belt-clamp.stl
@@ -7,15 +6,12 @@ BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_adxl-moun
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_cooper-head-mount-mod.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_copper-head-support-a.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_copper-head-support-b.stl
-BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/dragon/1x_dragon-support.stl
-BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/mosquito/1x_mosquito-support.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/nova/1x_nova-mount-mod.stl
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/back-body.stl
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/filament-arm.stl
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/front-body.stl
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/main-body-e3d-collet.stl
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/main-body-triangle-lab-collet.stl
-BETA3_Standard_Release_STL/STLs/E-axis/toolhead-pcb/pcb-spacer.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/250_MACHINE_ONLY_2x_gasket-side.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/18x_panel-mounter.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BC.stl

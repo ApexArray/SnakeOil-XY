@@ -12,14 +12,14 @@ from pathlib import Path
 import re
 import sys
 from typing import List, Union
-import FreeCAD as App
-import FreeCADGui as Gui
+import FreeCAD as App  # type: ignore
+import FreeCADGui as Gui  # type: ignore
 import json
 import logging
 from enum import Enum
 from lib.CAD import (
     BomItem, PRINTED_MAIN, PRINTED_ACCENT, PRINTED_MISSING, PRINTED_UNKNOWN_COLOR, PRINTED_CONFLICTING_COLORS, 
-    FASTENER, OTHER, get_cad_objects_from_freecad, get_cad_objects_from_cache, write_cad_objects_to_cache
+    FASTENER, OTHER, get_cad_objects_from_freecad, get_cad_objects_from_cache, get_filename_color_results, write_cad_objects_to_cache
     )
 
 logging.basicConfig(
@@ -179,95 +179,11 @@ def load_printed_parts_from_file(filename='bom-printed-parts.json'):
     accent_colors = parts_dict['printed (accent color)']
     return main_colors, accent_colors
 
-def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]):
-    """Check if part_name is a main or accent color. Returns 'main', 'accent', 0 or obj containing error info"""
-    # Find objects in each list with names container in our filename
-    all_results = [part for part in cad_objects if part.name in file_name]
-    main_results = [part for part in all_results if part.type == PRINTED_MAIN]
-    accent_results = [part for part in all_results if part.type == PRINTED_ACCENT]
-    unknown_results = [part for part in all_results if part.type not in [PRINTED_MAIN, PRINTED_ACCENT]]
-    # Help variables for logging below
-    main_count = len(main_results)
-    accent_count = len(accent_results)
-    total_colored_count = main_count + accent_count
-    main_list = '\n'.join([f'    - {part}' for part in main_results])
-    accent_list = '\n'.join([f'    - {part}' for part in accent_results])
-    main_color_report = f"  main colors:\n{main_list}\n"
-    accent_color_report = f"  accent colors:\n{accent_list}\n"
-    # Ideally, we should have exactly one match.
-    if total_colored_count == 1:
-        if main_count == 1:
-            return PRINTED_MAIN
-        elif accent_count == 1:
-            return PRINTED_ACCENT
-        else:
-            raise ValueError(f"total count is {total_colored_count}, main and accent count != 1")
-    # Return 0 if no results were found
-    elif total_colored_count == 0:
-        if len(unknown_results) > 0:
-            msg = f"{PRINTED_UNKNOWN_COLOR} colors found:\n"
-            msg += str(unknown_results)
-            LOGGER.error(f"{file_name} {msg}")
-            return msg
-        else:
-            return PRINTED_MISSING
-    # Proceed with warning if more than one match, but all matches are either main OR accent color
-    elif total_colored_count > 1 and total_colored_count in [main_count, accent_count]:
-        full_report = f"{file_name} matches multiple CAD objects of the same color:\n"
-        if total_colored_count == main_count:
-            LOGGER.warning(full_report + main_color_report)
-            return PRINTED_MAIN
-        elif total_colored_count == accent_count:
-            LOGGER.warning(full_report + accent_color_report)
-            return PRINTED_ACCENT
-    # Display error if we found matching results with both main and accent colors
-    else:
-        msg = f"{PRINTED_CONFLICTING_COLORS} colors found:\n" + main_color_report + accent_color_report
-        LOGGER.error(f"{file_name} {msg}")
-        return msg
-
-def get_filename_color_results(printed_parts: List[BomItem]):
-    """return dictionary of filename['main'|'accent'|0|obj]"""
-    stl_files = get_stl_files()
-    # main_colors, accent_colors = load_printed_parts_from_file()
-    file_results = {
-        file_path: get_part_color_from_filename(file_path.name, printed_parts) for file_path in stl_files
-        }
-    main_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_MAIN]
-    accent_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_ACCENT]
-    missing_parts = [fp for (fp, result) in file_results.items() if result.startswith(PRINTED_MISSING)]
-    unknown_color_parts = [
-        f"{fp} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_UNKNOWN_COLOR)
-        ]
-    conflicting_parts = [
-        f"{fp} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_CONFLICTING_COLORS)
-        ]
-    msg = f"""# Total STL files: {len(stl_files)}
-# Total main parts: {len(main_parts)}
-# Total accent parts: {len(accent_parts)}
-# Total missing parts: {len(missing_parts)}
-# Total unknown colored parts: {len(unknown_color_parts)}
-# Total conflicting parts: {len(conflicting_parts)}"""
-    LOGGER.info("\n"+msg)
-    with open('results.txt', 'w') as file:
-        file.write(msg)
-    assert len(stl_files) == sum([
-        len(main_parts), len(accent_parts), len(missing_parts), 
-        len(unknown_color_parts), len(conflicting_parts)
-    ])
-    return {
-        PRINTED_MAIN: main_parts, 
-        PRINTED_ACCENT: accent_parts, 
-        PRINTED_MISSING: missing_parts,
-        PRINTED_UNKNOWN_COLOR: unknown_color_parts,
-        PRINTED_CONFLICTING_COLORS: conflicting_parts
-        }
-
 def write_filename_reports(filename_results):
     for category in [
         PRINTED_MAIN, PRINTED_ACCENT, PRINTED_MISSING, PRINTED_UNKNOWN_COLOR, PRINTED_CONFLICTING_COLORS
         ]:
-        with open(f'{category}-color.log', 'w') as file:
+        with open(f'results-{category}.txt', 'w') as file:
             results: list[Path] = filename_results[category]
             formatted_results: list[str] = [str(x) for x in results]
             sorted_results = sorted(formatted_results)
@@ -294,5 +210,6 @@ if __name__ == '__main__':
     # Write all BOM files
     write_bom_files()
     # List all CAD objects by main and accent colors
-    filename_results = get_filename_color_results(cad_parts)
+    stl_files = get_stl_files()
+    filename_results = get_filename_color_results(stl_files, cad_parts)
     write_filename_reports(filename_results)
