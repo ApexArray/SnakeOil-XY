@@ -25,13 +25,12 @@ BASE_PATH = Path(os.path.dirname(__file__))
 SNAKEOIL_PROJECT_PATH = BASE_PATH.parent.parent.parent
 CAD_FILE = SNAKEOIL_PROJECT_PATH / 'CAD/v1-180-assembly.FCStd'
 STL_PATH = (
-    Path(SNAKEOIL_PROJECT_PATH) / 'BETA3_Standard_Release_STL' / 'STLs'
-    ).relative_to(SNAKEOIL_PROJECT_PATH)
-EXCLUDE_DIRS = [
+    SNAKEOIL_PROJECT_PATH / 'BETA3_Standard_Release_STL' / 'STLs').relative_to(SNAKEOIL_PROJECT_PATH)
+STL_EXCLUDE_DIRS = [
     STL_PATH / "Add-on",
     STL_PATH / "Tools",
 ]
-EXCLUDE_STRINGS = [
+STL_EXCLUDE_STRINGS = [
     "OPTIONAL"
 ]
 
@@ -46,7 +45,7 @@ def generate_bom(cad_parts):
 def generate_filename_color_reports(cad_parts):
     """Builds filename color reports and writes to color-results-*.txt"""
     # List all CAD objects by main and accent colors
-    stl_files = STL.get_stl_files(SNAKEOIL_PROJECT_PATH, STL_PATH, EXCLUDE_DIRS, EXCLUDE_STRINGS)
+    stl_files = STL.get_stl_files(SNAKEOIL_PROJECT_PATH, STL_PATH, STL_EXCLUDE_DIRS, STL_EXCLUDE_STRINGS)
     filename_results = CAD.get_filename_color_results(stl_files, cad_parts)
     STL.write_file_color_reports(filename_results)
 
