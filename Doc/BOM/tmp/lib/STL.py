@@ -49,8 +49,10 @@ def write_file_color_reports(filename_results: Dict[str, Union[List[Path], List[
         CAD.PRINTED_MAIN, CAD.PRINTED_ACCENT, CAD.PRINTED_MISSING, 
         CAD.PRINTED_UNKNOWN_COLOR, CAD.PRINTED_CONFLICTING_COLORS
         ]:
+        results = filename_results[category]
         with open(BASE_PATH / f'color-results-{category}.txt', 'w') as file:
-            results = filename_results[category]
+            if not results:
+                return
             if issubclass(type(results[0]), Path):
                 formatted_results: List[str] = [x.as_posix() for x in results]  # type: ignore
             elif type(results[0]) is str:

@@ -22,12 +22,14 @@ BETA3_Standard_Release_STL/STLs/E-axis/toolhead-pcb/pcb-spacer.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/180_MACHINE_ONLY_2x_gasket-bottom.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/180_MACHINE_ONLY_2x_gasket-top.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/250_MACHINE_ONLY_2x_gasket-bottom.stl
+BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/250_MACHINE_ONLY_2x_gasket-side.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/250_MACHINE_ONLY_2x_gasket-top-250.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/2x_gasket-side-long.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/2x_gasket-side-short.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/18x_panel-mounter.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/17x_panel-mounter.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_ac-socket-mounter.stl
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_side-panel-connector.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_nut.stl
 BETA3_Standard_Release_STL/STLs/Panels/Side-panel/24x_mounter-inner.stl
 BETA3_Standard_Release_STL/STLs/Panels/Top-lid/1x_lid-left-bottom-hinge.stl
@@ -42,6 +44,7 @@ BETA3_Standard_Release_STL/STLs/XY-axis/1x_y-endstop-housing.stl
 BETA3_Standard_Release_STL/STLs/XY-axis/1x_y-endstop-wire-clamp.stl
 BETA3_Standard_Release_STL/STLs/XY-axis/2x_motor-mount-stack-idler-spacer.stl
 BETA3_Standard_Release_STL/STLs/XY-axis/4x_front-idler-spacer.stl
+BETA3_Standard_Release_STL/STLs/XY-axis/generic-x-endstop/1x_x-endstop-base.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/1x_bottom-right-cover.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/1x_z-idler-housing-right.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/1x_z-motor-back-plate-right.stl
@@ -61,6 +64,7 @@ BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/bed-arm-threaded-ba
 BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/1x_bed-cable-mounter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/1x_bed-cable-mounter_offset-for-thicker-cable.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/1x_bed-cable-supporter.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/bed-arm-threaded-ball-coupler(default-in-beta-2)/3x_threaded-ball-spacer.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-axis.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-back-mounter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-mid-plate.stl

@@ -16,6 +16,7 @@ from dataclasses import InitVar, dataclass, field
 import shelve
 import re
 from difflib import SequenceMatcher
+from lib.overrides import COLOR_OVERRIDES
 
 # Quick references to BOM part types.  Also provides type hinting in the BomPart dataclass
 PRINTED_MAIN = "main"
@@ -205,8 +206,14 @@ def search_cad_objects__fuzzy_top_result(file_name: str, cad_objects: List[BomIt
             top_ratio = ratio
     return top_results
 
-def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]) -> str:
-    """Check if part_name is a main or accent color. Returns 'main', 'accent', 0 or obj containing error info"""
+def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) -> str:
+    """Check if part_name is a main or accent color. Returns 'main', 'accent', str containing containing error info"""
+    file_path_str = file_path.as_posix()
+    file_name = file_path.name
+    if file_path_str in COLOR_OVERRIDES.keys():
+        override_color = COLOR_OVERRIDES[file_path_str]
+        LOGGER.info(f"Found {file_path} in COLOR_OVERRIDES: {override_color}")
+        return override_color
     # Find objects in each list with names container in our filename
     all_results = search_cad_objects__cad_part_name_in_filename(file_name, cad_objects)
     if not all_results:
@@ -223,10 +230,10 @@ def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]) -> 
             if all_results:
                 LOGGER.warning(f"Found fuzzy matches {file_name} -> {all_results}")
             # Get top fuzzy result. Use with caution
-            # else:
-            #     fuzzy_results = search_cad_objects__fuzzy_top_result(file_name, cad_objects)
-            #     if fuzzy_results:
-            #         LOGGER.warning(f"{file_name} top fuzzy matches {fuzzy_results}")
+            else:
+                fuzzy_results = search_cad_objects__fuzzy_top_result(file_name, cad_objects)
+                if fuzzy_results:
+                    LOGGER.warning(f"{file_name} top fuzzy matches {fuzzy_results}")
     main_results = [part for part in all_results if part.bom_item_type == PRINTED_MAIN]
     accent_results = [part for part in all_results if part.bom_item_type == PRINTED_ACCENT]
     unknown_results = [part for part in all_results if part.bom_item_type not in [PRINTED_MAIN, PRINTED_ACCENT]]
@@ -276,7 +283,7 @@ def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) 
     """return dictionary of filename['main'|'accent'|0|obj]"""
     # main_colors, accent_colors = load_printed_parts_from_file()
     file_results = {
-        file_path: get_part_color_from_filename(file_path.name, cad_parts) for file_path in stl_files
+        file_path: get_part_color_from_stl_file(file_path, cad_parts) for file_path in stl_files
         }
     main_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_MAIN]
     accent_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_ACCENT]

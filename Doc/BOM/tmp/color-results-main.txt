@@ -5,6 +5,8 @@ BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-front-plate.st
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_adxl-mount.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_face-plate.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_x-endstop-cap.stl
+BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_cooper-head-mount-mod.stl
+BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/nova/1x_nova-mount-mod.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/1x_5v-psu-mounter.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/1x_panel-support-bottom.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/2x_bottom-cable-mounter.stl
@@ -16,10 +18,12 @@ BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Top/1x_bottom-right-corner-mou
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Top/2x_side-mount.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Top/2x_top-corner-mount.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/2x_back-din-cap.stl
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/2x_back-pannel-support.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/2x_center-panel-connector.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/2x_front-din-cap.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/4x_bottom-din-holder.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_back-din-cap.stl
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_back-pannel-support.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_center-panel-connector.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_front-din-cap.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_lrs-xx-200-psu-mounter-mirror.stl
@@ -72,11 +76,14 @@ BETA3_Standard_Release_STL/STLs/Z-axis/3x_z-belt-mounter-middle.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/1x-bed-extrusion-connector-with-ziptie.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/2x_120mm-fan-mounter-_for-250-machine.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/2x_120mm-fan-mounter-mirror_for-250-machine.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/2x_bed-extrusion-end-left.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/2x_bed-extrusion-end-right.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/3x-bed-extrusion-connector.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/4x_bed-fan-mounter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/bed-arm-silicon-coupler(default-in-beta-3)/1x_back-left-arm.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/bed-arm-silicon-coupler(default-in-beta-3)/1x_front-left-arm.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/bed-arm-silicon-coupler(default-in-beta-3)/1x_middle-right-arm.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/bed-arm-threaded-ball-coupler(default-in-beta-2)/3x_bed-frame-top-arm.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/2x_extrusion-connector.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/2x_fan-mounter-mirror.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/2x_fan-mounter.stl
@@ -101,4 +108,6 @@ BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/bed-arm-thread
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-back-plate.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-front-mounter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-front-plate.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_top-bearing-arm.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_z-rail-block-mount-right-with-limiter-dual(default-in-beta-2).stl
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_z-rail-block-mount-right.stl
