@@ -32,8 +32,10 @@ EXTRA_CAD_FILES = [
 STL_PATH = (
     SNAKEOIL_PROJECT_PATH / 'BETA3_Standard_Release_STL' / 'STLs').relative_to(SNAKEOIL_PROJECT_PATH)
 STL_EXCLUDE_DIRS = [
-    STL_PATH / "Add-on",
-    STL_PATH / "Tools",
+    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Add-on").relative_to(SNAKEOIL_PROJECT_PATH),
+    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Tools").relative_to(SNAKEOIL_PROJECT_PATH),
+    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/alt").relative_to(SNAKEOIL_PROJECT_PATH),
+    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Z-axis/alt").relative_to(SNAKEOIL_PROJECT_PATH),
 ]
 STL_EXCLUDE_STRINGS = [
     "OPTIONAL"
@@ -60,7 +62,7 @@ if __name__ == '__main__':
     cad_parts = CAD.get_cad_parts_from_file(CAD_FILE)
     extra_cad_parts = []
     for extra_cad_file in EXTRA_CAD_FILES:
-        this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file, use_cache=False)
+        this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file)
         extra_cad_parts += this_cad_parts
     # Generate bom-*.json files
     generate_bom(cad_parts)

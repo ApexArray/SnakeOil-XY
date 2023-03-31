@@ -189,6 +189,22 @@ def search_cad_objects__fuzzy(file_name: str, cad_objects: List[BomItem], cutoff
         SequenceMatcher(None, file_name, part.clean_name).ratio() >= cutoff_ratio
         )]
 
+def search_cad_objects__fuzzy_top_result(file_name: str, cad_objects: List[BomItem]):
+    file_name = clean_name(file_name)
+    top_results = []
+    top_ratio = 0.0
+    for part in cad_objects:
+        ratio = SequenceMatcher(None, file_name, part.clean_name).ratio()
+        # Reset list with this part as the sole member if this is the best ratio we've seen
+        if ratio > top_ratio:
+            top_results = [part]
+            top_ratio = ratio
+        # Append part to list if tied with top_ratio
+        elif ratio == top_ratio:
+            top_results.append(part)
+            top_ratio = ratio
+    return top_results
+
 def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]) -> str:
     """Check if part_name is a main or accent color. Returns 'main', 'accent', 0 or obj containing error info"""
     # Find objects in each list with names container in our filename
@@ -200,9 +216,13 @@ def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]) -> 
             LOGGER.debug(f"Found {len(all_results)} matches using alternative serach method for {file_name}")
         else:
             LOGGER.debug(f"Trying fuzzy search method for {file_name}")
-            all_results = search_cad_objects__fuzzy(file_name, cad_objects)
+            all_results = search_cad_objects__fuzzy(file_name, cad_objects, 0.8)
             if all_results:
                 LOGGER.warning(f"Found fuzzy matches {file_name} -> {all_results}")
+            else:
+                fuzzy_results = search_cad_objects__fuzzy_top_result(file_name, cad_objects)
+                if fuzzy_results:
+                    LOGGER.warning(f"{file_name} top fuzzy matches {fuzzy_results}")
     main_results = [part for part in all_results if part.bom_item_type == PRINTED_MAIN]
     accent_results = [part for part in all_results if part.bom_item_type == PRINTED_ACCENT]
     unknown_results = [part for part in all_results if part.bom_item_type not in [PRINTED_MAIN, PRINTED_ACCENT]]
