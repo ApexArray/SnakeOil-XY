@@ -121,14 +121,14 @@ class BomItem:
     def __repr__(self) -> str:
         return self.__str__()
     
-def get_cad_objects_from_cache() -> List[BomItem]:
+def get_cad_objects_from_cache(var_name: str) -> List[BomItem]:
     with shelve.open('cad_cache') as db:
-        return db['freecad_objects']
+        return db[var_name]
     
-def write_cad_objects_to_cache(cad_objects: List[BomItem]):
+def write_cad_objects_to_cache(var_name: str, cad_objects: List[BomItem]):
     LOGGER.info("Writing cad objects to cache")
     with shelve.open('cad_cache') as db:
-        db['freecad_objects'] = cad_objects
+        db[var_name] = cad_objects
 
 def get_cad_objects_from_freecad(assembly: App.Document) -> List[BomItem]:
     freecad_objects = None

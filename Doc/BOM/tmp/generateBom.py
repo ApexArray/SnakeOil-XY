@@ -24,6 +24,10 @@ LOGGER = logging.getLogger()
 BASE_PATH = Path(os.path.dirname(__file__))
 SNAKEOIL_PROJECT_PATH = BASE_PATH.parent.parent.parent
 CAD_FILE = SNAKEOIL_PROJECT_PATH / 'CAD/v1-180-assembly.FCStd'
+# Use EXTRA_CAD_FILES to find colors of parts not in the main assembly
+EXTRA_CAD_FILES = [
+    SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/toolhead-carrier-sherpa-1515-assembly.FCStd'
+]
 STL_PATH = (
     SNAKEOIL_PROJECT_PATH / 'BETA3_Standard_Release_STL' / 'STLs').relative_to(SNAKEOIL_PROJECT_PATH)
 STL_EXCLUDE_DIRS = [
@@ -53,8 +57,12 @@ def generate_filename_color_reports(cad_parts):
 if __name__ == '__main__':
     LOGGER.info(f"# Getting BOM from {CAD_FILE}")
     # Get assembly object from filepath
+    cad_parts = []
+    extra_cad_parts = []
     try:
-        cad_parts = CAD.get_cad_objects_from_cache()
+        cad_parts = CAD.get_cad_objects_from_cache('cad_parts')
+        if EXTRA_CAD_FILES:
+            extra_cad_parts = CAD.get_cad_objects_from_cache('extra_cad_parts')
     except KeyError:
         LOGGER.info("# No cached freecad_objects found. Reading from CAD file")
         # Open GUI if running from console, otherwise we know we are running from a macro
@@ -64,9 +72,12 @@ if __name__ == '__main__':
             print("Running as macro")
         cad_assembly = App.open(str(CAD_FILE))
         cad_parts = CAD.get_cad_objects_from_freecad(cad_assembly)
-        CAD.write_cad_objects_to_cache(cad_parts)
+        for extra_cad_file in EXTRA_CAD_FILES:
+            extra_cad_assembly = App.open(str(extra_cad_file))
+            extra_cad_parts += CAD.get_cad_objects_from_freecad(extra_cad_assembly)
+        CAD.write_cad_objects_to_cache('cad_parts', cad_parts)
+        CAD.write_cad_objects_to_cache('extra_cad_parts', extra_cad_parts)
     # Generate bom-*.json files
     generate_bom(cad_parts)
     # Generate color-results-*.txt files
-    filename_results = generate_filename_color_reports(cad_parts)
-    
+    filename_results = generate_filename_color_reports(cad_parts + extra_cad_parts)

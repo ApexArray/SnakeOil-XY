@@ -2,6 +2,7 @@ BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-back-plate.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-cable-end-mounter.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-front-plate-lighter.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-front-plate.stl
+BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_adxl-mount.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_face-plate.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_x-endstop-cap.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/1x_5v-psu-mounter.stl

@@ -1,5 +1,3 @@
-BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-cable-support.stl
-BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_adxl-mount.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_cooper-head-mount-mod.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_copper-head-support-a.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_copper-head-support-b.stl
