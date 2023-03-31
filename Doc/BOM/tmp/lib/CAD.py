@@ -221,10 +221,10 @@ def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]) -> 
                 all_results = search_cad_objects__fuzzy(file_name, cad_objects, 0.8)
             if all_results:
                 LOGGER.warning(f"Found fuzzy matches {file_name} -> {all_results}")
-            else:
-                fuzzy_results = search_cad_objects__fuzzy_top_result(file_name, cad_objects)
-                if fuzzy_results:
-                    LOGGER.warning(f"{file_name} top fuzzy matches {fuzzy_results}")
+            # else:
+            #     fuzzy_results = search_cad_objects__fuzzy_top_result(file_name, cad_objects)
+            #     if fuzzy_results:
+            #         LOGGER.warning(f"{file_name} top fuzzy matches {fuzzy_results}")
     main_results = [part for part in all_results if part.bom_item_type == PRINTED_MAIN]
     accent_results = [part for part in all_results if part.bom_item_type == PRINTED_ACCENT]
     unknown_results = [part for part in all_results if part.bom_item_type not in [PRINTED_MAIN, PRINTED_ACCENT]]
