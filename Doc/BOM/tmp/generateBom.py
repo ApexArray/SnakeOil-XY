@@ -30,10 +30,15 @@ EXTRA_CAD_FILES = [
     SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/top-lid-assembly.FCStd',
     SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/sherpa-mini-assembly.FCStd',
     SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/bottom-panel-250-assembly.FCStd',
+    SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/4PR-assembly.FCStd',
     SNAKEOIL_PROJECT_PATH / 'WIP/E-axis/sherpa-mini.FCStd',
 ]
-STL_PATH = (
-    SNAKEOIL_PROJECT_PATH / 'BETA3_Standard_Release_STL' / 'STLs').relative_to(SNAKEOIL_PROJECT_PATH)
+STL_PATHS = [
+    SNAKEOIL_PROJECT_PATH / 'BETA3_Standard_Release_STL' / 'STLs',
+    SNAKEOIL_PROJECT_PATH / 'BETA3_4PR_Release_STL' / 'STLs',
+    # SNAKEOIL_PROJECT_PATH / 'BETA3_Standard_Release_STL' / 'STLs',
+]
+STL_PATHS = [x.relative_to(SNAKEOIL_PROJECT_PATH) for x in STL_PATHS]
 # Ignore STL files in these directories
 STL_EXCLUDE_DIRS = [
     (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Add-on"),
@@ -58,7 +63,9 @@ def generate_bom(cad_parts):
 def generate_filename_color_reports(cad_parts):
     """Builds filename color reports and writes to color-results-*.txt"""
     # List all CAD objects by main and accent colors
-    stl_files = STL.get_stl_files(SNAKEOIL_PROJECT_PATH, STL_PATH, STL_EXCLUDE_DIRS, STL_EXCLUDE_STRINGS)
+    stl_files = []
+    for stl_path in STL_PATHS:
+        stl_files += STL.get_stl_files(SNAKEOIL_PROJECT_PATH, stl_path, STL_EXCLUDE_DIRS, STL_EXCLUDE_STRINGS)
     filename_results = CAD.get_filename_color_results(stl_files, cad_parts)
     STL.write_file_color_reports(filename_results)
     return filename_results
@@ -69,6 +76,8 @@ if __name__ == '__main__':
     extra_cad_parts = []
     for extra_cad_file in EXTRA_CAD_FILES:
         this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file)
+        if '4pr' in extra_cad_file.as_posix().lower():
+            this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file, use_cache=False)
         extra_cad_parts += this_cad_parts
     # Generate bom-*.json files
     generate_bom(cad_parts)

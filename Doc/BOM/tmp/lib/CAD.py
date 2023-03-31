@@ -76,7 +76,9 @@ def get_printed_part_color(part: App.DocumentObject):
         None: if not a known color for printed parts
     """
     # Teal
-    if part.ViewObject.ShapeColor == (0.3333333432674408, 1.0, 1.0, 0.0):  # type: ignore
+    if part.ViewObject.ShapeColor in [  # type: ignore
+        (0.3333333432674408, 1.0, 1.0, 0.0),
+        (0.0, 1.0, 1.0, 0.0)]:
         return PRINTED_MAIN
     # Blue
     elif part.ViewObject.ShapeColor == (0.6666666865348816, 0.6666666865348816, 1.0, 0.0):  # type: ignore
@@ -240,7 +242,7 @@ def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) ->
         write_md5_result(md5_sum, override_color)
         return override_color
     # Find objects in each list with names container in our filename
-    all_results = search_cad_objects__cad_part_name_in_filename(file_name, cad_objects)
+    all_results = []
     if not all_results:
         LOGGER.debug(f"Trying alternative search method for {file_name}")
         all_results = search_cad_objects__filename_in_cad_part_name(file_name, cad_objects)
@@ -249,7 +251,7 @@ def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) ->
         else:
             LOGGER.debug(f"Trying fuzzy search method for {file_name}")
             # while not all_results and (target_ratio >= min_ratio):
-            all_results = search_cad_objects__fuzzy(file_name, cad_objects, 0.9)
+            all_results = search_cad_objects__fuzzy(file_name, cad_objects, 0.75)
                 # if not all_results:
                 #     target_ratio -= ratio_step
             if all_results:
@@ -281,7 +283,7 @@ def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) ->
     # Color is unknown if we found matching CAD objects, but they are not a known color
     elif total_colored_count == 0:
         if len(unknown_results) > 0:
-            msg = f"{PRINTED_UNKNOWN_COLOR} colors found:"
+            msg = f"{PRINTED_UNKNOWN_COLOR} colors found:\n"
             msg += str(unknown_results)
             LOGGER.error(f"{file_name} {msg}")
             result = msg
