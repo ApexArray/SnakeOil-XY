@@ -16,12 +16,10 @@ BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Top/1x_bottom-right-corner-mou
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Top/2x_side-mount.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Top/2x_top-corner-mount.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/2x_back-din-cap.stl
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/2x_back-pannel-support.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/2x_center-panel-connector.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/2x_front-din-cap.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/4x_bottom-din-holder.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_back-din-cap.stl
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_back-pannel-support.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_center-panel-connector.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_front-din-cap.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_lrs-xx-200-psu-mounter-mirror.stl
