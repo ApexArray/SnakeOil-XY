@@ -30,6 +30,10 @@ BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/17x_panel-mounter.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_ac-socket-mounter.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_nut.stl
 BETA3_Standard_Release_STL/STLs/Panels/Side-panel/24x_mounter-inner.stl
+BETA3_Standard_Release_STL/STLs/Panels/Top-lid/1x_lid-left-bottom-hinge.stl
+BETA3_Standard_Release_STL/STLs/Panels/Top-lid/1x_lid-left-top-hinge.stl
+BETA3_Standard_Release_STL/STLs/Panels/Top-lid/1x_lid-right-bottom-hinge.stl
+BETA3_Standard_Release_STL/STLs/Panels/Top-lid/1x_lid-right-top-hinge.stl
 BETA3_Standard_Release_STL/STLs/Panels/Top-panel/12x_mounter-inner.stl
 BETA3_Standard_Release_STL/STLs/XY-axis/1x_ab-motor-right-pulley-spacer.stl
 BETA3_Standard_Release_STL/STLs/XY-axis/1x_left-idler-top.stl

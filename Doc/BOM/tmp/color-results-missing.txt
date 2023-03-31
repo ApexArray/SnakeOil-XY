@@ -9,11 +9,6 @@ BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/main-body-e3d-collet
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/main-body-triangle-lab-collet.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/250_MACHINE_ONLY_2x_gasket-side.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/4x_foot_insert_TPU.stl
-BETA3_Standard_Release_STL/STLs/Panels/Top-lid/1x_lid-left-bottom-hinge.stl
-BETA3_Standard_Release_STL/STLs/Panels/Top-lid/1x_lid-left-top-hinge.stl
-BETA3_Standard_Release_STL/STLs/Panels/Top-lid/1x_lid-right-bottom-hinge.stl
-BETA3_Standard_Release_STL/STLs/Panels/Top-lid/1x_lid-right-top-hinge.stl
-BETA3_Standard_Release_STL/STLs/Panels/Top-lid/2x_lid-end-cap.stl
 BETA3_Standard_Release_STL/STLs/XY-axis/generic-x-endstop/1x_x-endstop-base.stl
 BETA3_Standard_Release_STL/STLs/XY-axis/y-carrier-CF/2x_mounting-block.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/6x_bed-spring-top-spacer.stl
