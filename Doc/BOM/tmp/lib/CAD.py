@@ -17,6 +17,8 @@ import shelve
 import re
 from difflib import SequenceMatcher
 from lib.overrides import COLOR_OVERRIDES
+import hashlib
+import json
 
 # Quick references to BOM part types.  Also provides type hinting in the BomPart dataclass
 PRINTED_MAIN = "main"
@@ -32,19 +34,36 @@ BOM_ITEM_TYPES = [
     PRINTED_MAIN, PRINTED_ACCENT, FASTENER, OTHER
 ]
 
-BASE_PATH = Path(os.path.dirname(__file__)).parent
-
 logging.basicConfig(
     # filename='generateBom.log', filemode='a', 
     format='%(levelname)s: %(message)s', level=logging.INFO
     )
 LOGGER = logging.getLogger()
 
+BASE_PATH = Path(os.path.dirname(__file__)).parent
+MD5_COLOR_CACHE_FILE = BASE_PATH / "md5-file-colors.json"
+
+md5_cache = {}
+
+if MD5_COLOR_CACHE_FILE.exists():
+    with open(MD5_COLOR_CACHE_FILE, 'r') as file:
+        md5_cache = json.load(file)
+        LOGGER.info(f"Loaded {len(md5_cache.keys())} results from md5 cache")
+else:
+    LOGGER.info("No md5 cache file found. creating now")
+    with open(MD5_COLOR_CACHE_FILE, 'w') as file:
+        file.write("{}")
+
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
 revision_pattern = r'-.\d+$'  # Used to identify and strip revision numbers from CAD part names
 # name cleaning patterns
 revision_pattern = re.compile(r'-.\d+$')  # Used to identify and strip revision numbers from CAD part names
 part_count_pattern = re.compile(r'^\d{1,2}x[_-]')  # Remove part counts at beginning of STL file names
+
+def write_md5_result(hash, result):
+    LOGGER.debug(f"Caching {hash} = {result}")
+    md5_cache[hash] = result
+    json.dump(md5_cache, open(MD5_COLOR_CACHE_FILE, 'w'), indent=2)
 
 def get_printed_part_color(part: App.DocumentObject):
     """Checks if CAD object is a printed part, as determined by its color (teal=main, blue=accent)
@@ -208,11 +227,17 @@ def search_cad_objects__fuzzy_top_result(file_name: str, cad_objects: List[BomIt
 
 def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) -> str:
     """Check if part_name is a main or accent color. Returns 'main', 'accent', str containing containing error info"""
+    with open(file_path, 'rb') as file:
+        md5_sum = hashlib.md5(file.read()).hexdigest()
+    if md5_sum in md5_cache.keys():
+        LOGGER.info(f"Found cached results for {file_path.as_posix()}")
+        return md5_cache[md5_sum]
     file_path_str = file_path.as_posix()
     file_name = file_path.name
     if file_path_str in COLOR_OVERRIDES.keys():
         override_color = COLOR_OVERRIDES[file_path_str]
         LOGGER.info(f"Found {file_path} in COLOR_OVERRIDES: {override_color}")
+        write_md5_result(md5_sum, override_color)
         return override_color
     # Find objects in each list with names container in our filename
     all_results = search_cad_objects__cad_part_name_in_filename(file_name, cad_objects)
@@ -248,36 +273,38 @@ def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) ->
     # Ideally, we should have exactly one match.
     if total_colored_count == 1:
         if main_count == 1:
-            return PRINTED_MAIN
+            result = PRINTED_MAIN
         elif accent_count == 1:
-            return PRINTED_ACCENT
+            result = PRINTED_ACCENT
         else:
             raise ValueError(f"total count is {total_colored_count}, main and accent count != 1")
-    # Return 0 if no results were found
+    # Color is unknown if we found matching CAD objects, but they are not a known color
     elif total_colored_count == 0:
         if len(unknown_results) > 0:
-            msg = f"{PRINTED_UNKNOWN_COLOR} colors found:\n"
+            msg = f"{PRINTED_UNKNOWN_COLOR} colors found:"
             msg += str(unknown_results)
             LOGGER.error(f"{file_name} {msg}")
-            return msg
+            result = msg
         else:
-            return PRINTED_MISSING
+            result = PRINTED_MISSING
     # Proceed with warning if more than one match, but all matches are either main OR accent color
     elif total_colored_count > 1 and total_colored_count in [main_count, accent_count]:
         full_report = f"{file_name} matches multiple CAD objects of the same color:\n"
         if total_colored_count == main_count:
             LOGGER.debug(full_report + main_color_report)
-            return PRINTED_MAIN
+            result = PRINTED_MAIN
         elif total_colored_count == accent_count:
             LOGGER.debug(full_report + accent_color_report)
-            return PRINTED_ACCENT
+            result = PRINTED_ACCENT
         else:
             raise Exception("Total color count does not match main_count or accent_count")
     # Display error if we found matching results with both main and accent colors
     else:
         msg = f"{PRINTED_CONFLICTING_COLORS} colors found:\n" + main_color_report + accent_color_report
         LOGGER.error(f"{file_name} {msg}")
-        return msg
+        result = msg
+    write_md5_result(md5_sum, result)
+    return result
 
 def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) -> Dict[str, Union[List[Path], List[str]]]:
     """return dictionary of filename['main'|'accent'|0|obj]"""
