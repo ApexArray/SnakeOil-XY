@@ -26,7 +26,6 @@ BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_center-panel-connector.st
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_front-din-cap.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_lrs-xx-200-psu-mounter-mirror.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_lrs-xx-200-psu-mounter.stl
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_side-panel-connector.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_sonoff-mount.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_wago-mount.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/2x_bottom-din-holder.stl
