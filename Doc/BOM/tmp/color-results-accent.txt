@@ -57,13 +57,16 @@ BETA3_Standard_Release_STL/STLs/Z-axis/3x_z-belt-block-mount.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/3x_z-belt-mounter-clamp-nut.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/1x_bed-cable-router.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/1x_bed-cable-supporter.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/1x_bed-wago-mounter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/bed-arm-threaded-ball-coupler(default-in-beta-2)/3x_spacer.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/1x_bed-cable-mounter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/1x_bed-cable-supporter.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/1x_wago-mounter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/bed-arm-threaded-ball-coupler/3x_spacer.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/1x_bed-cable-mounter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/1x_bed-cable-mounter_offset-for-thicker-cable.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/1x_bed-cable-supporter.stl
+BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/1x_wago-mounter.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/bed-arm-threaded-ball-coupler(default-in-beta-2)/3x_threaded-ball-spacer.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-axis.stl
 BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_cw-back-mounter.stl

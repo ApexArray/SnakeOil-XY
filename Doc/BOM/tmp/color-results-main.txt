@@ -36,6 +36,7 @@ BETA3_Standard_Release_STL/STLs/Panels/Front-panel/1x_door-magnet-mount-large.st
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_door-magnet-mount-small.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_front-hinge.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_hinge-support.stl
+BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_knob.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_side-hinge.stl
 BETA3_Standard_Release_STL/STLs/Panels/Top-lid/2x_lid-end-cap.stl
 BETA3_Standard_Release_STL/STLs/Panels/Top-panel/4x_corner-endcap.stl

@@ -29,4 +29,8 @@ COLOR_OVERRIDES = {
     "BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/bed-arm-threaded-ball-coupler(default-in-beta-2)/3x_threaded-ball-spacer.stl": PRINTED_ACCENT,
     "BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_top-bearing-arm.stl": PRINTED_MAIN,
     "BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_z-rail-block-mount-right-with-limiter-dual(default-in-beta-2).stl": PRINTED_MAIN,
+    "BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_knob.stl": PRINTED_MAIN,
+    "BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/1x_bed-wago-mounter.stl": PRINTED_ACCENT,
+    "BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/1x_wago-mounter.stl": PRINTED_ACCENT,
+    "BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/1x_wago-mounter.stl": PRINTED_ACCENT,
 }
