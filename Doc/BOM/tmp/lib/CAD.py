@@ -142,15 +142,17 @@ def _get_cad_parts_from_freecad_assembly(assembly: App.Document) -> List[BomItem
         freecad_objects += _get_cad_parts_from_freecad_assembly(linked_file.LinkedObject.Document)
     return freecad_objects
 
-def get_cad_parts_from_file(path: Path) -> List[BomItem]:
-    try:
-        cad_parts = _get_cad_parts_from_cache(path.name)
-    except KeyError:
-        LOGGER.info(f"Loading CAD parts from {path}")
-        Gui.showMainWindow()
-        cad_assembly = App.open(str(path))
-        cad_parts = _get_cad_parts_from_freecad_assembly(cad_assembly)
-        _write_cad_parts_to_cache(path.name, cad_parts)
+def get_cad_parts_from_file(path: Path, use_cache=True) -> List[BomItem]:
+    if use_cache:
+        try:
+            return _get_cad_parts_from_cache(path.name)
+        except KeyError:
+            LOGGER.debug(f"No cache for {path}")
+    LOGGER.info(f"Loading CAD parts from {path}")
+    Gui.showMainWindow()
+    cad_assembly = App.open(str(path))
+    cad_parts = _get_cad_parts_from_freecad_assembly(cad_assembly)
+    _write_cad_parts_to_cache(path.name, cad_parts)
     return cad_parts
 
 def clean_name(name: str):
