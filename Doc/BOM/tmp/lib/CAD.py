@@ -45,7 +45,7 @@ revision_pattern = r'-.\d+$'  # Used to identify and strip revision numbers from
 revision_pattern = re.compile(r'-.\d+$')  # Used to identify and strip revision numbers from CAD part names
 part_count_pattern = re.compile(r'^\d{1,2}x[_-]')  # Remove part counts at beginning of STL file names
 
-def get_printed_part_color(part: App.Part):
+def get_printed_part_color(part: App.DocumentObject):
     """Checks if CAD object is a printed part, as determined by its color (teal=main, blue=accent)
 
     Args:
@@ -55,16 +55,18 @@ def get_printed_part_color(part: App.Part):
         str: friendly name of color (ex: main, accent)
         None: if not a known color for printed parts
     """
-    if part.ViewObject.ShapeColor == (0.3333333432674408, 1.0, 1.0, 0.0):  # Teal
+    # Teal
+    if part.ViewObject.ShapeColor == (0.3333333432674408, 1.0, 1.0, 0.0):  # type: ignore
         return PRINTED_MAIN
-    elif part.ViewObject.ShapeColor == (0.6666666865348816, 0.6666666865348816, 1.0, 0.0):  # Blue
+    # Blue
+    elif part.ViewObject.ShapeColor == (0.6666666865348816, 0.6666666865348816, 1.0, 0.0):  # type: ignore
         return PRINTED_ACCENT
     else:
         return None
 
 @dataclass
 class BomItem:
-    part: InitVar[App.Part]
+    part: InitVar[App.DocumentObject]
     bom_item_type: str = field(init=False)  # What type of BOM entry (printed, fastener, other)
     name: str = field(init=False)  # We'll get the name from the part.label in the __post_init__ function
     clean_name: str = field(init=False)
@@ -73,9 +75,9 @@ class BomItem:
     color_category: str = field(init=False)
     raw_color: tuple = field(init=False)
 
-    def __post_init__(self, part: App.Part):
+    def __post_init__(self, part: App.DocumentObject):
         self.name = part.Label
-        self.raw_color = part.ViewObject.ShapeColor
+        self.raw_color = part.ViewObject.ShapeColor  # type: ignore
         self.document = part.Document.Label
         self.clean_name = clean_name(self.name)
         # Remove numbers at end if they exist (e.g. 'M3-Washer004' becomes 'M3-Washer')
@@ -92,21 +94,21 @@ class BomItem:
         # Add descriptive fastener names
         if self.bom_item_type == FASTENER:
             if hasattr(part, 'type'):
-                if part.type == "ISO4762":
+                if part.type == "ISO4762":  # type: ignore
                     self.name = f"Socket head {self.name}"
-                if part.type == "ISO7380-1":
+                if part.type == "ISO7380-1":  # type: ignore
                     self.name = f"Button head {self.name}"
-                if part.type == "ISO4026":
+                if part.type == "ISO4026": # type: ignore
                     self.name = f"Grub {self.name}"
-                if part.type == "ISO4032":
+                if part.type == "ISO4032":  # type: ignore
                     self.name = f"Hex {self.name}"
-                if part.type == "ISO7092":
+                if part.type == "ISO7092":  # type: ignore
                     self.name = f"Small size {self.name}"
-                if part.type == "ISO7093-1":
+                if part.type == "ISO7093-1":  # type: ignore
                     self.name = f"Big size {self.name}"
-                if part.type == "ISO7089":
+                if part.type == "ISO7089":  # type: ignore
                     self.name = f"Standard size {self.name}"
-                if part.type == "ISO7090":
+                if part.type == "ISO7090":  # type: ignore
                     self.name = f"Standard size {self.name}"
         # Try to add parent object
         try:
@@ -139,7 +141,8 @@ def _get_cad_parts_from_freecad_assembly(assembly: App.Document) -> List[BomItem
     # Recurse through each linked file
     for linked_file in assembly.findObjects("App::Link"):
         LOGGER.debug("# Getting linked parts from", linked_file.Name)
-        freecad_objects += _get_cad_parts_from_freecad_assembly(linked_file.LinkedObject.Document)
+        freecad_objects += _get_cad_parts_from_freecad_assembly(
+            linked_file.LinkedObject.Document)  # type: ignore
     return freecad_objects
 
 def get_cad_parts_from_file(path: Path, use_cache=True) -> List[BomItem]:
