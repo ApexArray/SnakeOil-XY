@@ -45,11 +45,7 @@ def get_stl_files(snakeoil_project_path: Path, target_stl_path: Path,
     return stl_files
 
 def write_file_color_reports(filename_results: Dict[str, Union[List[Path], List[str]]]):
-    for category in [
-        CAD.PRINTED_MAIN, CAD.PRINTED_ACCENT, CAD.PRINTED_MISSING, 
-        CAD.PRINTED_UNKNOWN_COLOR, CAD.PRINTED_CONFLICTING_COLORS
-        ]:
-        results = filename_results[category]
+    for category, results in filename_results.items():
         with open(BASE_PATH / f'color-results-{category}.txt', 'w') as file:
             if not results:
                 continue
