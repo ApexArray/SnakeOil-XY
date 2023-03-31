@@ -216,7 +216,9 @@ def get_part_color_from_filename(file_name: str, cad_objects: List[BomItem]) -> 
             LOGGER.debug(f"Found {len(all_results)} matches using alternative serach method for {file_name}")
         else:
             LOGGER.debug(f"Trying fuzzy search method for {file_name}")
-            all_results = search_cad_objects__fuzzy(file_name, cad_objects, 0.8)
+            all_results = search_cad_objects__fuzzy(file_name, cad_objects, 0.9)
+            if not all_results:
+                all_results = search_cad_objects__fuzzy(file_name, cad_objects, 0.8)
             if all_results:
                 LOGGER.warning(f"Found fuzzy matches {file_name} -> {all_results}")
             else:
