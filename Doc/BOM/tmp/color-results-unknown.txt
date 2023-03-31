@@ -2,22 +2,26 @@ BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/dragon/1x_dr
 [toolhead-sherpa-pcb-1515-assembly: toolhead-sherp-pcb-1515/dragon_support, toolhead-carrier-sherpa-1515-assembly: toolhead-carrier-sherpa-1515/dragon_support]
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/mosquito/1x_mosquito-support.stl unknown colors found:
 [toolhead-sherpa-pcb-1515-assembly: toolhead-sherp-pcb-1515/mosquito_support, toolhead-carrier-sherpa-1515-assembly: toolhead-carrier-sherpa-1515/mosquito_support]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BC.stl unknown colors found:
+[bottom-panel-250-assembly: bottom-panel/panel-BC]
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BL.stl unknown colors found:
-[bottom-panel-assembly: bottom-panel/panel-BL]
+[bottom-panel-assembly: bottom-panel/panel-BL, bottom-panel-250-assembly: bottom-panel/panel-BL]
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BR.stl unknown colors found:
-[bottom-panel-assembly: bottom-panel/panel-BR]
+[bottom-panel-assembly: bottom-panel/panel-BR, bottom-panel-250-assembly: bottom-panel/panel-BR]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FC.stl unknown colors found:
+[bottom-panel-250-assembly: bottom-panel/panel-FC]
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FL.stl unknown colors found:
-[bottom-panel-assembly: bottom-panel/panel-FL]
+[bottom-panel-assembly: bottom-panel/panel-FL, bottom-panel-250-assembly: bottom-panel/panel-FL]
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FR.stl unknown colors found:
-[bottom-panel-assembly: bottom-panel/panel-FR]
+[bottom-panel-assembly: bottom-panel/panel-FR, bottom-panel-250-assembly: bottom-panel/panel-FR]
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-BL.stl unknown colors found:
-[bottom-panel-assembly: bottom-panel/panel-BL]
+[bottom-panel-assembly: bottom-panel/panel-BL, bottom-panel-250-assembly: bottom-panel/panel-BL]
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-BR.stl unknown colors found:
-[bottom-panel-assembly: bottom-panel/panel-BR]
+[bottom-panel-assembly: bottom-panel/panel-BR, bottom-panel-250-assembly: bottom-panel/panel-BR]
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-FL.stl unknown colors found:
-[bottom-panel-assembly: bottom-panel/panel-FL]
+[bottom-panel-assembly: bottom-panel/panel-FL, bottom-panel-250-assembly: bottom-panel/panel-FL]
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-FR.stl unknown colors found:
-[bottom-panel-assembly: bottom-panel/panel-FR]
+[bottom-panel-assembly: bottom-panel/panel-FR, bottom-panel-250-assembly: bottom-panel/panel-FR]
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/3x_frame-magnet-mount.stl unknown colors found:
 [front-panel-assembly: front-panel/frame-magnet-mount, front-panel-assembly: front-panel/frame-magnet-mount, front-panel-assembly: front-panel/frame-magnet-mount]
 BETA3_Standard_Release_STL/STLs/Panels/Side-panel/24x_mounter-outer.stl unknown colors found:

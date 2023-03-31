@@ -29,16 +29,20 @@ EXTRA_CAD_FILES = [
     SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/toolhead-carrier-sherpa-1515-assembly.FCStd',
     SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/top-lid-assembly.FCStd',
     SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/sherpa-mini-assembly.FCStd',
+    SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/bottom-panel-250-assembly.FCStd',
     SNAKEOIL_PROJECT_PATH / 'WIP/E-axis/sherpa-mini.FCStd',
 ]
 STL_PATH = (
     SNAKEOIL_PROJECT_PATH / 'BETA3_Standard_Release_STL' / 'STLs').relative_to(SNAKEOIL_PROJECT_PATH)
+# Ignore STL files in these directories
 STL_EXCLUDE_DIRS = [
-    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Add-on").relative_to(SNAKEOIL_PROJECT_PATH),
-    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Tools").relative_to(SNAKEOIL_PROJECT_PATH),
-    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/alt").relative_to(SNAKEOIL_PROJECT_PATH),
-    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Z-axis/alt").relative_to(SNAKEOIL_PROJECT_PATH),
+    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Add-on"),
+    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Tools"),
+    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/alt"),
+    (SNAKEOIL_PROJECT_PATH / "BETA3_Standard_Release_STL/STLs/Z-axis/alt"),
 ]
+# Convert to relative paths
+STL_EXCLUDE_DIRS = [x.relative_to(SNAKEOIL_PROJECT_PATH) for x in STL_EXCLUDE_DIRS]
 STL_EXCLUDE_STRINGS = [
     "OPTIONAL"
 ]

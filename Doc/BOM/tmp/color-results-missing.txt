@@ -8,8 +8,6 @@ BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/front-body.stl
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/main-body-e3d-collet.stl
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/main-body-triangle-lab-collet.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/250_MACHINE_ONLY_2x_gasket-side.stl
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BC.stl
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FC.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/2x_back-pannel-support.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_back-pannel-support.stl
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_side-panel-connector.stl
