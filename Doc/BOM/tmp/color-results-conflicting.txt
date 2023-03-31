@@ -1,24 +1,24 @@
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_knob.stl conflicting colors found:
   main colors:
-    - LCD-retro/knob
+    - LCD-assembly: LCD-retro/knob
   accent colors:
-    - front-panel/knob
-    - front-panel/knob
+    - front-panel-assembly: front-panel/knob
+    - front-panel-assembly: front-panel/knob
 
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-2020/1x_bed-wago-mounter.stl conflicting colors found:
   main colors:
-    - bottom-panel/wago-mount
+    - bottom-panel-assembly: bottom-panel/wago-mount
   accent colors:
-    - bed_assembly/wago-mounter
+    - bed-assembly: bed_assembly/wago-mounter
 
 BETA3_Standard_Release_STL/STLs/Z-axis/bed-frame-makerbeamxl/1x_wago-mounter.stl conflicting colors found:
   main colors:
-    - bottom-panel/wago-mount
+    - bottom-panel-assembly: bottom-panel/wago-mount
   accent colors:
-    - bed_assembly/wago-mounter
+    - bed-assembly: bed_assembly/wago-mounter
 
 BETA3_Standard_Release_STL/STLs/Z-axis/recommended-bed-frame-1515/1x_wago-mounter.stl conflicting colors found:
   main colors:
-    - bottom-panel/wago-mount
+    - bottom-panel-assembly: bottom-panel/wago-mount
   accent colors:
-    - bed_assembly/wago-mounter
+    - bed-assembly: bed_assembly/wago-mounter
