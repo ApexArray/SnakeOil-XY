@@ -26,7 +26,8 @@ SNAKEOIL_PROJECT_PATH = BASE_PATH.parent.parent.parent
 CAD_FILE = SNAKEOIL_PROJECT_PATH / 'CAD/v1-180-assembly.FCStd'
 # Use EXTRA_CAD_FILES to find colors of parts not in the main assembly
 EXTRA_CAD_FILES = [
-    SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/toolhead-carrier-sherpa-1515-assembly.FCStd'
+    SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/toolhead-carrier-sherpa-1515-assembly.FCStd',
+    SNAKEOIL_PROJECT_PATH / 'WIP/E-axis/sherpa-mini.FCStd'
 ]
 STL_PATH = (
     SNAKEOIL_PROJECT_PATH / 'BETA3_Standard_Release_STL' / 'STLs').relative_to(SNAKEOIL_PROJECT_PATH)
