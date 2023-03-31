@@ -76,8 +76,6 @@ if __name__ == '__main__':
     extra_cad_parts = []
     for extra_cad_file in EXTRA_CAD_FILES:
         this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file)
-        if '4pr' in extra_cad_file.as_posix().lower():
-            this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file, use_cache=False)
         extra_cad_parts += this_cad_parts
     # Generate bom-*.json files
     generate_bom(cad_parts)
