@@ -27,7 +27,8 @@ CAD_FILE = SNAKEOIL_PROJECT_PATH / 'CAD/v1-180-assembly.FCStd'
 # Use EXTRA_CAD_FILES to find colors of parts not in the main assembly
 EXTRA_CAD_FILES = [
     SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/toolhead-carrier-sherpa-1515-assembly.FCStd',
-    SNAKEOIL_PROJECT_PATH / 'WIP/E-axis/sherpa-mini.FCStd'
+    SNAKEOIL_PROJECT_PATH / 'WIP/E-axis/sherpa-mini.FCStd',
+    SNAKEOIL_PROJECT_PATH / 'WIP/component-assembly/top-lid-assembly.FCStd'
 ]
 STL_PATH = (
     SNAKEOIL_PROJECT_PATH / 'BETA3_Standard_Release_STL' / 'STLs').relative_to(SNAKEOIL_PROJECT_PATH)
@@ -62,7 +63,7 @@ if __name__ == '__main__':
     cad_parts = CAD.get_cad_parts_from_file(CAD_FILE)
     extra_cad_parts = []
     for extra_cad_file in EXTRA_CAD_FILES:
-        this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file)
+        this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file, use_cache=False)
         extra_cad_parts += this_cad_parts
     # Generate bom-*.json files
     generate_bom(cad_parts)
