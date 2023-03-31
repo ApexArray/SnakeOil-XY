@@ -10,6 +10,7 @@ import re
 import sys
 from typing import Dict, List, Union
 import FreeCAD as App  # type: ignore
+import FreeCADGui as Gui  # type: ignore
 import logging
 from dataclasses import InitVar, dataclass, field
 import shelve
@@ -116,21 +117,21 @@ class BomItem:
             pass
     
     def __str__(self) -> str:
-        return f"{self.parent}/{self.name}"
+        return f"{self.document}: {self.parent}/{self.name}"
     
     def __repr__(self) -> str:
         return self.__str__()
     
-def get_cad_objects_from_cache(var_name: str) -> List[BomItem]:
+def _get_cad_parts_from_cache(var_name: str) -> List[BomItem]:
     with shelve.open('cad_cache') as db:
         return db[var_name]
     
-def write_cad_objects_to_cache(var_name: str, cad_objects: List[BomItem]):
-    LOGGER.info("Writing cad objects to cache")
+def _write_cad_parts_to_cache(var_name: str, cad_parts: List[BomItem]):
+    LOGGER.info(f"Writing {var_name} CAD parts to cache")
     with shelve.open('cad_cache') as db:
-        db[var_name] = cad_objects
+        db[var_name] = cad_parts
 
-def get_cad_objects_from_freecad(assembly: App.Document) -> List[BomItem]:
+def _get_cad_parts_from_freecad_assembly(assembly: App.Document) -> List[BomItem]:
     freecad_objects = None
     # Try to read from cache to avoid length process of reading CAD file
     LOGGER.debug("# Getting parts from", assembly.Label)
@@ -138,8 +139,19 @@ def get_cad_objects_from_freecad(assembly: App.Document) -> List[BomItem]:
     # Recurse through each linked file
     for linked_file in assembly.findObjects("App::Link"):
         LOGGER.debug("# Getting linked parts from", linked_file.Name)
-        freecad_objects += get_cad_objects_from_freecad(linked_file.LinkedObject.Document)
+        freecad_objects += _get_cad_parts_from_freecad_assembly(linked_file.LinkedObject.Document)
     return freecad_objects
+
+def get_cad_parts_from_file(path: Path) -> List[BomItem]:
+    try:
+        cad_parts = _get_cad_parts_from_cache(path.name)
+    except KeyError:
+        LOGGER.info(f"Loading CAD parts from {path}")
+        Gui.showMainWindow()
+        cad_assembly = App.open(str(path))
+        cad_parts = _get_cad_parts_from_freecad_assembly(cad_assembly)
+        _write_cad_parts_to_cache(path.name, cad_parts)
+    return cad_parts
 
 def clean_name(name: str):
     name = name.replace('_', '-')

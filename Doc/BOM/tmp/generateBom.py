@@ -56,28 +56,11 @@ def generate_filename_color_reports(cad_parts):
     return filename_results
 
 if __name__ == '__main__':
-    LOGGER.info(f"# Getting BOM from {CAD_FILE}")
     # Get assembly object from filepath
-    cad_parts = []
+    cad_parts = CAD.get_cad_parts_from_file(CAD_FILE)
     extra_cad_parts = []
-    try:
-        cad_parts = CAD.get_cad_objects_from_cache('cad_parts')
-        if EXTRA_CAD_FILES:
-            extra_cad_parts = CAD.get_cad_objects_from_cache('extra_cad_parts')
-    except KeyError:
-        LOGGER.info("# No cached freecad_objects found. Reading from CAD file")
-        # Open GUI if running from console, otherwise we know we are running from a macro
-        if hasattr(Gui, 'showMainWindow'):
-            Gui.showMainWindow()
-        else:
-            print("Running as macro")
-        cad_assembly = App.open(str(CAD_FILE))
-        cad_parts = CAD.get_cad_objects_from_freecad(cad_assembly)
-        for extra_cad_file in EXTRA_CAD_FILES:
-            extra_cad_assembly = App.open(str(extra_cad_file))
-            extra_cad_parts += CAD.get_cad_objects_from_freecad(extra_cad_assembly)
-        CAD.write_cad_objects_to_cache('cad_parts', cad_parts)
-        CAD.write_cad_objects_to_cache('extra_cad_parts', extra_cad_parts)
+    for extra_cad_file in EXTRA_CAD_FILES:
+        extra_cad_parts += CAD.get_cad_parts_from_file(extra_cad_file)
     # Generate bom-*.json files
     generate_bom(cad_parts)
     # Generate color-results-*.txt files
