@@ -21,6 +21,7 @@ BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_x-endstop
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_x-endstop-flag-2020.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/dragon/1x_dragon-mount-mod.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/mosquito/1x_mosquito-mount-mod.stl
+BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/nova/1x_nova-mount-mod.stl
 BETA3_Standard_Release_STL/STLs/E-axis/toolhead-pcb/pcb-mounter-cable-guide.stl
 BETA3_Standard_Release_STL/STLs/E-axis/toolhead-pcb/pcb-spacer.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/180_MACHINE_ONLY_2x_gasket-bottom.stl

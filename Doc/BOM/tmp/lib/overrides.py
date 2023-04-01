@@ -8,7 +8,6 @@ COLOR_OVERRIDES = {
     "BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_cooper-head-mount-mod.stl": PRINTED_MAIN,
     "BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_copper-head-support-a.stl": PRINTED_UNKNOWN_COLOR,
     "BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_copper-head-support-b.stl": PRINTED_UNKNOWN_COLOR,
-    "BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/nova/1x_nova-mount-mod.stl": PRINTED_MAIN,
     "BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/back-body.stl": PRINTED_UNKNOWN_COLOR,
     "BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/filament-arm.stl": PRINTED_UNKNOWN_COLOR,
     "BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/front-body.stl": PRINTED_UNKNOWN_COLOR,

@@ -19,7 +19,6 @@ BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_adxl-moun
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_face-plate.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_x-endstop-cap.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_cooper-head-mount-mod.stl
-BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/nova/1x_nova-mount-mod.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/1x_5v-psu-mounter.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/1x_panel-support-bottom.stl
 BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/2x_bottom-cable-mounter.stl

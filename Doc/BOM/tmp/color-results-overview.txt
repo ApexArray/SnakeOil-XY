@@ -1,6 +1,6 @@
 # Total STL files: 238
-# Total main parts: 129
-# Total accent parts: 81
+# Total main parts: 128
+# Total accent parts: 82
 # Total missing parts: 0
 # Total unknown colored parts: 28
 # Total conflicting parts: 0
