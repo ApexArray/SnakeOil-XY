@@ -69,6 +69,7 @@
   },
   "printed (main color)": {
     "5v-psu-mounter": 1,
+    "Chamfer": 1,
     "Cut": 1,
     "ab-motor-bottom-left": 1,
     "ab-motor-bottom-right": 1,
@@ -116,6 +117,7 @@
     "lrs-xx-200-psu-mounter": 1,
     "lrs-xx-200-psu-mounter-mirror": 1,
     "middle-right-arm": 1,
+    "mounter-outer": 29,
     "neo-pixel-arm": 2,
     "neo-pixel-arm-rev": 2,
     "panel-support": 6,

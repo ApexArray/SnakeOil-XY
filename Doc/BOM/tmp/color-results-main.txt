@@ -2,10 +2,6 @@ BETA3_4PR_Release_STL/STLs/1515/1x_y-carrier-top-left.stl
 BETA3_4PR_Release_STL/STLs/1515/1x_y-carrier-top-right.stl
 BETA3_4PR_Release_STL/STLs/1x_c-left-idler-mounter.stl
 BETA3_4PR_Release_STL/STLs/1x_c-right-idler-mounter.stl
-BETA3_4PR_Release_STL/STLs/1x_left-c-motor-mount-inner.stl
-BETA3_4PR_Release_STL/STLs/1x_left-c-motor-mount-outer.stl
-BETA3_4PR_Release_STL/STLs/1x_right-c-motor-mount-inner.stl
-BETA3_4PR_Release_STL/STLs/1x_right-c-motor-mount-outer.stl
 BETA3_4PR_Release_STL/STLs/2020/1x_y-carrier-top-left.stl
 BETA3_4PR_Release_STL/STLs/2020/1x_y-carrier-top-right.stl
 BETA3_4PR_Release_STL/STLs/2x_c-belt-mounter-top.stl
@@ -51,7 +47,9 @@ BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_front-hinge.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_hinge-support.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_knob.stl
 BETA3_Standard_Release_STL/STLs/Panels/Front-panel/2x_side-hinge.stl
+BETA3_Standard_Release_STL/STLs/Panels/Side-panel/24x_mounter-outer.stl
 BETA3_Standard_Release_STL/STLs/Panels/Top-lid/2x_lid-end-cap.stl
+BETA3_Standard_Release_STL/STLs/Panels/Top-panel/12x_mounter-outer.stl
 BETA3_Standard_Release_STL/STLs/Panels/Top-panel/4x_corner-endcap.stl
 BETA3_Standard_Release_STL/STLs/XY-axis/1x_ab-motor-bottom-left.stl
 BETA3_Standard_Release_STL/STLs/XY-axis/1x_ab-motor-bottom-right.stl

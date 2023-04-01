@@ -411,10 +411,11 @@
     "fastener": {
       "Button head M6x16-Screw": 10
     },
-    "main": {},
-    "other": {
+    "main": {
       "Chamfer": 1,
-      "mounter-outer": 9,
+      "mounter-outer": 9
+    },
+    "other": {
       "panel-324x454x3mm": 1
     }
   },
@@ -495,9 +496,10 @@
     "fastener": {
       "Button head M6x16-Screw": 12
     },
-    "main": {},
+    "main": {
+      "mounter-outer": 12
+    },
     "other": {
-      "mounter-outer": 12,
       "panel-324x454x3mm": 1
     }
   },
@@ -628,10 +630,10 @@
       "Button head M8x12-Screw": 4
     },
     "main": {
-      "corner-endcap": 4
+      "corner-endcap": 4,
+      "mounter-outer": 8
     },
     "other": {
-      "mounter-outer": 8,
       "panel-324x234x3mm": 1
     }
   },

@@ -288,7 +288,7 @@ def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) ->
     # Color is unknown if we found matching CAD objects, but they are not a known color
     elif total_colored_count == 0:
         if len(unknown_results) > 0:
-            msg = f"{PRINTED_UNKNOWN_COLOR} colors found:\n"
+            msg = f"{PRINTED_UNKNOWN_COLOR} colors found: "
             msg += str(unknown_results)
             LOGGER.error(f"{file_name} {msg}")
             result = msg

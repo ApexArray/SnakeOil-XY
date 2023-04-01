@@ -10,9 +10,7 @@ BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-default.s
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-low.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-wide-low.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_duct-tri-horn-wide.stl
-BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-bottom-plate.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-cable-support.stl
-BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/2x_extruder-belt-clamp.stl
 BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/2x_extruder-belt-tesioner.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_top-plate-with-endstop-1515.stl
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/1x_top-plate-with-endstop-2020.stl
