@@ -1,28 +1,28 @@
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_copper-head-support-a.stl unknown (manual override)
 BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_copper-head-support-b.stl unknown (manual override)
-BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/dragon/1x_dragon-support.stl unknown colors found: [toolhead-sherpa-pcb-1515-assembly: toolhead-sherp-pcb-1515/dragon_support, toolhead-carrier-sherpa-1515-assembly: toolhead-carrier-sherpa-1515/dragon_support]
-BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/mosquito/1x_mosquito-support.stl unknown colors found: [toolhead-sherpa-pcb-1515-assembly: toolhead-sherp-pcb-1515/mosquito_support, toolhead-carrier-sherpa-1515-assembly: toolhead-carrier-sherpa-1515/mosquito_support]
+BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/dragon/1x_dragon-support.stl unknown colors found: [toolhead-sherp-pcb-1515/dragon_support, toolhead-carrier-sherpa-1515/dragon_support]
+BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/mosquito/1x_mosquito-support.stl unknown colors found: [toolhead-sherp-pcb-1515/mosquito_support, toolhead-carrier-sherpa-1515/mosquito_support]
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/back-body.stl unknown (manual override)
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/filament-arm.stl unknown (manual override)
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/front-body.stl unknown (manual override)
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/main-body-e3d-collet.stl unknown (manual override)
 BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/main-body-triangle-lab-collet.stl unknown (manual override)
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BC.stl unknown colors found: [bottom-panel-250-assembly: bottom-panel/panel-BC]
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BL.stl unknown colors found: [bottom-panel-assembly: bottom-panel/panel-BL, bottom-panel-250-assembly: bottom-panel/panel-BL]
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BR.stl unknown colors found: [bottom-panel-assembly: bottom-panel/panel-BR, bottom-panel-250-assembly: bottom-panel/panel-BR]
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FC.stl unknown colors found: [bottom-panel-250-assembly: bottom-panel/panel-FC]
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FL.stl unknown colors found: [bottom-panel-assembly: bottom-panel/panel-FL, bottom-panel-250-assembly: bottom-panel/panel-FL]
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FR.stl unknown colors found: [bottom-panel-assembly: bottom-panel/panel-FR, bottom-panel-250-assembly: bottom-panel/panel-FR]
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-BL.stl unknown colors found: [bottom-panel-assembly: bottom-panel/panel-BL, bottom-panel-250-assembly: bottom-panel/panel-BL]
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-BR.stl unknown colors found: [bottom-panel-assembly: bottom-panel/panel-BR, bottom-panel-250-assembly: bottom-panel/panel-BR]
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-FL.stl unknown colors found: [bottom-panel-assembly: bottom-panel/panel-FL, bottom-panel-250-assembly: bottom-panel/panel-FL]
-BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-FR.stl unknown colors found: [bottom-panel-assembly: bottom-panel/panel-FR, bottom-panel-250-assembly: bottom-panel/panel-FR]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BC.stl unknown colors found: [bottom-panel/panel-BC]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BL.stl unknown colors found: [bottom-panel/panel-BL, bottom-panel/panel-BL]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-BR.stl unknown colors found: [bottom-panel/panel-BR, bottom-panel/panel-BR]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FC.stl unknown colors found: [bottom-panel/panel-FC]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FL.stl unknown colors found: [bottom-panel/panel-FL, bottom-panel/panel-FL]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/1x_panel-FR.stl unknown colors found: [bottom-panel/panel-FR, bottom-panel/panel-FR]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-BL.stl unknown colors found: [bottom-panel/panel-BL, bottom-panel/panel-BL]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-BR.stl unknown colors found: [bottom-panel/panel-BR, bottom-panel/panel-BR]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-FL.stl unknown colors found: [bottom-panel/panel-FL, bottom-panel/panel-FL]
+BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_panel-FR.stl unknown colors found: [bottom-panel/panel-FR, bottom-panel/panel-FR]
 BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/4x_foot_insert_TPU.stl unknown (manual override)
-BETA3_Standard_Release_STL/STLs/Panels/Front-panel/3x_frame-magnet-mount.stl unknown colors found: [front-panel-assembly: front-panel/frame-magnet-mount, front-panel-assembly: front-panel/frame-magnet-mount, front-panel-assembly: front-panel/frame-magnet-mount]
-BETA3_Standard_Release_STL/STLs/XY-axis/2x_ab-motor-spacer.stl unknown colors found: [z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-right-assembly: z-motor-right/motor-spacer, z-motor-right-assembly: z-motor-right/motor-spacer, z-motor-right-assembly: z-motor-right/motor-spacer, z-motor-right-assembly: z-motor-right/motor-spacer]
+BETA3_Standard_Release_STL/STLs/Panels/Front-panel/3x_frame-magnet-mount.stl unknown colors found: [front-panel/frame-magnet-mount, front-panel/frame-magnet-mount, front-panel/frame-magnet-mount]
+BETA3_Standard_Release_STL/STLs/XY-axis/2x_ab-motor-spacer.stl unknown colors found: [snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer]
 BETA3_Standard_Release_STL/STLs/XY-axis/y-carrier-CF/2x_mounting-block.stl unknown (manual override)
-BETA3_Standard_Release_STL/STLs/Z-axis/12x_z-motor-spacer.stl unknown colors found: [z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-left-assembly: snakeoilxy-180/motor-spacer, z-motor-right-assembly: z-motor-right/motor-spacer, z-motor-right-assembly: z-motor-right/motor-spacer, z-motor-right-assembly: z-motor-right/motor-spacer, z-motor-right-assembly: z-motor-right/motor-spacer]
+BETA3_Standard_Release_STL/STLs/Z-axis/12x_z-motor-spacer.stl unknown colors found: [snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, snakeoilxy-180/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer, z-motor-right/motor-spacer]
 BETA3_Standard_Release_STL/STLs/Z-axis/6x_bed-spring-top-spacer.stl unknown (manual override)
 BETA3_Standard_Release_STL/STLs/Z-axis/6x_bedspring-bottom-spacer.stl unknown (manual override)
-BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_spacer-0p5mm.stl unknown colors found: [counter-weight-spring-box-assembly: counter-weight-top-arm/spacer-0p5mm, counter-weight-spring-box-assembly: counter-weight-top-arm/spacer-0p5mm]
-BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_spacer-1mm.stl unknown colors found: [counter-weight-spring-box-assembly: counter-weight-top-arm/spacer-1mm, counter-weight-spring-box-assembly: counter-weight-top-arm/spacer-1mm]
+BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_spacer-0p5mm.stl unknown colors found: [counter-weight-top-arm/spacer-0p5mm, counter-weight-top-arm/spacer-0p5mm]
+BETA3_Standard_Release_STL/STLs/Z-axis/z-counter-weight/1x_spacer-1mm.stl unknown colors found: [counter-weight-top-arm/spacer-1mm, counter-weight-top-arm/spacer-1mm]

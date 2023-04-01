@@ -146,7 +146,7 @@ class BomItem:
             pass
     
     def __str__(self) -> str:
-        return f"{self.document}: {self.parent}/{self.name}"
+        return f"{self.parent}/{self.name}"
     
     def __repr__(self) -> str:
         return self.__str__()
@@ -294,7 +294,7 @@ def get_part_color_from_stl_file(file_path: Path, cad_parts: List[BomItem]) -> s
     file_name = file_path.name
     if file_path_str in COLOR_OVERRIDES.keys():
         override_color = COLOR_OVERRIDES[file_path_str]
-        LOGGER.info(f"Found {file_path} in COLOR_OVERRIDES: {override_color}")
+        LOGGER.info(f"Color override applied to {file_path} from override.py: {override_color}")
         write_md5_result(md5_sum, override_color)
         return override_color
     # Find objects in each list with names container in our filename
@@ -316,7 +316,7 @@ def get_part_color_from_stl_file(file_path: Path, cad_parts: List[BomItem]) -> s
                 if not matching_cad_parts:
                     target_ratio -= ratio_step
             if matching_cad_parts:
-                LOGGER.warning(f"Using less reliable 'fuzzy' search method for file name {file_name} -> {matching_cad_parts}")
+                LOGGER.warning(f"Using less reliable 'fuzzy' search method for {file_name} -> {matching_cad_parts}")
             # Get top fuzzy result. Use with caution
             else:
                 fuzzy_results = search_cad_objects__fuzzy_top_result(file_name, cad_parts)
