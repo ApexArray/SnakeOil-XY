@@ -43,16 +43,19 @@ LOGGER = logging.getLogger()
 BASE_PATH = Path(os.path.dirname(__file__)).parent
 MD5_COLOR_CACHE_FILE = BASE_PATH / "md5-file-colors.json"
 
+global md5_cache
 md5_cache = {}
 
-if MD5_COLOR_CACHE_FILE.exists():
-    with open(MD5_COLOR_CACHE_FILE, 'r') as file:
-        md5_cache = json.load(file)
-        LOGGER.info(f"Loaded {len(md5_cache.keys())} results from md5 cache")
-else:
-    LOGGER.info("No md5 cache file found. creating now")
-    with open(MD5_COLOR_CACHE_FILE, 'w') as file:
-        file.write("{}")
+def init_md5_cache_file():
+    global md5_cache
+    if MD5_COLOR_CACHE_FILE.exists():
+        with open(MD5_COLOR_CACHE_FILE, 'r') as file:
+            md5_cache = json.load(file)
+            LOGGER.info(f"Loaded {len(md5_cache.keys())} results from md5 cache")
+    else:
+        LOGGER.info("No md5 cache file found. creating now")
+        with open(MD5_COLOR_CACHE_FILE, 'w') as file:
+            file.write("{}")
 
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
 revision_pattern = r'-.\d+$'  # Used to identify and strip revision numbers from CAD part names
@@ -91,17 +94,19 @@ class BomItem:
     part: InitVar[App.DocumentObject]
     bom_item_type: str = field(init=False)  # What type of BOM entry (printed, fastener, other)
     name: str = field(init=False)  # We'll get the name from the part.label in the __post_init__ function
-    clean_name: str = field(init=False)
     parent: str = field(init=False, default='')
     document: str = field(init=False, default='')
     color_category: str = field(init=False)
     raw_color: tuple = field(init=False)
 
+    @property
+    def clean_name(self):
+        return clean_name(self.name)
+
     def __post_init__(self, part: App.DocumentObject):
         self.name = part.Label
         self.raw_color = part.ViewObject.ShapeColor  # type: ignore
         self.document = part.Document.Label
-        self.clean_name = clean_name(self.name)
         # Remove numbers at end if they exist (e.g. 'M3-Washer004' becomes 'M3-Washer')
         while self.name[-1].isnumeric():
             self.name = self.name[:-1]
@@ -242,7 +247,7 @@ def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) ->
         write_md5_result(md5_sum, override_color)
         return override_color
     # Find objects in each list with names container in our filename
-    all_results = []
+    all_results = search_cad_objects__cad_part_name_in_filename(file_name, cad_objects)
     if not all_results:
         LOGGER.debug(f"Trying alternative search method for {file_name}")
         all_results = search_cad_objects__filename_in_cad_part_name(file_name, cad_objects)
@@ -310,7 +315,6 @@ def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) ->
 
 def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) -> Dict[str, Union[List[Path], List[str]]]:
     """return dictionary of filename['main'|'accent'|0|obj]"""
-    # main_colors, accent_colors = load_printed_parts_from_file()
     file_results = {
         file_path: get_part_color_from_stl_file(file_path, cad_parts) for file_path in stl_files
         }

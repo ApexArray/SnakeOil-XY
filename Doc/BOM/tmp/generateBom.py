@@ -60,9 +60,14 @@ def generate_bom(cad_parts):
     # Write all BOM files
     BOM.write_bom_files()
 
-def generate_filename_color_reports(cad_parts):
+def generate_filename_color_reports(cad_parts, use_cache):
     """Builds filename color reports and writes to color-results-*.txt"""
     # List all CAD objects by main and accent colors
+    if not use_cache:
+        with open(CAD.MD5_COLOR_CACHE_FILE, 'w') as file:
+            file.write('{}')
+            file.flush()
+            os.fsync(file)
     stl_files = []
     for stl_path in STL_PATHS:
         stl_files += STL.get_stl_files(SNAKEOIL_PROJECT_PATH, stl_path, STL_EXCLUDE_DIRS, STL_EXCLUDE_STRINGS)
@@ -72,12 +77,13 @@ def generate_filename_color_reports(cad_parts):
 
 if __name__ == '__main__':
     # Get assembly object from filepath
-    cad_parts = CAD.get_cad_parts_from_file(CAD_FILE)
+    CACHE = True
+    cad_parts = CAD.get_cad_parts_from_file(CAD_FILE, CACHE)
     extra_cad_parts = []
     for extra_cad_file in EXTRA_CAD_FILES:
-        this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file)
+        this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file, CACHE)
         extra_cad_parts += this_cad_parts
     # Generate bom-*.json files
     generate_bom(cad_parts)
     # Generate color-results-*.txt files
-    filename_results = generate_filename_color_reports(cad_parts + extra_cad_parts)
+    filename_results = generate_filename_color_reports(cad_parts + extra_cad_parts, False)
