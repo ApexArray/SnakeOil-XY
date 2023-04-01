@@ -575,10 +575,10 @@
   },
   "toolhead-sherpa-pcb-1515-assembly": {
     "accent": {
-      "belt-clamp-r": 2,
       "bltouch-mount": 1,
       "dragon-mount-mod": 1,
       "duct-tri-horn": 1,
+      "extruder-belt-clamp-r": 2,
       "extruder-belt-tesioner": 2,
       "extruderbottom-plate": 1,
       "mosquito-mount-mod": 1,

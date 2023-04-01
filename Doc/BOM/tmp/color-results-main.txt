@@ -1,5 +1,7 @@
 BETA3_4PR_Release_STL/STLs/1515/1x_y-carrier-top-left.stl
 BETA3_4PR_Release_STL/STLs/1515/1x_y-carrier-top-right.stl
+BETA3_4PR_Release_STL/STLs/1x_c-left-idler-mounter.stl
+BETA3_4PR_Release_STL/STLs/1x_c-right-idler-mounter.stl
 BETA3_4PR_Release_STL/STLs/2020/1x_y-carrier-top-left.stl
 BETA3_4PR_Release_STL/STLs/2020/1x_y-carrier-top-right.stl
 BETA3_4PR_Release_STL/STLs/2x_c-belt-mounter-top.stl
