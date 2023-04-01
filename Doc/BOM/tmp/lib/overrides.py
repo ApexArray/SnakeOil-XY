@@ -15,8 +15,6 @@ COLOR_OVERRIDES = {
     "BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/main-body-e3d-collet.stl": PRINTED_UNKNOWN_COLOR,
     "BETA3_Standard_Release_STL/STLs/E-axis/sherpa-mini-extruder/main-body-triangle-lab-collet.stl": PRINTED_UNKNOWN_COLOR,
     "BETA3_Standard_Release_STL/STLs/Panels/Back-panel/Bottom/250_MACHINE_ONLY_2x_gasket-side.stl": PRINTED_ACCENT,
-    "BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel-base-250/2x_back-pannel-support.stl": PRINTED_MAIN,  # .8125 ratio
-    "BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_back-pannel-support.stl": PRINTED_MAIN,  # .8125 ratio
     "BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/1x_side-panel-connector.stl": PRINTED_ACCENT,
     "BETA3_Standard_Release_STL/STLs/Panels/Bottom-panel/4x_foot_insert_TPU.stl": PRINTED_UNKNOWN_COLOR,
     "BETA3_Standard_Release_STL/STLs/XY-axis/generic-x-endstop/1x_x-endstop-base.stl": PRINTED_ACCENT,
