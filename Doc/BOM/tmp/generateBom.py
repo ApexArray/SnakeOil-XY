@@ -81,7 +81,7 @@ if __name__ == '__main__':
     cad_parts = CAD.get_cad_parts_from_file(CAD_FILE, CACHE)
     extra_cad_parts = []
     for extra_cad_file in EXTRA_CAD_FILES:
-        this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file, False)
+        this_cad_parts = CAD.get_cad_parts_from_file(extra_cad_file, True)
         extra_cad_parts += this_cad_parts
     # Generate bom-*.json files
     generate_bom(cad_parts)

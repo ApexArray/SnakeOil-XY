@@ -316,7 +316,7 @@ def get_part_color_from_stl_file(file_path: Path, cad_parts: List[BomItem]) -> s
                 if not matching_cad_parts:
                     target_ratio -= ratio_step
             if matching_cad_parts:
-                LOGGER.warning(f"Found fuzzy matches {file_name} -> {matching_cad_parts}")
+                LOGGER.warning(f"Using less reliable 'fuzzy' search method for file name {file_name} -> {matching_cad_parts}")
             # Get top fuzzy result. Use with caution
             else:
                 fuzzy_results = search_cad_objects__fuzzy_top_result(file_name, cad_parts)
