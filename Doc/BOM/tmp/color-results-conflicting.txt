@@ -1,8 +1,0 @@
-BETA3_Standard_Release_STL/STLs/E-axis/carrier-common/1x_extruder-bottom-plate.stl conflicting colors found:
-  main colors:
-    - toolhead-sherpa-pcb-1515-assembly: toolhead-sherp-pcb-1515/extruder-front-plate
-    - toolhead-sherpa-pcb-1515-assembly: toolhead-sherp-pcb-1515/extruder-back-plate
-    - toolhead-carrier-sherpa-1515-assembly: toolhead-carrier-sherpa-1515/extruder-back-plate
-  accent colors:
-    - toolhead-sherpa-pcb-1515-assembly: toolhead-sherp-pcb-1515/extruderbottom-plate
-    - toolhead-carrier-sherpa-1515-assembly: toolhead-carrier-sherpa-1515/extruderbottom-plate
