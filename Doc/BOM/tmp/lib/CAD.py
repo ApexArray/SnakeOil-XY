@@ -232,7 +232,7 @@ def search_cad_objects__fuzzy_top_result(file_name: str, cad_objects: List[BomIt
             top_ratio = ratio
     return top_results
 
-def _get_color_category_from_cad_list(file_name, matching_cad_parts: List[BomItem]):
+def _get_color_category_from_cad_list(file_name, matching_cad_parts: List[BomItem], suppress_logs=False):
     main_results = [part for part in matching_cad_parts if part.bom_item_type == PRINTED_MAIN]
     accent_results = [part for part in matching_cad_parts if part.bom_item_type == PRINTED_ACCENT]
     unknown_results = [part for part in matching_cad_parts if part.bom_item_type not in [PRINTED_MAIN, PRINTED_ACCENT]]
@@ -257,7 +257,8 @@ def _get_color_category_from_cad_list(file_name, matching_cad_parts: List[BomIte
         if len(unknown_results) > 0:
             msg = f"{PRINTED_UNKNOWN_COLOR} colors found: "
             msg += str(unknown_results)
-            LOGGER.error(f"{file_name} {msg}")
+            if not suppress_logs:
+                LOGGER.error(f"{file_name} {msg}")
             result = msg
         else:
             result = PRINTED_MISSING
@@ -265,17 +266,20 @@ def _get_color_category_from_cad_list(file_name, matching_cad_parts: List[BomIte
     elif total_colored_count > 1 and total_colored_count in [main_count, accent_count]:
         full_report = f"{file_name} matches multiple CAD objects of the same color:\n"
         if total_colored_count == main_count:
-            LOGGER.debug(full_report + main_color_report)
+            if not suppress_logs:
+                LOGGER.debug(full_report + main_color_report)
             result = PRINTED_MAIN
         elif total_colored_count == accent_count:
-            LOGGER.debug(full_report + accent_color_report)
+            if not suppress_logs:
+                LOGGER.debug(full_report + accent_color_report)
             result = PRINTED_ACCENT
         else:
             raise Exception("Total color count does not match main_count or accent_count")
     # Display error if we found matching results with both main and accent colors
     else:
         msg = f"{PRINTED_CONFLICTING_COLORS} colors found:\n" + main_color_report + accent_color_report
-        LOGGER.error(f"{file_name} {msg}")
+        if not suppress_logs:
+            LOGGER.error(f"{file_name} {msg}")
         result = msg
     return result
 
@@ -295,11 +299,11 @@ def get_part_color_from_stl_file(file_path: Path, cad_parts: List[BomItem]) -> s
         return override_color
     # Find objects in each list with names container in our filename
     matching_cad_parts = search_cad_objects__cad_part_name_in_filename(file_name, cad_parts)
-    _result = _get_color_category_from_cad_list(file_name, matching_cad_parts)
+    _result = _get_color_category_from_cad_list(file_name, matching_cad_parts, suppress_logs=True)
     if not matching_cad_parts or _result.startswith(PRINTED_UNKNOWN_COLOR):
         LOGGER.debug(f"Trying alternative search method for {file_name}")
         matching_cad_parts = search_cad_objects__filename_in_cad_part_name(file_name, cad_parts)
-        _result = _get_color_category_from_cad_list(file_name, matching_cad_parts)
+        _result = _get_color_category_from_cad_list(file_name, matching_cad_parts, suppress_logs=True)
         if matching_cad_parts and not _result.startswith(PRINTED_UNKNOWN_COLOR):
             LOGGER.debug(f"Found {len(matching_cad_parts)} matches using alternative search method for {file_name}")
         else:
