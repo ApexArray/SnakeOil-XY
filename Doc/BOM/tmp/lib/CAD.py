@@ -295,11 +295,13 @@ def get_part_color_from_stl_file(file_path: Path, cad_parts: List[BomItem]) -> s
         return override_color
     # Find objects in each list with names container in our filename
     matching_cad_parts = search_cad_objects__cad_part_name_in_filename(file_name, cad_parts)
-    if not matching_cad_parts:
+    _result = _get_color_category_from_cad_list(file_name, matching_cad_parts)
+    if not matching_cad_parts or _result.startswith(PRINTED_UNKNOWN_COLOR):
         LOGGER.debug(f"Trying alternative search method for {file_name}")
         matching_cad_parts = search_cad_objects__filename_in_cad_part_name(file_name, cad_parts)
-        if matching_cad_parts:
-            LOGGER.debug(f"Found {len(matching_cad_parts)} matches using alternative serach method for {file_name}")
+        _result = _get_color_category_from_cad_list(file_name, matching_cad_parts)
+        if matching_cad_parts and not _result.startswith(PRINTED_UNKNOWN_COLOR):
+            LOGGER.debug(f"Found {len(matching_cad_parts)} matches using alternative search method for {file_name}")
         else:
             LOGGER.debug(f"Trying fuzzy search method for {file_name}")
             target_ratio = 0.91
