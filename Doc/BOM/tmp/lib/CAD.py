@@ -232,46 +232,10 @@ def search_cad_objects__fuzzy_top_result(file_name: str, cad_objects: List[BomIt
             top_ratio = ratio
     return top_results
 
-def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) -> str:
-    """Check if part_name is a main or accent color. Returns 'main', 'accent', str containing containing error info"""
-    with open(file_path, 'rb') as file:
-        md5_sum = hashlib.md5(file.read()).hexdigest()
-    if md5_sum in md5_cache.keys():
-        LOGGER.info(f"Found cached results for {file_path.as_posix()}")
-        return md5_cache[md5_sum]
-    file_path_str = file_path.as_posix()
-    file_name = file_path.name
-    if file_path_str in COLOR_OVERRIDES.keys():
-        override_color = COLOR_OVERRIDES[file_path_str]
-        LOGGER.info(f"Found {file_path} in COLOR_OVERRIDES: {override_color}")
-        write_md5_result(md5_sum, override_color)
-        return override_color
-    # Find objects in each list with names container in our filename
-    all_results = search_cad_objects__cad_part_name_in_filename(file_name, cad_objects)
-    if not all_results:
-        LOGGER.debug(f"Trying alternative search method for {file_name}")
-        all_results = search_cad_objects__filename_in_cad_part_name(file_name, cad_objects)
-        if all_results:
-            LOGGER.debug(f"Found {len(all_results)} matches using alternative serach method for {file_name}")
-        else:
-            LOGGER.debug(f"Trying fuzzy search method for {file_name}")
-            target_ratio = 0.91
-            min_ratio = 0.70
-            ratio_step = 0.05
-            while not all_results and (target_ratio >= min_ratio):
-                all_results = search_cad_objects__fuzzy(file_name, cad_objects, target_ratio)
-                if not all_results:
-                    target_ratio -= ratio_step
-            if all_results:
-                LOGGER.warning(f"Found fuzzy matches {file_name} -> {all_results}")
-            # Get top fuzzy result. Use with caution
-            else:
-                fuzzy_results = search_cad_objects__fuzzy_top_result(file_name, cad_objects)
-                if fuzzy_results:
-                    LOGGER.warning(f"{file_name} top fuzzy matches {fuzzy_results}")
-    main_results = [part for part in all_results if part.bom_item_type == PRINTED_MAIN]
-    accent_results = [part for part in all_results if part.bom_item_type == PRINTED_ACCENT]
-    unknown_results = [part for part in all_results if part.bom_item_type not in [PRINTED_MAIN, PRINTED_ACCENT]]
+def _get_color_category_from_cad_list(file_name, matching_cad_parts: List[BomItem]):
+    main_results = [part for part in matching_cad_parts if part.bom_item_type == PRINTED_MAIN]
+    accent_results = [part for part in matching_cad_parts if part.bom_item_type == PRINTED_ACCENT]
+    unknown_results = [part for part in matching_cad_parts if part.bom_item_type not in [PRINTED_MAIN, PRINTED_ACCENT]]
     # Help variables for logging below
     main_count = len(main_results)
     accent_count = len(accent_results)
@@ -313,6 +277,46 @@ def get_part_color_from_stl_file(file_path: Path, cad_objects: List[BomItem]) ->
         msg = f"{PRINTED_CONFLICTING_COLORS} colors found:\n" + main_color_report + accent_color_report
         LOGGER.error(f"{file_name} {msg}")
         result = msg
+    return result
+
+def get_part_color_from_stl_file(file_path: Path, cad_parts: List[BomItem]) -> str:
+    """Check if part_name is a main or accent color. Returns 'main', 'accent', str containing containing error info"""
+    with open(file_path, 'rb') as file:
+        md5_sum = hashlib.md5(file.read()).hexdigest()
+    if md5_sum in md5_cache.keys():
+        LOGGER.info(f"Found cached results for {file_path.as_posix()}")
+        return md5_cache[md5_sum]
+    file_path_str = file_path.as_posix()
+    file_name = file_path.name
+    if file_path_str in COLOR_OVERRIDES.keys():
+        override_color = COLOR_OVERRIDES[file_path_str]
+        LOGGER.info(f"Found {file_path} in COLOR_OVERRIDES: {override_color}")
+        write_md5_result(md5_sum, override_color)
+        return override_color
+    # Find objects in each list with names container in our filename
+    matching_cad_parts = search_cad_objects__cad_part_name_in_filename(file_name, cad_parts)
+    if not matching_cad_parts:
+        LOGGER.debug(f"Trying alternative search method for {file_name}")
+        matching_cad_parts = search_cad_objects__filename_in_cad_part_name(file_name, cad_parts)
+        if matching_cad_parts:
+            LOGGER.debug(f"Found {len(matching_cad_parts)} matches using alternative serach method for {file_name}")
+        else:
+            LOGGER.debug(f"Trying fuzzy search method for {file_name}")
+            target_ratio = 0.91
+            min_ratio = 0.70
+            ratio_step = 0.05
+            while not matching_cad_parts and (target_ratio >= min_ratio):
+                matching_cad_parts = search_cad_objects__fuzzy(file_name, cad_parts, target_ratio)
+                if not matching_cad_parts:
+                    target_ratio -= ratio_step
+            if matching_cad_parts:
+                LOGGER.warning(f"Found fuzzy matches {file_name} -> {matching_cad_parts}")
+            # Get top fuzzy result. Use with caution
+            else:
+                fuzzy_results = search_cad_objects__fuzzy_top_result(file_name, cad_parts)
+                if fuzzy_results:
+                    LOGGER.warning(f"{file_name} top fuzzy matches {fuzzy_results}")
+    result = _get_color_category_from_cad_list(file_name, matching_cad_parts)
     write_md5_result(md5_sum, result)
     return result
 
