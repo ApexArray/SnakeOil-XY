@@ -2,6 +2,7 @@
 Run with FreeCAD's bundled interpreter, or as a FreeCAD macro
 """
 import os
+from typing import Dict, List, Union
 if os.name == 'nt':
     FREECADPATH = os.getenv('FREECADPATH', 'C:/Program Files/FreeCAD 0.20/bin')
 else:
@@ -74,6 +75,18 @@ def generate_filename_color_reports(cad_parts, use_cache):
     filename_results = CAD.get_filename_color_results(stl_files, cad_parts)
     STL.write_file_color_reports(filename_results)
     return filename_results
+
+def add_part_colors_to_stl_file_names(filename_results: Dict[str, Union[List[Path], List[str]]]):
+    color_to_filename_prepend = {
+        CAD.PRINTED_MAIN: "M_",
+        CAD.PRINTED_ACCENT: "A_",
+        CAD.PRINTED_UNKNOWN_COLOR: "C_"
+    }
+    for color, prepend_str in color_to_filename_prepend.items():
+        for fp in filename_results[color]:
+            assert type(fp) is Path, "file name result is not a valid Path type: {fp}"
+            new_name = fp.with_name(f"{prepend_str}{fp.name}")
+            os.rename(fp, new_name)
 
 if __name__ == '__main__':
     # Get assembly object from filepath
