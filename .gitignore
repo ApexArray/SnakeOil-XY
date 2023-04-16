@@ -9,3 +9,4 @@ Doc/img/HBLFSN6.png
 *.log
 __pycache__
 cad_cache.*
+color-results-*.txt
