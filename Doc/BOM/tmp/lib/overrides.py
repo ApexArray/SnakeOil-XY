@@ -1,8 +1,7 @@
-
 # Quick references to BOM part types.  Also provides type hinting in the BomPart dataclass
 PRINTED_MAIN = "main"
 PRINTED_ACCENT = "accent"
-PRINTED_UNKNOWN_COLOR = "unknown (manual override)"
+PRINTED_UNKNOWN_COLOR = "unknown"
 
 COLOR_OVERRIDES = {
     "BETA3_Standard_Release_STL/STLs/E-axis/hotend-mount-for-sherpa-mini/cooper-head/1x_cooper-head-mount-mod.stl": PRINTED_MAIN,

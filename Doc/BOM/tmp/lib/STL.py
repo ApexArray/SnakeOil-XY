@@ -3,6 +3,7 @@ Run with FreeCAD's bundled interpreter, or as a FreeCAD macro
 """
 import logging
 import os
+import re
 if os.name == 'nt':
     FREECADPATH = os.getenv('FREECADPATH', 'C:/Program Files/FreeCAD 0.20/bin')
 else:
@@ -33,6 +34,9 @@ def filter_stl_files(stl_files: List[Path], exclude_dirs: List[Path] = [], exclu
         for excluded_str in exclude_strings:
             if excluded_str.lower() in str(file).lower():
                 keep = False
+        # Ignore if filename already has a part color
+        if re.match(CAD.part_color_pattern, file.name):
+            keep = False
         if keep == True:
             filtered_stl_files.append(file)
     return filtered_stl_files

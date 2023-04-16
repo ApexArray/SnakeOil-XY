@@ -29,6 +29,13 @@ PRINTED_CONFLICTING_COLORS = "conflicting"
 FASTENER = "fastener"
 OTHER = "other"
 
+# String to prepend to filename for each color
+COLOR_PREPEND_KEYS = {
+        PRINTED_MAIN: "M_",
+        PRINTED_ACCENT: "A_",
+        PRINTED_UNKNOWN_COLOR: "C_"
+    }
+
 # Allowed types in a BOM
 BOM_ITEM_TYPES = [
     PRINTED_MAIN, PRINTED_ACCENT, FASTENER, OTHER
@@ -264,7 +271,7 @@ def _get_color_category_from_cad_list(file_name, matching_cad_parts: List[BomIte
             msg += str(unknown_results)
             if not suppress_logs:
                 LOGGER.error(f"{file_name} {msg}")
-            result = msg
+            result = PRINTED_UNKNOWN_COLOR
         else:
             result = PRINTED_MISSING
     # Proceed with warning if more than one match, but all matches are either main OR accent color
@@ -343,7 +350,7 @@ def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) 
     accent_parts = [fp for (fp, result) in file_results.items() if result == PRINTED_ACCENT]
     missing_parts = [fp for (fp, result) in file_results.items() if result.startswith(PRINTED_MISSING)]
     unknown_color_parts = [
-        f"{fp.as_posix()} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_UNKNOWN_COLOR)
+        fp for (fp, result) in file_results.items() if result.startswith(PRINTED_UNKNOWN_COLOR)
         ]
     conflicting_parts = [
         f"{fp.as_posix()} {result}" for (fp, result) in file_results.items() if result.startswith(PRINTED_CONFLICTING_COLORS)

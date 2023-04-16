@@ -77,16 +77,18 @@ def generate_filename_color_reports(cad_parts, use_cache):
     return filename_results
 
 def add_part_colors_to_stl_file_names(filename_results: Dict[str, Union[List[Path], List[str]]]):
-    color_to_filename_prepend = {
-        CAD.PRINTED_MAIN: "M_",
-        CAD.PRINTED_ACCENT: "A_",
-        CAD.PRINTED_UNKNOWN_COLOR: "C_"
-    }
-    for color, prepend_str in color_to_filename_prepend.items():
+    for color, prepend_str in CAD.COLOR_PREPEND_KEYS.items():
         for fp in filename_results[color]:
-            assert type(fp) is Path, "file name result is not a valid Path type: {fp}"
-            new_name = fp.with_name(f"{prepend_str}{fp.name}")
-            os.rename(fp, new_name)
+            if issubclass(type(fp), Path):
+                filename = fp.name  # type: ignore
+                # Strip any existing colors from filenames
+                if True in [x for x in CAD.COLOR_PREPEND_KEYS.values() if filename.startswith(x)]:
+                    filename = filename[2:]
+                new_name = fp.with_name(f"{prepend_str}{filename}")  # type: ignore
+                os.rename(fp, new_name)
+            else:
+                raise Exception(f"file name result is not a valid Path type: {fp}")
+
 
 if __name__ == '__main__':
     # Get assembly object from filepath
@@ -100,3 +102,4 @@ if __name__ == '__main__':
     generate_bom(cad_parts)
     # Generate color-results-*.txt files
     filename_results = generate_filename_color_reports(cad_parts + extra_cad_parts, False)
+    add_part_colors_to_stl_file_names(filename_results)
