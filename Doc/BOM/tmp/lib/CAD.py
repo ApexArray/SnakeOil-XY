@@ -58,10 +58,10 @@ def init_md5_cache_file():
             file.write("{}")
 
 fastener_pattern = re.compile('.*-(Screw|Washer|HeatSet|Nut)')
-revision_pattern = r'-.\d+$'  # Used to identify and strip revision numbers from CAD part names
 # name cleaning patterns
 revision_pattern = re.compile(r'-.\d+$')  # Used to identify and strip revision numbers from CAD part names
 part_count_pattern = re.compile(r'^\d{1,2}x[_-]')  # Remove part counts at beginning of STL file names
+part_color_pattern = re.compile(r'^(A|M|C)_')
 
 def write_md5_result(hash, result):
     LOGGER.debug(f"Caching {hash} = {result}")
@@ -186,9 +186,11 @@ def get_cad_parts_from_file(path: Path, use_cache=True) -> List[BomItem]:
     return cad_parts
 
 def clean_name(name: str):
-    name = name.replace('_', '-')
-    name = name.replace('.stl', '')
-    for pattern in [revision_pattern, part_count_pattern]:
+    """Clean STL file names and CAD part names so they can be compared"""
+    name = name.replace('_', '-')  # Convert all underscores (_) to dash characters (-)
+    name = name.replace('.stl', '')  # Remove stl file extension
+    # Remove all revision strings (like 'r001') and part count names (like "1x_")
+    for pattern in [revision_pattern, part_count_pattern, part_color_pattern]:
         matches = re.findall(pattern, name)
         if matches:
             if len(matches) > 1:
@@ -327,7 +329,10 @@ def get_part_color_from_stl_file(file_path: Path, cad_parts: List[BomItem]) -> s
     return result
 
 def get_filename_color_results(stl_files: List[Path], cad_parts: List[BomItem]) -> Dict[str, Union[List[Path], List[str]]]:
-    """return dictionary of filename['main'|'accent'|0|obj]"""
+    """returns dictionary where 
+        key =('main'|'accent'|'unknown'|'missing'|'conflicting),
+        value = (Path|error_string)
+    """
     file_results = {
         file_path: get_part_color_from_stl_file(file_path, cad_parts) for file_path in stl_files
         }
