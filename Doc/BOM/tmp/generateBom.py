@@ -16,7 +16,6 @@ import logging
 from lib import BOM, STL, CAD
 
 logging.basicConfig(
-    # filename='generateBom.log', filemode='w', 
     format='%(levelname)s: %(message)s', level=logging.INFO
     )
 LOGGER = logging.getLogger()
@@ -38,6 +37,7 @@ STL_PATHS = [
     SNAKEOIL_PROJECT_PATH / 'BETA3_4PR_Release_STL' / 'STLs',
     # SNAKEOIL_PROJECT_PATH / 'BETA3_Standard_Release_STL' / 'STLs',
 ]
+# Convert to relative paths
 STL_PATHS = [x.relative_to(SNAKEOIL_PROJECT_PATH) for x in STL_PATHS]
 # Ignore STL files in these directories
 STL_EXCLUDE_DIRS = [
