@@ -193,7 +193,7 @@ def clean_name(name: str):
     name = name.replace('_', '-')  # Convert all underscores (_) to dash characters (-)
     name = name.replace('.stl', '')  # Remove stl file extension
     # Remove all revision strings (like 'r001') and part count names (like "1x_")
-    for pattern in [revision_pattern, part_count_pattern, part_color_pattern]:
+    for pattern in [part_count_pattern, part_color_pattern, revision_pattern]:
         matches = re.findall(pattern, name)
         if matches:
             if len(matches) > 1:
