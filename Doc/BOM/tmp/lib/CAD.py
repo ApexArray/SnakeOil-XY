@@ -179,7 +179,10 @@ def get_cad_parts_from_file(path: Path, use_cache=True) -> List[BomItem]:
         except KeyError:
             LOGGER.debug(f"No cache for {path}")
     LOGGER.info(f"Loading CAD parts from {path}")
-    Gui.showMainWindow()
+    try:
+        Gui.showMainWindow()
+    except Exception as e:
+        LOGGER.warning("Could not open main window. This is expected on some systems, so will continue.")
     cad_assembly = App.open(str(path))
     cad_parts = _get_cad_parts_from_freecad_assembly(cad_assembly)
     _write_cad_parts_to_cache(path.name, cad_parts)
